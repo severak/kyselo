@@ -1,3 +1,9 @@
 .kyselo-dark {
     background-color: #444444;
 }
+
+.kyselo-content {
+	margin: 0 auto;
+	width: 600px;
+	margin-top: 40px;
+}
