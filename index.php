@@ -22,5 +22,31 @@ Flight::route('/', function(){
 	Flight::render('homepage');
 });
 
+Flight::route('/@name', function($name){
+	$db = Flight::db();
+	
+	$blog = $db->from('blog')->where('name', $name)->select()->one();
+	
+	if (empty($blog)) {
+		Flight::notFound();
+	}
+	
+	$sel = $db
+		->from('post')
+		->where('blog_id', $blog['id']);
+	
+	if (!empty($_GET['since'])) {
+		$sel->where('datetime <= ', $_GET['since']);
+	}
+	
+	$posts = $sel->limit(31)
+		->sortDesc('datetime')
+		->select()
+		->many();
+
+	Flight::render('header', ['title' => $blog["title"] ], 'header');
+	Flight::render('footer', [], 'footer');
+	Flight::render('blog', ['blog_name'=>$name, 'blog_title' => $blog["title"], 'blog_about'=>$blog['about'], 'blog_image'=>$blog['photo_url'], 'posts'=>$posts ]);
+});
 
 Flight::start();
