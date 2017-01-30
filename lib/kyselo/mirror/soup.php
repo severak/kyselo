@@ -57,7 +57,7 @@ class kyselo_mirror_soup
 		}
 		
 		// quote
-		if ($def['type']=='link') {
+		if ($def['type']=='quote') {
 			$this->_post['title'] = $def['title']; // koho citujeme
 			$this->_post['body'] = $def['body'];
 			$this->_post['source'] = $def['source'];

@@ -1,4 +1,12 @@
 <?php
+if (empty($argv[1]) || empty($argv[2])) {
+	die("ERROR \nBad import parameters. \nPlease specifiy: \n- RSS file \n- destination user ID\n");
+}
+
+if (!file_exists($argv[1])) {
+	die("ERROR \nCannot open file: " . $argv[1] . "\n");
+}
+
 require dirname(__FILE__) . "/lib/brickyard.php";
 
 $fw = new brickyard();
@@ -13,5 +21,6 @@ $db = new medoo(array(
 ));
 
 $import = new kyselo_mirror_soup($db);
+echo "importing your feed...\n";
 $import->importFeed($argv[1], $argv[2]);
-echo 'OK';
+echo "OK\n";
