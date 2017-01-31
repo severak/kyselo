@@ -39,6 +39,7 @@ foreach ($posts as $post) {
 
 
 		<!-- repost a spol -->
+		<div style="height: 2.1em">
                 <div class="pure-menu pure-menu-horizontal">
                     <ul class="pure-menu-list pull-right">
                         <li class="pure-menu-item"><a href="<?php echo sprintf('/%s/post/%d', $blog_name, $post['id']); ?>" class="pure-button">#</a></li>
@@ -53,6 +54,7 @@ foreach ($posts as $post) {
                     <li class="pure-menu-item"><a href="#" class="pure-button">react</a></li>
                     </ul>
                 </div>
+				</div>
                 <!-- /repost a spol -->
 	</div>
 </div>
