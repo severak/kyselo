@@ -36,7 +36,8 @@ Flight::route('/@name', function($name){
 		->where('blog_id', $blog['id']);
 	
 	if (!empty($_GET['since'])) {
-		$sel->where('datetime <= ', $_GET['since']);
+		// dump( strtotime($_GET['since']));
+		$sel->where('datetime <= ', $_GET['since'] );
 	}
 	
 	$posts = $sel->limit(31)

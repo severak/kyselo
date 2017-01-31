@@ -18,13 +18,13 @@ $i = 0;
 foreach ($posts as $post) {
 ?>
 <div class="pure-g">
-	<div class="pure-u-1-5"><img class="pure-img" src="<?php echo $blog_image; ?>"/><?php echo $blog_name; ?></div>
+	<div class="pure-u-1-5"><img class="pure-img" src="<?php echo $blog_image; ?>"/><br/><?php echo $blog_name; ?></div>
 	<div class="pure-u-4-5">
-	<?php echo date('j.n.Y', strtotime($post['datetime'])); ?>
+	<?php echo date('j.n.Y', strtotime($post['datetime'])); ?><br/>
 	
 	<?php if ($post['type']==1): ?>
 		<?php if (!empty($post['title'])) {
-			echo '<h2>' . $post['body'] . '</h2>';
+			echo '<h2>' . $post['title'] . '</h2>';
 		} 
 		echo $post['body'];
 		?>
@@ -41,7 +41,7 @@ foreach ($posts as $post) {
 		<!-- repost a spol -->
                 <div class="pure-menu pure-menu-horizontal">
                     <ul class="pure-menu-list pull-right">
-                        <li class="pure-menu-item"><a href="#" class="pure-button">#</a></li>
+                        <li class="pure-menu-item"><a href="<?php echo sprintf('/%s/post/%d', $blog_name, $post['id']); ?>" class="pure-button">#</a></li>
                         <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
                             <a href="#" class="pure-menu-link pure-button">repost</a>
                             <ul class="pure-menu-children">
@@ -56,6 +56,8 @@ foreach ($posts as $post) {
                 <!-- /repost a spol -->
 	</div>
 </div>
+<hr>
+
 <?php
 $i++;
 
