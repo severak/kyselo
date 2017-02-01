@@ -1,6 +1,6 @@
 # project Resoup
 
-self-hosted Soup.io clone
+self-hosted Soup.io open source clone
 
 ## Project goals
 
@@ -19,11 +19,11 @@ self-hosted Soup.io clone
 
 I am able to import backup/archived RSS feed and display it in an ugly interface.
 
-See examples:
+See examples of imported content:
 
- - [severak's soup](http://resoup.svita.cz/severak)
- - [vladimirputin.soup.io](http://resoup.svita.cz/vladimirputin) (RSS fragment from archive.org)
- - [redheads.soup.io](http://resoup.svita.cz/redheads) **NSFW!** (RSS fragment from archive.org)
+ - [severak's soup](http://resoup.svita.cz/severak) (made from my soup backup)
+ - [vladimirputin.soup.io](http://resoup.svita.cz/vladimirputin) (made from RSS fragment got from archive.org)
+ - [redheads.soup.io](http://resoup.svita.cz/redheads) **NSFW!** (made from RSS fragment got from archive.org)
 
 ## Author
 
