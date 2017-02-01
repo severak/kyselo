@@ -101,7 +101,7 @@ class kyselo_mirror_soup
 		}
 		
 		// event
-		if ($def['type']=='file') {
+		if ($def['type']=='event') {
 			$this->_post['title'] = $def['title']; // titulek
 			$this->_post['body'] = $def['body']; // popisek
 			$this->_post['url'] = $def['url']; // URL obrázku
@@ -122,11 +122,11 @@ class kyselo_mirror_soup
 	
 	function closeItem()
 	{
-		var_export($this->_post);
-		echo PHP_EOL;
+		// var_export($this->_post);
+		// echo PHP_EOL;
 		if (isset($this->_post['type'])) {
 			$this->_db->insert('post', $this->_post);
-			var_dump($this->_db->error());
+			// var_dump($this->_db->error());
 		}
 	}
 } 

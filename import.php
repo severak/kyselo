@@ -22,5 +22,6 @@ $db = new medoo(array(
 
 $import = new kyselo_mirror_soup($db);
 echo "importing your feed...\n";
+ob_flush();
 $import->importFeed($argv[1], $argv[2]);
 echo "OK\n";
