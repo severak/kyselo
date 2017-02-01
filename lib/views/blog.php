@@ -118,7 +118,7 @@ if ($i==30) {
 }
 
 if (isset($posts[30]['datetime'])) {
-	echo '<a href="/'.$blog_name.'?since='.date('c', strtotime($posts[30]['datetime'])).'">load moar</a><br/><br/><br/>';
+	echo '<a href="/'.$blog_name.'?since='.date('Y-m-d\TH:i:s', strtotime($posts[30]['datetime'])).'">load moar</a><br/><br/><br/>';
 } else {
 	echo 'You have reached teh end...';
 }

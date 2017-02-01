@@ -40,10 +40,13 @@ Flight::route('/@name', function($name){
 		$sel->where('datetime <= ', $_GET['since'] );
 	}
 	
-	$posts = $sel->limit(31)
+	$sel->limit(31)
 		->sortDesc('datetime')
-		->select()
-		->many();
+		->select();
+	
+	// dump($sel->sql());
+	
+	$posts = $sel->many();
 
 	Flight::render('header', ['title' => $blog["title"] ], 'header');
 	Flight::render('footer', [], 'footer');
