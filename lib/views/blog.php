@@ -58,7 +58,7 @@ foreach ($posts as $post) {
 		}
 	} else if ($post['type']==7) { // rating
 		echo '<h2>' . $post['title'] . '</h2>';
-		echo 'rating: ' . str_repeat('*', $post['rating']);
+		echo 'rating: ' . str_repeat('❋', $post['rating']);
 		if (!empty($post['body'])) {
 			echo '<p>' . $post['body'] . '</p>';
 		}
