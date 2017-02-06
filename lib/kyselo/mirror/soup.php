@@ -29,11 +29,13 @@ class kyselo_mirror_soup
 		$this->_post = array();
 		$this->_post['author_id'] = $this->_destination;
 		$this->_post['blog_id'] = $this->_destination;
+
+		$this->_tags = array();
 	}
 	
 	function setGuid($text)
 	{
-		$this->_guid = $text;
+		$this->_post['guid'] = $text;
 	}
 	
 	function setSoup($text)
@@ -85,7 +87,7 @@ class kyselo_mirror_soup
 		if ($def['type']=='file') {
 			$this->_post['title'] = $def['title']; // titulek
 			$this->_post['body'] = $def['body']; // popisek
-			$this->_post['info'] = $def['info']; // info o souboru
+			$this->_post['file_info'] = $def['info']; // info o souboru
 			$this->_post['url'] = $def['url']; // URL souboru
 			$this->_post['type'] = 6;
 		}
@@ -111,22 +113,25 @@ class kyselo_mirror_soup
 			$this->_post['type'] = 8;
 		}
 		
-		$this->tags = $def['tags'];
-		
+		$this->_tags = $def['tags'];
 	}
 	
 	function setPubDate($date)
 	{
-		$this->_post['datetime'] = date('Y-m-d H:i:s', strtotime($date));
+		$this->_post['datetime'] = strtotime($date);
 	}
 	
 	function closeItem()
 	{
-		// var_export($this->_post);
-		// echo PHP_EOL;
 		if (isset($this->_post['type'])) {
-			$this->_db->insert('post', $this->_post);
-			// var_dump($this->_db->error());
+			if ($this->_db->has('posts', ['guid'=>$this->_post['guid']])) {
+				echo 'found duplicate while import ' . $this->_post['guid'] . PHP_EOL;
+			} else {
+				$newPostId = $this->_db->insert('posts', $this->_post);
+				foreach ($this->_tags as $tag) {
+					$this->_db->insert('post_tags', ['post_id'=>$newPostId, 'tag'=>$tag]);
+				}
+			}
 		}
 	}
 } 
