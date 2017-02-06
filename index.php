@@ -25,14 +25,14 @@ Flight::route('/', function(){
 Flight::route('/@name', function($name){
 	$db = Flight::db();
 	
-	$blog = $db->from('blog')->where('name', $name)->select()->one();
+	$blog = $db->from('blogs')->where('name', $name)->select()->one();
 	
 	if (empty($blog)) {
 		Flight::notFound();
 	}
 	
 	$sel = $db
-		->from('post')
+		->from('posts')
 		->where('blog_id', $blog['id']);
 	
 	if (!empty($_GET['since'])) {
@@ -50,7 +50,7 @@ Flight::route('/@name', function($name){
 
 	Flight::render('header', ['title' => $blog["title"] ], 'header');
 	Flight::render('footer', [], 'footer');
-	Flight::render('blog', ['blog_name'=>$name, 'blog_title' => $blog["title"], 'blog_about'=>$blog['about'], 'blog_image'=>$blog['photo_url'], 'posts'=>$posts ]);
+	Flight::render('blog', ['blog_name'=>$name, 'blog_title' => $blog["title"], 'blog_about'=>$blog['about'], 'blog_image'=>$blog['avatar_url'], 'posts'=>$posts ]);
 });
 
 Flight::start();
