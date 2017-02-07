@@ -37,7 +37,7 @@ Flight::route('/@name', function($name){
 	
 	if (!empty($_GET['since'])) {
 		// dump( strtotime($_GET['since']));
-		$sel->where('datetime <= ', $_GET['since'] );
+		$sel->where('datetime <= ', strtotime($_GET['since']) );
 	}
 	
 	$sel->limit(31)

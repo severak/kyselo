@@ -20,7 +20,7 @@ foreach ($posts as $post) {
 <div class="pure-g">
 	<div class="pure-u-1-5"><img class="pure-img" src="<?php echo $blog_image; ?>"/><br/><?php echo $blog_name; ?></div>
 	<div class="pure-u-4-5">
-	<?php echo date('j.n.Y H:i:s', strtotime($post['datetime'])); ?><br/>
+	<?php echo date('j.n.Y H:i:s', $post['datetime']); ?><br/>
 	
 	<?php 
 	if ($post['type']==1) { // text
@@ -52,7 +52,7 @@ foreach ($posts as $post) {
 			echo '<p>from <a href="' . $post['source'] . '">' . $post['source'] . '</a></p>';
 		}
 	} else if ($post['type']==6) { // file
-		echo '<a href="' . $post['url'] . '">' . $post['title'] . '</a> <small>' . $post['info'] . '</small>';
+		echo '<a href="' . $post['url'] . '">' . $post['title'] . '</a> <small>' . $post['file_info'] . '</small>';
 		if (!empty($post['body'])) {
 			echo '<p>' . $post['body'] . '</p>';
 		}
@@ -62,7 +62,7 @@ foreach ($posts as $post) {
 		if (!empty($post['body'])) {
 			echo '<p>' . $post['body'] . '</p>';
 		}
-		// todo ULR of video
+		// todo URL of video
 		if (!empty($post['source'])) {
 			echo '<p>from <a href="' . $post['source'] . '">' . $post['source'] . '</a></p>';
 		}
@@ -118,7 +118,7 @@ if ($i==30) {
 }
 
 if (isset($posts[30]['datetime'])) {
-	echo '<a href="/'.$blog_name.'?since='.date('Y-m-d\TH:i:s', strtotime($posts[30]['datetime'])).'">load moar</a><br/><br/><br/>';
+	echo '<a href="/'.$blog_name.'?since='.date('Y-m-d\TH:i:s', $posts[30]['datetime']).'">load moar</a><br/><br/><br/>';
 } else {
 	echo 'You have reached teh end...';
 }
