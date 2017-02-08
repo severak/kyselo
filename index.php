@@ -17,15 +17,51 @@ Flight::register('db', 'sparrow', [], function($db) {
 });
 
 Flight::route('/', function(){
-	Flight::render('header', array('title' => 'resoUp'), 'header');
-	Flight::render('header', [], 'footer');
+	Flight::render('header', array('title' => 'resoUp'));
 	Flight::render('homepage');
+	Flight::render('footer', []);
+});
+
+Flight::route('/@name/post/@postid', function($name, $postId){
+	$db = Flight::db();
+
+	$blog = $db->from('blogs')->where('name', $name)->where('is_visible', 1)->select()->one();
+
+	if (empty($blog)) {
+		Flight::notFound();
+	}
+
+	$sel = $db
+		->from('posts')
+		->join('blogs', ['blog_id'=>'blogs.id'])
+		->where('posts.id', $postId)
+		->where('posts.is_visible', 1);
+
+	$sel->select('posts.*, blogs.name as name, blogs.avatar_url');
+
+	$post = $sel->one();
+	if (!$post) {
+		Flight::notFound();
+	}
+
+	// todo: check if blog.id = posts.blog_id
+
+	Flight::render('header', ['title' => $blog["title"] ]);
+	Flight::render('blog_header', [
+		'title'=> $blog['title'],
+		'about'=> $blog['about'],
+		'avatar_url'=> $blog['avatar_url']
+	]);
+	Flight::render('posts', [
+		'posts'=> [$post]
+	]);
+	Flight::render('footer', []);
 });
 
 Flight::route('/@name', function($name){
 	$db = Flight::db();
 	
-	$blog = $db->from('blogs')->where('name', $name)->select()->one();
+	$blog = $db->from('blogs')->where('name', $name)->where('is_visible', 1)->select()->one();
 	
 	if (empty($blog)) {
 		Flight::notFound();
@@ -33,24 +69,45 @@ Flight::route('/@name', function($name){
 	
 	$sel = $db
 		->from('posts')
-		->where('blog_id', $blog['id']);
+		->join('blogs', ['blog_id'=>'blogs.id'])
+		->where('blog_id', $blog['id'])
+		->where('posts.is_visible', 1);
 	
 	if (!empty($_GET['since'])) {
-		// dump( strtotime($_GET['since']));
 		$sel->where('datetime <= ', strtotime($_GET['since']) );
 	}
 	
 	$sel->limit(31)
 		->sortDesc('datetime')
-		->select();
-	
-	// dump($sel->sql());
+		->select('posts.*, blogs.name as name, blogs.avatar_url');
 	
 	$posts = $sel->many();
 
-	Flight::render('header', ['title' => $blog["title"] ], 'header');
-	Flight::render('footer', [], 'footer');
-	Flight::render('blog', ['blog_name'=>$name, 'blog_title' => $blog["title"], 'blog_about'=>$blog['about'], 'blog_image'=>$blog['avatar_url'], 'posts'=>$posts ]);
+	$moreLink = null;
+	$theEnd = true;
+
+	if (count($posts)==31) {
+		$lastPost = array_pop($posts);
+		$moreLink = '/' . $blog['name'] . '?since=' . date('Y-m-dTH:i:s', $lastPost['datetime']);
+		$theEnd = false;
+	}
+
+	array_pop($posts);
+
+	Flight::render('header', ['title' => $blog["title"] ]);
+	Flight::render('blog_header', [
+		'title'=> $blog['title'],
+		'about'=> $blog['about'],
+		'avatar_url'=> $blog['avatar_url']
+	]);
+	Flight::render('posts', [
+		'posts'=>$posts,
+		'more_link'=>$moreLink,
+		'the_end'=>$theEnd
+	]);
+	Flight::render('footer', []);
 });
+
+
 
 Flight::start();
