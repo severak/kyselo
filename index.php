@@ -92,8 +92,6 @@ Flight::route('/@name', function($name){
 		$theEnd = false;
 	}
 
-	array_pop($posts);
-
 	Flight::render('header', ['title' => $blog["title"] ]);
 	Flight::render('blog_header', [
 		'title'=> $blog['title'],
