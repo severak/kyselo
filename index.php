@@ -1,4 +1,9 @@
 <?php
+if (!file_exists(__DIR__ . '/config.php')) {
+	die("ERROR: Kyselo not installed.");
+}
+$config = require __DIR__ . '/config.php';
+
 require 'lib/flight/Flight.php';
 require "lib/flight/autoload.php";
 
@@ -11,8 +16,8 @@ Debugger::enable();
 
 flight\core\Loader::addDirectory("lib/flourish");
 
-Flight::register('db', 'sparrow', [], function($db) {
-	$db->setDb('pdosqlite://localhost/'.__DIR__.'/data/kyselo.sqlite');
+Flight::register('db', 'sparrow', [], function($db) use($config) {
+	$db->setDb('pdosqlite://localhost/' . __DIR__ . '/' . $config['database']);
 	$db->show_sql = true;
 });
 

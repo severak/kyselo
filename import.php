@@ -3,6 +3,11 @@ if (php_sapi_name()!='cli') {
 	die('ERROR: This script is only for command line.');
 }
 
+if (!file_exists(__DIR__ . '/config.php')) {
+	die("ERROR \nKyselo not installed.\n");
+}
+$config = require __DIR__ . '/config.php';
+
 if (empty($argv[1]) || empty($argv[2])) {
 	die("ERROR \nBad import parameters. \nPlease specifiy: \n- RSS file \n- destination username\n");
 }
@@ -17,7 +22,7 @@ require dirname(__FILE__) . "/lib/flight/autoload.php";
 
 $db = new medoo(array(
 	'database_type' => 'sqlite',
-	'database_file' => dirname(__FILE__) . '/data/kyselo.sqlite'
+	'database_file' => dirname(__FILE__) . '/' . $config['database']
 ));
 
 $blog = $db->get('blogs', '*', ['name'=>$argv[2]]);

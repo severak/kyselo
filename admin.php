@@ -30,7 +30,7 @@ function adminer_object() {
 
 		function login($login, $password) {
 			// validate user submitted credentials
-			return ($login == 'admin' && $password == $this->_kyseloConfig['adminer_password']);
+			return ($login == 'admin' && md5($password) == $this->_kyseloConfig['adminer_password']);
 		}
 
 		function loginForm() {
@@ -49,6 +49,11 @@ function adminer_object() {
 			echo "<p><input type='submit' value='" . lang('Login') . "'>\n";
 			echo checkbox("auth[permanent]", 1, $_COOKIE["adminer_permanent"], lang('Permanent login')) . "\n";
 		}
+	}
+	
+	
+	if (!file_exists(__DIR__ . '/config.php')) {
+		die("ERROR: Kyselo not installed.");
 	}
 
 	$config = require 'config.php';
