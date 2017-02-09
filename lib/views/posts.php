@@ -16,7 +16,7 @@ foreach ($posts as $post) {
 	</div>
 	<div class="pure-u-4-5">
 	<div>
-		<img src="<?php echo $post['avatar_url']; ?>" style="width: 1em"> <?php echo $post['name']; ?>
+		<img src="<?php echo $post['avatar_url']; ?>" style="width: 1em"> <a href="/<?php echo $post['name']; ?>"><?php echo $post['name']; ?></a>
 		<small><?php echo date('j.n.Y H:i:s', $post['datetime']); ?></small>
 	</div><br>
 	<?php 
