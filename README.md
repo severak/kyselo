@@ -1,4 +1,4 @@
-# project Resoup
+# project Kyselo
 
 self-hosted Soup.io open source clone
 
