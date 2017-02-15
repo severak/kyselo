@@ -2,6 +2,8 @@
 
 self-hosted Soup.io open source clone
 
+**[download here](https://bitbucket.org/severak/kyselo/get/0.5.zip)**
+
 ## Requirements
 
  - PHP 5.6
