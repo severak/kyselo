@@ -32,4 +32,5 @@ Sorry - only in Czech for now.
 - komunikace JS frontend «» backend - JSON-RPC
 - co není nutné v JS, tak v PHP
 - optimalizovat na desktop brambory, později pro mobily
+- média se spouští až po kliku (jak to udělat pro gify?)
 - [zabezpečit](http://flourishlib.com/docs/Security) až nakonec + [útoky breach, heist](https://www.fg.cz/cs/deje-se/prolomeni-sifrovaneho-protokolu-https-10930)
