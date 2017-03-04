@@ -14,7 +14,7 @@ Sorry - only in Czech for now.
 - následování jiných blogů {ajax}
 - feed sledovaných - `/blog/friends`
 - feed fof - `/blog/fof`
-- feed všech příspěvků (tady to žije) - `/all`
+- feed všech příspěvků (*tady to žije*) - `/all`
 - RSS podoba feedů
 - vstoupení do skupiny
 - posílání postů do skupiny {ajax}
@@ -24,6 +24,8 @@ Sorry - only in Czech for now.
 - automatický mirror ze RSS (Soupu) v crontabu
 - výpisy členů skupin a přátel v hlavičce blogu
 - adresář skupin/blogů
+- [filtrování blogů](http://didyouknow.soup.io/post/481207241/You-can-easily-filter-your-Soup-and)
+- statický export
 
 ## způsoby řešení
 
