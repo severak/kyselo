@@ -153,6 +153,6 @@ Flight::route('/@name', function($name){
 	Flight::render('footer', []);
 });
 
-
+require __DIR__ . '/lib/routes/authorization.php';
 
 Flight::start();
