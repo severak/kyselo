@@ -1,0 +1,43 @@
+// čtení z DB
+$rows->getOne($table, $where)
+$rows->count($table, $where)
+$rows->getMore($table, $where, $order)
+$rows->getPage($table, $where, $order, $pageNo, $perPage)
+$total = $rows->pageCount; // vyplněno po volání getPage, jinak obsahuje -1
+
+// úpravy DB
+$rows->insert($table, $data)
+$rows->update($table, $data, $where)
+$rows->delete($table, $where)
+
+// definice formuláře
+$form = new form($action, $url)
+$form->field($name, $attr)
+$form->check($name, $callback($field, $other), $message)
+
+// použití formuláře
+$form->fill($data)
+$form->validate()
+
+// vypsání formuláře
+echo $form
+$formTemplate->render($form)
+
+// stav formuláře
+$form->isValid
+$form->errors
+$form->values
+$form->fields
+
+SESSION modul jen zabezpečuje ukládání/odesílání SESSION, implementaci přihlášení/košíku/flash messages whatever necháváme na programátorovi.
+
+příklad použití:
+
+$form->fill($_POST)
+
+if ($form->validate()) {
+	$db->insert('table', $form->values)
+	// redirect
+}
+
+echo $form; // ukázat form + případné chyby
