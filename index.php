@@ -16,6 +16,10 @@ Debugger::enable();
 
 flight\core\Loader::addDirectory("lib/flourish");
 
+// start session
+session_start();
+
+
 Flight::register('db', 'sparrow', [], function($db) use($config) {
 	$db->setDb('pdosqlite://localhost/' . __DIR__ . '/' . $config['database']);
 	$db->show_sql = true;

@@ -12,31 +12,37 @@
 	<!-- hlavni menu -->
 	<div class="pure-menu pure-menu-horizontal pure-menu-fixed kyselo-dark">
         <ul class="pure-menu-list">
-            <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-home"></i> My blog</a></li>
+	<?php if (!empty($_SESSION['user'])): ?>
+            <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>" class="pure-menu-link"><i class="fa fa-home"></i> My blog</a></li>
             <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
                 <a href="#" class="pure-menu-link">Groups</a>
                 <ul class="pure-menu-children">
-                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">lorem</a></li>
-                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">ipsum</a></li>
-                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">dedit</a></li>
-                    <li class="pure-menu-item"><a href="#" class="pure-menu-link pure-button">Find &amp; create…</a></li>
+		    <?php foreach($_SESSION['user']['groups'] as $group): ?>
+                    <li class="pure-menu-item"><a href="/<?= $group['name']; ?>" class="pure-menu-link"><?= $group['name']; ?></a></li>
+                    <?php endforeach; ?>
+		    <li class="pure-menu-item"><a href="/act/groups" class="pure-menu-link pure-button">Find &amp; create…</a></li>
                 </ul>
             </li>
             <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
                 <a href="#" class="pure-menu-link">People</a>
                 <ul class="pure-menu-children">
-                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">My friends</a></li>
-                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">My followers</a></li>
-                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Friends of a friend</a></li>
-                    <li class="pure-menu-item"><a href="#" class="pure-menu-link pure-button">Find &amp; invite…</a></li>
+                    <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>/friends" class="pure-menu-link">My friends</a></li>
+                    <!-- <li class="pure-menu-item"><a href="#" class="pure-menu-link">My followers</a></li> -->
+                    <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>/fof" class="pure-menu-link">Friends of a friend</a></li>
+                    <li class="pure-menu-item"><a href="/act/invite" class="pure-menu-link pure-button">Find &amp; invite…</a></li>
                 </ul>
             </li>
             <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
                 <a href="#" class="pure-menu-link"><i class="fa fa-coffee"></i></a>
                 <ul class="pure-menu-children">
-                    <li class="pure-menu-item"><a href="#" class="pure-menu-link"><i class="fa fa-sing-out"></i>logout</a></li>
+                    <li class="pure-menu-item"><a href="/act/logout" class="pure-menu-link"><i class="fa fa-sing-out"></i>logout</a></li>
                 </ul>
             </li>
+	<?php else: ?>
+		<li class="pure-menu-item"><a href="/all" class="pure-menu-link"><i class="fa fa-home"></i> all blogs</a></li>
+		<li class="pure-menu-item"><a href="/act/login" class="pure-menu-link"> login</a></li>
+		<li class="pure-menu-item"><a href="/act/register" class="pure-menu-link"> sing-up</a></li>
+	<?php endif; ?>
         </ul>
     </div>
     <!-- /hlavni menu -->

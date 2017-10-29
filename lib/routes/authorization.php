@@ -4,8 +4,8 @@ const KYSELO_PASSWORD_ALG = PASSWORD_DEFAULT;
 // famous 1-step registration process
 
 Flight::route('/act/register', function() {
-	if (!fAuthorization::checkLoggedIn()) {
-		// todo redirect na kamarády
+	if (!empty($_SESSION['user']['name'])) {
+		Flight::redirect('/' . $_SESSION['user']['name'] . '/friends');
 	}
 
 	/** @var Sparrow $db */
@@ -70,6 +70,61 @@ Flight::route('/act/register', function() {
 	Flight::render('footer', []);
 });
 
-// todo: login
+// login
+Flight::route('/act/login', function() {
+	if (!empty($_SESSION['user']['name'])) {
+		Flight::redirect('/' . $_SESSION['user']['name'] . '/friends');
+	}
 
-// todo: logout
+	/** @var Sparrow $db */
+	$db = Flight::db();
+	$request = Flight::request();
+	
+	$form = new severak\forms\form(['method'=>'POST', 'class'=>'pure-form pure-form-stacked']);
+	$form->field('username', ['label'=>'User name', 'required'=>true]);
+	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
+	$form->field('register', ['label'=>'Login', 'type'=>'submit']);
+	
+	
+	if ($request->method=='POST') {
+		$form->fill($_POST);
+		
+		if ($form->validate()) {
+			$blog = $db->from('blogs')->where('name', $_POST['username'])->one();
+			if (!empty($blog)) {
+				$user = $db->from('users')->where('id',$blog['user_id'])->one();
+				if (password_verify($_POST['password'], $user['password'])) {
+					$_SESSION['user'] = [
+						'name' => $blog['name'],
+						'blog_id' => $blog['id'],
+						'avatar_url' => $blog['avatar_url'],
+						'groups'=> [], // todo - skupiny, kterych jsem clenem
+					];
+					
+					Flight::redirect('/' . $blog['name'] . '/friends');
+				}
+			}
+		}
+		$forms->errors['password'] = 'Bad login/password!';
+	}
+	
+
+	Flight::render('header', ['title' => 'login' ]);
+	Flight::render('registration', [
+		'form' => $form,
+	]);
+	Flight::render('footer', []);
+});
+
+
+
+// logout
+Flight::route('/act/logout', function() {
+	if (empty($_SESSION['user']['name'])) {
+		Flight::redirect('/');
+	}
+	
+	$_SESSION['user'] = false;
+	Flight::redirect('/');
+});
+
