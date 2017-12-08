@@ -19,8 +19,10 @@ Flight::route('/act/register', function() {
 	$form->field('password_again', ['label'=>'and again', 'type'=>'password', 'required'=>true]);
 	$form->field('terms_agreement', ['label'=>'I agree with terms of service', 'type'=>'checkbox', 'required'=>true]);
 	$form->field('register', ['label'=>'Sing in', 'type'=>'submit']);
-	// todo: catchpa
+	// todo: catchpa - viz http://jecas.cz/recaptcha
 
+	// todo: kontrola formátu username
+	
 	$form->rule('username', function($name) {
 		$db = Flight::db();
 		return $db->from('blogs')->where('name', $name)->count() == 0;
@@ -59,6 +61,7 @@ Flight::route('/act/register', function() {
 
 			$db->from('users')->update(['blog_id'=>$blogId])->where(['id'=>$userId])->execute();
 
+			// todo: flash msg
 			Flight::redirect('/act/login');
 		}
 	}
