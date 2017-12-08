@@ -21,7 +21,6 @@ $form->validate()
 
 // vypsání formuláře
 echo $form
-$formTemplate->render($form)
 
 // stav formuláře
 $form->isValid
@@ -29,9 +28,7 @@ $form->errors
 $form->values
 $form->fields
 
-SESSION modul jen zabezpečuje ukládání/odesílání SESSION, implementaci přihlášení/košíku/flash messages whatever necháváme na programátorovi.
-
-příklad použití:
+// použití formuláře s DB:
 
 $form->fill($_POST)
 
@@ -41,3 +38,35 @@ if ($form->validate()) {
 }
 
 echo $form; // ukázat form + případné chyby
+
+// pokročilé vykreslení formuláře:
+
+$F = new severak\forms\html($form);
+echo $F->open(['class'=>'turbo-form']);
+echo '<table>'
+foreach ($F->fields as $fieldName) {
+	echo '<tr><td>';
+	echo $F->label($fieldName);
+	echo '</td><td>';
+	echo $F->field($fieldName, ['class'=>'in-table'])
+	if (!empty($form->errors[$fieldName])) {
+		echo 'chyba - '  . $form->errors[$fieldName];
+	}
+	echo '</td></tr>';
+}
+echo '</table>';
+echo $F->close();
+
+
+// použití reCatchpy:
+
+$captcha = new severak\forms\recaptcha($key);
+
+$form = new severak\forms\form;
+$form->field('text', ['type'=>'spam']);
+$captcha->attach($form);
+$form->field('submit', ['type'=>'submit'])
+
+---
+
+SESSION modul jen zabezpečuje ukládání/odesílání SESSION, implementaci přihlášení/košíku/flash messages whatever necháváme na programátorovi.
