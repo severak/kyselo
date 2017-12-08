@@ -29,6 +29,7 @@ self-hosted Soup.io open source clone
 ## Milestones
 
  - v 0.5 - easy import and read only display of backup ✔ 
+ - v 0.6 - it's possible to post updates ⌛  
  - v 1.0 - usable multiuser Soup.io clone ⌛ 
  - v 2.0 - distributed social network
 
