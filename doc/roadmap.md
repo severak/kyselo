@@ -4,11 +4,12 @@ Sorry - only in Czech for now.
 
 ## kýžená funkcionalita
 
-- registrace
-- login/logout
+- registrace ✔
+- login/logout ✔
 - nastavení blogu (titulek, popis, avatar)
 - nastavení barviček blogu
-- postování + předvyplnění skrz bookmarklet
+- postování 
+- předvyplnění skrz bookmarklet
 - repostování {ajax}
 - editace postů
 - následování jiných blogů {ajax}
@@ -26,13 +27,21 @@ Sorry - only in Czech for now.
 - adresář skupin/blogů
 - [filtrování blogů](http://didyouknow.soup.io/post/481207241/You-can-easily-filter-your-Soup-and)
 - statický export
+- superadministrace
+
+## technika
+
+- Flight::flash()
+- Flight::requireLogin()
+- Flight::config()
 
 ## způsoby řešení
 
-- data do SQlite, později MySQL
-- obrázky na FS, později S3?
+- data do SQlite ✔, později volitelně MySQL
+- obrázky na FS, později S3 nebo něco podobného
 - komunikace JS frontend «» backend - JSON-RPC
 - co není nutné v JS, tak v PHP
 - optimalizovat na desktop brambory, později pro mobily
 - média se spouští až po kliku (jak to udělat pro gify?)
+- kešovat výpisy + detaily (http://flightphp.com/learn/#httpcaching)
 - [zabezpečit](http://flourishlib.com/docs/Security) až nakonec + [útoky breach, heist](https://www.fg.cz/cs/deje-se/prolomeni-sifrovaneho-protokolu-https-10930)
