@@ -5,10 +5,12 @@ class html
 {
 	/** @var form */
 	protected $_form;
+	public $fields = [];
 
 	public function __construct(form $form)
 	{
 		$this->_form = $form;
+		$this->fields = array_keys($form->fields);
 	}
 
 	protected function _text($value)
@@ -22,8 +24,6 @@ class html
 		foreach ($attr as $key=>$val) {
 			if (is_array($val)) continue; // skip options etc
 
-			if ($key=='required') continue; // todo: tohle je jen pro test
-
 			if ($val===true) {
 				$out .= $key . ' ';
 			} else {
@@ -35,24 +35,76 @@ class html
 	
 	function open($attr=[])
 	{
-		$attr = $this->_form->attr + $attr;
+		$attr = $attr + $this->_form->attr;
 		return '<form ' . $this->_attr($attr) . '>';
 	}
 	
 	function label($fieldName, $attr=[])
 	{
+		$form = $this->_form;
 		if (empty($form->fields[$fieldName])) throw new usageException('Label ' . $fieldName . ' not defined.');
-		
+	
+		$attr = $attr + $this->_form->attr;
 		$field = $form->fields[$fieldName];
 		
 		if (in_array($field['type'], ['submit', 'reset', 'checkbox'])) {
-			return ''; // 
+			return ''; // these input types has no label
 		}
 		
-		// todo
+		return '<label for="'.$field['id'].'">' . $field['label'] . '</label>';
 	}
 	
-	// todo...
+	function field($fieldName, $attr=[])
+	{
+		$form = $this->_form;
+		if (empty($form->fields[$fieldName])) throw new usageException('Label ' . $fieldName . ' not defined.');
+	
+		$field = $attr + $form->fields[$fieldName];
+		$fieldValue = isset($form->values[$fieldName]) ? $form->values[$fieldName] : '';
+		$out = '';
+		
+		if ($field['type']=='textarea') {
+			// textarea
+			$out .= '<textarea ' . $this->_attr($field) . '>';
+			$out .= $this->_text($fieldValue);
+			$out .= '</textarea>';
+
+		} elseif ($field['type']=='select') {
+			// select
+			$out .= '<select ' . $this->_attr($field) . '>';
+			foreach ($field['options'] as $key=>$val) {
+				$_attr = ['value'=>$val];
+				if ($fieldValue===$val) {
+					$_attr['selected'] = true;
+				}
+				$out .= '<option '.$this->_attr($_attr).'>' . $this->_text($val) . '</option>';
+			}
+			$out .= '</select>';
+		} else {
+			// input
+			if ($field['type']=='checkbox' && $fieldValue===$field['value']) {
+				$field['checked'] = true;
+			}
+
+			if (!in_array($field['type'], ['submit', 'reset', 'password', 'checkbox'])) {
+				$field['value'] = $fieldValue;
+			}
+
+			if ($field['type']=='checkbox') {
+				$out .= ' <label for="'.$field['id'].'" class="'.$field['class'].'">';
+				unset($field['class']);
+			}
+			
+			$out .= '<input ' . $this->_attr($field) . '/>';
+			
+			if ($field['type']=='checkbox') {
+				$out .= ' ' . $this->_text($field['label']) . '</label>';	
+			}	
+		}
+		// todo - radio buttons
+		
+		return $out;
+	}	
 	
 	function close()
 	{
@@ -62,66 +114,26 @@ class html
 	
 	function all()
 	{
+		$form = $this->_form;
 		
+		$out = $this->open();
+		foreach ($this->fields as $fieldName) {
+			$out .= $this->label($fieldName);
+			$out .= $this->field($fieldName);
+			
+			if (!empty($form->errors[$fieldName])) {
+				// todo: nechceme spíš pole chyb?
+				$out .= '<p class="error-message"><em>' . $this->_text($form->errors[$fieldName]) . '</em></p>';
+			}
+		}
+		$out .= $this->close();
+ 		
+		return $out;
 	}
 
 	function __toString()
 	{
-		$form = $this->_form;
-		
-		$out = '<form ' . $this->_attr($form->attr) . '>';
-
-		foreach ($form->fields as $name=>$field) {
-			$fieldValue = isset($form->values[$name]) ? $form->values[$name] : '';
-
-
-			if (!in_array($field['type'], ['submit', 'reset', 'checkbox'])) {
-				$out .= '<label for="'.$field['id'].'">' . $field['label'] . '</label>';
-				unset($field['label']);
-			}
-
-			if ($field['type']=='textarea') {
-				$out .= '<select ' . $this->_attr($field) . '>';
-				$out .= $this->_text($fieldValue);
-				$out .= '</select>';
-
-			} elseif ($field['type']=='select') {
-				$out .= '<select ' . $this->_attr($field) . '>';
-				foreach ($field['options'] as $key=>$val) {
-					$_attr = ['value'=>$val];
-					if ($fieldValue===$val) {
-						$_attr['selected'] = true;
-					}
-					$out .= '<option '.$this->_attr($_attr).'>' . $this->_text($val) . '</option>';
-				}
-				$out .= '</select>';
-
-
-			} else {
-
-				if ($field['type']=='checkbox' && $fieldValue===$field['value']) {
-					$field['checked'] = true;
-				}
-
-				if (!in_array($field['type'], ['submit', 'reset', 'password', 'checkbox'])) {
-					$field['value'] = $fieldValue;
-				}
-
-
-				$out .= '<input ' . $this->_attr($field) . '/>';
-				if ($field['type']=='checkbox') {
-					$out .= ' <label for="'.$field['id'].'">' . $field['label'] . '</label>';
-				}
-			}
-			
-			if (!empty($form->errors[$name])) {
-				// todo: nechceme spíš pole chyb?
-				$out .= '<p class="error-message"><em>' . $this->_text($form->errors[$name]) . '</em></p>';
-			}
-		}
-
-		$out .= '</form>';
-		return $out;
+		return $this->all();
 	}
 
 }
