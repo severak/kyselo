@@ -12,27 +12,35 @@ Flight::route('/act/register', function() {
 	$db = Flight::db();
 	$request = Flight::request();
 	
-	$form = new severak\forms\form(['method'=>'POST', 'class'=>'pure-form pure-form-stacked']);
+	$form = new severak\forms\form(['method'=>'POST']);
 	$form->field('username', ['label'=>'User name', 'required'=>true]);
 	$form->field('email', ['label'=>'E-mail', 'type'=>'email', 'required'=>true]);
 	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
 	$form->field('password_again', ['label'=>'and again', 'type'=>'password', 'required'=>true]);
-	$form->field('terms_agreement', ['label'=>'I agree with terms of service', 'type'=>'checkbox', 'required'=>true]);
+	$form->field('terms_agreement', ['label'=>'I agree with terms of service', 'type'=>'checkbox']);
 	$form->field('register', ['label'=>'Sing in', 'type'=>'submit']);
 	// todo: catchpa - viz http://jecas.cz/recaptcha
 
-	// todo: kontrola formátu username
-	
 	$form->rule('username', function($name) {
 		$db = Flight::db();
 		return $db->from('blogs')->where('name', $name)->count() == 0;
 	}, 'Username already in use. Choose another.');
 	
-	// todo: check if email is email
+	$form->rule('username', function($name) {
+		return preg_match('~^[a-z]([a-z0-9]{3,})$~', $name)===1;
+	}, 'Bad username format: 3 or more letters and numbers allowed, must start with letter.');
+	
+	// todo: validovat mail + posílat mailem ověření
+	
+	// todo: password sanity test
 
 	$form->rule('password_again', function($password, $fields) {
 		return $password==$fields['password'];
 	}, 'Must match previous password.');
+	
+	$form->rule('terms_agreement', function($agreed){
+		return !empty($agreed);
+	}, 'You cannot use our service without terms agreement.');	
 
 	if ($request->method=='POST') {
 		$form->fill($_POST);
@@ -83,7 +91,7 @@ Flight::route('/act/login', function() {
 	$db = Flight::db();
 	$request = Flight::request();
 	
-	$form = new severak\forms\form(['method'=>'POST', 'class'=>'pure-form pure-form-stacked']);
+	$form = new severak\forms\form(['method'=>'POST']);
 	$form->field('username', ['label'=>'User name', 'required'=>true]);
 	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
 	$form->field('register', ['label'=>'Login', 'type'=>'submit']);
@@ -108,7 +116,7 @@ Flight::route('/act/login', function() {
 				}
 			}
 		}
-		$forms->errors['password'] = 'Bad login/password!';
+		$form->errors['password'] = 'Bad login/password!';
 	}
 	
 
