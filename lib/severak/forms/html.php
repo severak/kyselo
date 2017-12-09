@@ -32,6 +32,38 @@ class html
 		}
 		return $out;
 	}
+	
+	function open($attr=[])
+	{
+		$attr = $this->_form->attr + $attr;
+		return '<form ' . $this->_attr($attr) . '>';
+	}
+	
+	function label($fieldName, $attr=[])
+	{
+		if (empty($form->fields[$fieldName])) throw new usageException('Label ' . $fieldName . ' not defined.');
+		
+		$field = $form->fields[$fieldName];
+		
+		if (in_array($field['type'], ['submit', 'reset', 'checkbox'])) {
+			return ''; // 
+		}
+		
+		// todo
+	}
+	
+	// todo...
+	
+	function close()
+	{
+		return '</form>';
+	}
+	
+	
+	function all()
+	{
+		
+	}
 
 	function __toString()
 	{
