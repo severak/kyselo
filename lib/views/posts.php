@@ -2,6 +2,7 @@
 // posts listing / post detail
 // arguments:
 // - $posts
+// - $blog
 // - $user
 // - $more_link
 // - $the_end
@@ -10,7 +11,7 @@ $icons = ['', 'book', 'link', 'paragraph', 'camera', 'youtube-play', 'file', 'st
 
 foreach ($posts as $post) {
 ?>
-<div class="pure-g" xmlns="http://www.w3.org/1999/html">
+<div class="pure-g">
 	<div class="pure-u-1-5">
 		<i class="fa fa-<?php echo $icons[$post['type']]; ?> fa-3x"></i>
 	</div>
@@ -113,3 +114,35 @@ if (!empty($more_link)) {
 if (!empty($the_end)) {
 	echo '<p>You have reached teh end...</p>';
 }
+
+// floating buttons:
+echo '<div class="kyselo-float">';
+if (empty($user)) {
+	$loginAs = '';
+	if (!empty($blog) && !$blog['is_group']) {
+		$loginAs = '?as=' . $blog['name'];
+	}
+	// login
+	echo '<a href="/act/login'.$loginAs.'" class="pure-button button-large"><i class="fa fa-key"></i><span class="kyselo-hidden"> login</span></a>';
+} else {
+	// my blog:
+	if (!empty($blog) && $blog['name']==$user['name']) {
+		// post
+		echo '<a href="/act/post?as='.$user['name'].'" class="pure-button button-large"><i class="fa fa-pencil"></i><span class="kyselo-hidden"> new post</span></a>';
+	}
+	// group:
+	if (!empty($blog) && $blog['name']!=$user['name'] && $blog['is_group']) {
+		// follow
+		echo '<a href="#" class="pure-button button-large"><i class="fa fa-heart"></i><span class="kyselo-hidden"> follow</span></a>';	
+		// member
+		echo '<a href="#" class="pure-button button-large"><i class="fa fa-user-plus"></i><span class="kyselo-hidden"> member</span></a>';	
+	}
+	// other blog:
+	if (!empty($blog) && $blog['name']!=$user['name'] && !$blog['is_group']) {
+		// follow
+		echo '<a href="#" class="pure-button button-large"><i class="fa fa-heart"></i><span class="kyselo-hidden"> follow</span></a>';	
+		// message
+		echo '<a href="#" class="pure-button button-large"><i class="fa fa-envelope"></i><span class="kyselo-hidden"> message</span></a>';	
+	}
+}
+echo '</div>';

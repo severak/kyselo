@@ -1,4 +1,28 @@
-.kyselo-dark {
+/* page layout */
+
+.kyselo-content {
+	margin: 0 auto;
+	width: 600px;
+	margin-top: 40px;
+}
+
+/* float */
+
+.kyselo-float {
+	position: fixed;
+	left: 40px;
+	bottom: 40px;
+}
+
+.kyselo-float .pure-button {
+	margin-right: 0.3em;
+	background-color: #444;
+	color: #ccc;
+}
+
+/* main menu */
+
+.kyselo-dark, .kyselo-dark .pure-menu-children {
     background-color: #444;
 }
 
@@ -7,15 +31,17 @@
 }
 
 .kyselo-dark .pure-menu-link:hover {
+	background-color: #ccc;
 	color: #444;
 }
 
-.kyselo-content {
-	margin: 0 auto;
-	width: 600px;
-	margin-top: 40px;
-}
+/* forms */
 
 .kyselo-form-error {
 	color: red;
+}
+
+/* various */
+.kyselo-hidden {
+		display: none;
 }

@@ -33,7 +33,8 @@ Sorry - only in Czech for now.
 
 - Flight::flash()
 - Flight::requireLogin()
-- Flight::config()
+- Flight::config() ✔
+- Flight::user($property) ✔
 
 ## způsoby řešení
 

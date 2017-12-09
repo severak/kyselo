@@ -94,7 +94,11 @@ Flight::route('/act/login', function() {
 	$form = new severak\forms\form(['method'=>'POST']);
 	$form->field('username', ['label'=>'User name', 'required'=>true]);
 	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
-	$form->field('register', ['label'=>'Login', 'type'=>'submit']);
+	$form->field('login', ['label'=>'Login', 'type'=>'submit']);
+	
+	if (!empty($_GET['as'])) {
+		$form->fill(['username'=>$_GET['as']]);
+	}
 	
 	
 	if ($request->method=='POST') {

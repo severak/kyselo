@@ -19,6 +19,21 @@ flight\core\Loader::addDirectory("lib/flourish");
 // start session
 session_start();
 
+Flight::map('config', function() {
+	global $config;
+	return $config;
+});
+
+Flight::map('user', function($property=null) {
+	if (!empty($_SESSION['user'])) {
+		if ($property) {
+			return $_SESSION['user'][$property];
+		}
+		return $_SESSION['user'];
+	}
+	return null;
+});
+
 Flight::register('db', 'sparrow', [], function($db) use($config) {
 	$db->setDb('pdosqlite://localhost/' . __DIR__ . '/' . $config['database']);
 	$db->show_sql = true;

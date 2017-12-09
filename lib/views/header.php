@@ -20,7 +20,7 @@
 		    <?php foreach($_SESSION['user']['groups'] as $group): ?>
                     <li class="pure-menu-item"><a href="/<?= $group['name']; ?>" class="pure-menu-link"><?= $group['name']; ?></a></li>
                     <?php endforeach; ?>
-		    <li class="pure-menu-item"><a href="/act/groups" class="pure-menu-link pure-button">Find &amp; create…</a></li>
+		    <li class="pure-menu-item"><a href="/act/groups" class="pure-menu-link">Find &amp; create…</a></li>
                 </ul>
             </li>
             <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
@@ -29,7 +29,7 @@
                     <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>/friends" class="pure-menu-link">My friends</a></li>
                     <!-- <li class="pure-menu-item"><a href="#" class="pure-menu-link">My followers</a></li> -->
                     <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>/fof" class="pure-menu-link">Friends of a friend</a></li>
-                    <li class="pure-menu-item"><a href="/act/invite" class="pure-menu-link pure-button">Find &amp; invite…</a></li>
+                    <li class="pure-menu-item"><a href="/act/invite" class="pure-menu-link">Find &amp; invite…</a></li>
                 </ul>
             </li>
             <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">

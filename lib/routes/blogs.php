@@ -39,7 +39,8 @@ Flight::route('/all', function(){
 	Flight::render('posts', [
 		'posts'=>$posts,
 		'more_link'=>$moreLink,
-		'the_end'=>$theEnd
+		'the_end'=>$theEnd,
+		'user' => Flight::user()
 	]);
 	Flight::render('footer', []);
 });
@@ -76,7 +77,9 @@ Flight::route('/@name/post/@postid', function($name, $postId){
 		'avatar_url'=> $blog['avatar_url']
 	]);
 	Flight::render('posts', [
-		'posts'=> [$post]
+		'posts'=> [$post],
+		'blog' => $blog,
+		'user' => Flight::user()
 	]);
 	Flight::render('footer', []);
 });
@@ -124,8 +127,12 @@ Flight::route('/@name', function($name){
 	]);
 	Flight::render('posts', [
 		'posts'=>$posts,
+		'blog' => $blog,
+		'user' => Flight::user(),
 		'more_link'=>$moreLink,
 		'the_end'=>$theEnd
 	]);
 	Flight::render('footer', []);
 });
+
+// todo: /friends
