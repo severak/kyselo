@@ -67,7 +67,7 @@ Flight::route('/act/register', function() {
 	}
 	
 	Flight::render('header', ['title' => 'registration' ]);
-	Flight::render('registration', [
+	Flight::render('form', [
 		'form' => $form,
 	]);
 	Flight::render('footer', []);
@@ -113,7 +113,7 @@ Flight::route('/act/login', function() {
 	
 
 	Flight::render('header', ['title' => 'login' ]);
-	Flight::render('registration', [
+	Flight::render('form', [
 		'form' => $form,
 	]);
 	Flight::render('footer', []);
