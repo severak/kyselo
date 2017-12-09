@@ -10,7 +10,7 @@ class form
 	public $fields = [];
 	public $attr=[];
 
-	protected $_rules;
+	protected $_rules=[];
 
 	public $messages = [
 		'required' => 'Field is required.'
