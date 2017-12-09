@@ -72,12 +72,12 @@ class html
 		} elseif ($field['type']=='select') {
 			// select
 			$out .= '<select ' . $this->_attr($field) . '>';
-			foreach ($field['options'] as $key=>$val) {
-				$_attr = ['value'=>$val];
-				if ($fieldValue===$val) {
+			foreach ($field['options'] as $value=>$text) {
+				$_attr = ['value'=>$value];
+				if ($fieldValue===$value) {
 					$_attr['selected'] = true;
 				}
-				$out .= '<option '.$this->_attr($_attr).'>' . $this->_text($val) . '</option>';
+				$out .= '<option '.$this->_attr($_attr).'>' . $this->_text($text) . '</option>';
 			}
 			$out .= '</select>';
 		} else {
