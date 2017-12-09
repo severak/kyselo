@@ -1,9 +1,21 @@
 .kyselo-dark {
-    background-color: #444444;
+    background-color: #444;
+}
+
+.kyselo-dark .pure-menu-link {
+	color: #ccc;
+}
+
+.kyselo-dark .pure-menu-link:hover {
+	color: #444;
 }
 
 .kyselo-content {
 	margin: 0 auto;
 	width: 600px;
 	margin-top: 40px;
+}
+
+.kyselo-form-error {
+	color: red;
 }
