@@ -82,7 +82,7 @@ class html
 			$out .= '</select>';
 		} else {
 			// input
-			if ($field['type']=='checkbox' && $fieldValue===$field['value']) {
+			if ($field['type']=='checkbox' && $fieldValue==$field['value']) {
 				$field['checked'] = true;
 			}
 
