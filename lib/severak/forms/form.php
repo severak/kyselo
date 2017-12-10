@@ -43,6 +43,8 @@ class form
 		if (empty($attr['id'])) $attr['id'] = $this->attr['id'] . '_' . $name;
 		// ---
 		$this->fields[$name] = $attr;
+		
+		if ($attr['type']=='file') $this->attr['enctype'] = 'multipart/form-data'; // enable upload
 
 		// implicit rule's
 		if (!empty($attr['required'])) $this->rule($name, 'severak\forms\rules::required', $this->messages['required']);
