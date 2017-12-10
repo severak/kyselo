@@ -121,9 +121,9 @@ Flight::route('/@name', function($name){
 
 	Flight::render('header', ['title' => $blog["title"] ]);
 	Flight::render('blog_header', [
-		'title'=> $blog['title'],
-		'about'=> $blog['about'],
-		'avatar_url'=> $blog['avatar_url']
+		'blog'=>$blog,
+		'user'=>Flight::user(),
+		'tab'=>'friends'
 	]);
 	Flight::render('posts', [
 		'posts'=>$posts,
@@ -173,9 +173,9 @@ Flight::route('/@name/friends', function($name){
 
 	Flight::render('header', ['title' => $blog["title"] ]);
 	Flight::render('blog_header', [
-		'title'=> $blog['title'],
-		'about'=> $blog['about'],
-		'avatar_url'=> $blog['avatar_url']
+		'blog'=>$blog,
+		'user'=>Flight::user(),
+		'tab'=>'friends'
 	]);
 	Flight::render('posts', [
 		'posts'=>$posts,
