@@ -34,6 +34,10 @@ Flight::map('user', function($property=null) {
 	return null;
 });
 
+Flight::map('requireLogin', function() {
+	if (!Flight::user()) Flight::redirect('/act/login');
+});
+
 Flight::register('db', 'sparrow', [], function($db) use($config) {
 	$db->setDb('pdosqlite://localhost/' . __DIR__ . '/' . $config['database']);
 	$db->show_sql = true;
@@ -41,5 +45,6 @@ Flight::register('db', 'sparrow', [], function($db) use($config) {
 
 require __DIR__ . '/lib/routes/blogs.php';
 require __DIR__ . '/lib/routes/authorization.php';
+require __DIR__ . '/lib/routes/posting.php';
 
 Flight::start();
