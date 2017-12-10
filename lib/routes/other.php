@@ -78,5 +78,52 @@ Flight::route('/act/member', function(){
 
 	Flight::redirect('/'.$blog['name']);
 });
+
+// /act/settings/@blog
+Flight::route('/act/settings/@name', function($name){
+	Flight::requireLogin();
+	$request = Flight::request();
+	$db = Flight::db();
+	$user = Flight::user();
+	
+	$blog = $db->from('blogs')->where('name', $name)->where('is_visible', 1)->select()->one();
+	
+	if (empty($blog)) {
+		Flight::notFound();
+	}
+	
+	if ($user['blog_id']!=$blog['id'] && !isset($user['groups'][$blog['id']])) {
+		Flight::halt(403, 'Not authorized!');
+	}
+	
+	$form = new severak\forms\form(['method'=>'post']);
+	$form->field('title', ['label'=>'Blog title', 'required'=>true]);
+	$form->field('about', ['label'=>'Blog description', 'type'=>'textarea', 'rows'=>6, 'required'=>true]);
+	$form->field('is_nsfw', ['label'=>'is NSFW blog', 'type'=>'checkbox']);
+	$form->field('upload', ['label'=>'Change logo', 'type'=>'file']);
+	$form->field('save', ['label'=>'Save', 'type'=>'submit']);
+	
+	$form->fill($blog);
+	
+	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
+		$update['title'] = $_POST['title'];
+		$update['about'] = $_POST['about'];
+		$update['is_nsfw'] = isset($_POST['is_nsfw']) ? 1 : 0;
+		
+		$db->from('blogs')->where('id', $blog['id'])->update($update)->execute();
+		Flight::redirect('/'.$blog['name']);
+		
+	}
+	
+	Flight::render('header', ['title' => $blog["title"] ]);
+	Flight::render('blog_header', [
+		'blog'=>$blog,
+		'user'=>Flight::user(),
+		'tab'=>'settings'
+	]);
+	Flight::render('form', ['form'=>$form]);
+	Flight::render('footer', []);
+});
+	
 	
 
