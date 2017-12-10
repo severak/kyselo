@@ -66,6 +66,11 @@
 		display: none;
 }
 
+.kyselo-big-profile {
+	padding: 4px;
+	box-sizing: border-box;
+}
+
 hr {
 	border: none;
 	border-bottom: 2px solid #ccc;

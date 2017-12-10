@@ -6,7 +6,7 @@
 // - $tab
 ?>
 <div class="pure-g">
-	<div class="pure-u-1-5"><img class="pure-img" src="<?php echo $blog['avatar_url']; ?>"/></div>
+	<div class="pure-u-1-5 kyselo-big-profile"><img class="pure-img" src="<?php echo $blog['avatar_url']; ?>"/></div>
 	<div class="pure-u-4-5">
 		<h1><?php echo $blog['title']; ?></h1>
 		<small><?php echo $blog['about']; ?></small>
