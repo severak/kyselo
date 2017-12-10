@@ -47,6 +47,40 @@ Flight::register('db', 'sparrow', [], function($db) use($config) {
 	$db->show_sql = true;
 });
 
+function kyselo_upload_image($form, $name)
+{
+	$uploader = new fUpload();
+	$uploader->setMIMETypes(
+		array(
+			'image/gif',
+			'image/jpeg',
+			'image/pjpeg',
+			'image/png'
+		),
+		'The file uploaded is not an image.'
+	);
+	$uploader->setMaxSize('2MB');
+	$uploader->setOptional();
+		
+	$uploaderError = $uploader->validate($name, true);
+	if ($uploaderError) {
+		$form->error($name, $uploaderError);
+	} elseif (!empty($_FILES[$name]['tmp_name'])) {
+		$md5 = md5_file($_FILES[$name]['tmp_name']);
+		$image = new fImage($_FILES[$name]['tmp_name']);
+		$md5_path = '/pub/' . substr($md5, 0, 2) . '/' . substr($md5, 2, 2) . '/' . substr($md5, 4, 2) . '/' . $md5 . '.'. $image->getType();
+		$prefix = Flight::rootpath();
+		$dirname = pathinfo($md5_path, PATHINFO_DIRNAME);
+		if (!is_dir($prefix. $dirname)) {
+			mkdir($prefix . $dirname, 0777, true);
+		}
+		if (move_uploaded_file($_FILES[$name]['tmp_name'], $prefix . $md5_path)) {
+			return $md5_path;
+		}
+	}
+	return null;
+}
+
 require __DIR__ . '/lib/routes/blogs.php';
 require __DIR__ . '/lib/routes/authorization.php';
 require __DIR__ . '/lib/routes/posting.php';
