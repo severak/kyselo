@@ -123,7 +123,7 @@ Flight::route('/@name', function($name){
 	Flight::render('blog_header', [
 		'blog'=>$blog,
 		'user'=>Flight::user(),
-		'tab'=>'friends'
+		'tab'=>'blog'
 	]);
 	Flight::render('posts', [
 		'posts'=>$posts,

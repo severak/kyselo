@@ -49,7 +49,24 @@
 	color: red;
 }
 
+/* tabs*/
+.kyselo-tabs {
+	margin-top: 15px;
+}
+
+.kyselo-tabs a {
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-bottom: none;
+}
+
+
 /* various */
 .kyselo-hidden {
 		display: none;
+}
+
+hr {
+	border: none;
+	border-bottom: 2px solid #ccc;
 }
