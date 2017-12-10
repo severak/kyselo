@@ -63,6 +63,12 @@ class form
 
 		return $this->values;
 	}
+	
+	public function error($name, $message)
+	{
+		$this->errors[$name] = $message;
+		$this->isValid = false;
+	}
 
 	public function validate()
 	{
