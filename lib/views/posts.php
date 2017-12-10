@@ -87,7 +87,7 @@ foreach ($posts as $post) {
                 <div class="pure-menu pure-menu-horizontal">
                     <ul class="pure-menu-list pull-right">
                         <li class="pure-menu-item"><a href="<?php echo $permalink; ?>" class="pure-button">#permalink</a></li>
-						<?php if (!empty($user)) { ?>
+						<?php if (!empty($user) && false) { ?>
                         <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
                             <a href="#" class="pure-menu-link pure-button">repost</a>
                             <ul class="pure-menu-children">
@@ -133,16 +133,17 @@ if (empty($user)) {
 	// group:
 	if (!empty($blog) && $blog['name']!=$user['name'] && $blog['is_group']) {
 		// follow
-		echo '<a href="#" class="pure-button button-large"><i class="fa fa-heart"></i><span class="kyselo-hidden"> follow</span></a>';	
+		echo '<a href="#" class="pure-button button-large kyselo-switch"><i class="fa fa-heart"></i><span class="kyselo-hidden"> follow</span></a>';	
 		// member
 		echo '<a href="#" class="pure-button button-large"><i class="fa fa-user-plus"></i><span class="kyselo-hidden"> member</span></a>';	
 	}
 	// other blog:
 	if (!empty($blog) && $blog['name']!=$user['name'] && !$blog['is_group']) {
+		$friendshipExists = Flight::db()->from('friendships')->where('from_blog_id', $user['blog_id'])->where('to_blog_id', $blog['id'])->count() > 0;
 		// follow
-		echo '<a href="#" class="pure-button button-large"><i class="fa fa-heart"></i><span class="kyselo-hidden"> follow</span></a>';	
+		echo '<a href="/act/follow?who='.$blog['name'].'" class="pure-button button-large kyselo-switch '.($friendshipExists ? 'on' : 'off').'"><i class="fa fa-heart"></i><span class="kyselo-hidden"> follow</span></a>';	
 		// message
-		echo '<a href="#" class="pure-button button-large"><i class="fa fa-envelope"></i><span class="kyselo-hidden"> message</span></a>';	
+		// echo '<a href="#" class="pure-button button-large"><i class="fa fa-envelope"></i><span class="kyselo-hidden"> message</span></a>';	
 	}
 }
 echo '</div>';

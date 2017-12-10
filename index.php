@@ -46,5 +46,6 @@ Flight::register('db', 'sparrow', [], function($db) use($config) {
 require __DIR__ . '/lib/routes/blogs.php';
 require __DIR__ . '/lib/routes/authorization.php';
 require __DIR__ . '/lib/routes/posting.php';
+require __DIR__ . '/lib/routes/other.php';
 
 Flight::start();

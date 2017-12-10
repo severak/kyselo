@@ -20,6 +20,14 @@
 	color: #ccc;
 }
 
+.kyselo-float .kyselo-switch:hover, .kyselo-float .kyselo-switch.on {
+	color: green;
+}
+
+.kyselo-float .kyselo-switch.on:hover {
+	color: red;
+}
+
 /* main menu */
 
 .kyselo-dark, .kyselo-dark .pure-menu-children {
