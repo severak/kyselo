@@ -126,7 +126,7 @@ Flight::route('/act/settings/@name', function($name){
 		$uploaderError = $uploader->validate('upload', true);
 		if ($uploaderError) {
 			$form->error('upload', $uploaderError);
-		} else {
+		} elseif (!empty($_FILES['upload']['tmp_name'])) {
 			$md5 = md5_file($_FILES['upload']['tmp_name']);
 			$image = new fImage($_FILES['upload']['tmp_name']);
 			$md5_path = '/pub/' . substr($md5, 0, 2) . '/' . substr($md5, 2, 2) . '/' . substr($md5, 4, 2) . '/' . $md5 . '.'. $image->getType();
