@@ -19,6 +19,10 @@ flight\core\Loader::addDirectory("lib/flourish");
 // start session
 session_start();
 
+Flight::map('rootpath', function() {
+	return __DIR__;
+});
+
 Flight::map('config', function() {
 	global $config;
 	return $config;

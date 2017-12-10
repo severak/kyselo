@@ -108,11 +108,42 @@ Flight::route('/act/settings/@name', function($name){
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		$update['title'] = $_POST['title'];
 		$update['about'] = $_POST['about'];
-		$update['is_nsfw'] = isset($_POST['is_nsfw']) ? 1 : 0;
+		$update['is_nsfw'] = isset($_POST['is_nsfw']) ? 1 : 0; // todo - podobnou konstrukci mít spíš ve formuláři
 		
-		$db->from('blogs')->where('id', $blog['id'])->update($update)->execute();
-		Flight::redirect('/'.$blog['name']);
+		$uploader = new fUpload();
+		$uploader->setMIMETypes(
+			array(
+				'image/gif',
+				'image/jpeg',
+				'image/pjpeg',
+				'image/png'
+			),
+			'The file uploaded is not an image.'
+		);
+		$uploader->setMaxSize('2MB');
+		$uploader->setOptional();
 		
+		$uploaderError = $uploader->validate('upload', true);
+		if ($uploaderError) {
+			$form->error('upload', $uploaderError);
+		} else {
+			$md5 = md5_file($_FILES['upload']['tmp_name']);
+			$image = new fImage($_FILES['upload']['tmp_name']);
+			$md5_path = '/pub/' . substr($md5, 0, 2) . '/' . substr($md5, 2, 2) . '/' . substr($md5, 4, 2) . '/' . $md5 . '.'. $image->getType();
+			$prefix = Flight::rootpath();
+			$dirname = pathinfo($md5_path, PATHINFO_DIRNAME);
+			if (!is_dir($prefix. $dirname)) {
+				mkdir($prefix . $dirname, 0777, true);
+			}
+			if (move_uploaded_file($_FILES['upload']['tmp_name'], $prefix . $md5_path)) {
+				$update['avatar_url'] = $md5_path;
+			}
+		}
+		
+		if ($form->isValid) {
+			$db->from('blogs')->where('id', $blog['id'])->update($update)->execute();
+			Flight::redirect('/'.$blog['name']);
+		}
 	}
 	
 	Flight::render('header', ['title' => $blog["title"] ]);
