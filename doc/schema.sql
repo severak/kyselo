@@ -66,7 +66,8 @@ CREATE TABLE friendships (
 	since TEXT
 );
 
-CREATE TABLE membership (
+CREATE TABLE memberships (
+	id INTEGER PRIMARY KEY,
 	blog_id INT NOT NULL,
 	member_id INT NOT NULL,
 	is_admin INT DEFAULT 0,

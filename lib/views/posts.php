@@ -132,10 +132,12 @@ if (empty($user)) {
 	}
 	// group:
 	if (!empty($blog) && $blog['name']!=$user['name'] && $blog['is_group']) {
+		$friendshipExists = Flight::db()->from('friendships')->where('from_blog_id', $user['blog_id'])->where('to_blog_id', $blog['id'])->count() > 0;
 		// follow
-		echo '<a href="#" class="pure-button button-large kyselo-switch"><i class="fa fa-heart"></i><span class="kyselo-hidden"> follow</span></a>';	
+		echo '<a href="/act/follow?who='.$blog['name'].'" class="pure-button button-large kyselo-switch '.($friendshipExists ? 'on' : 'off').'"><i class="fa fa-heart"></i><span class="kyselo-hidden"> follow</span></a>';	
+		$membership = Flight::db()->from('memberships')->where('member_id', $user['blog_id'])->where('blog_id', $blog['id'])->one();
 		// member
-		echo '<a href="#" class="pure-button button-large"><i class="fa fa-user-plus"></i><span class="kyselo-hidden"> member</span></a>';	
+		echo '<a href="/act/member?who='.$blog['name'].'" class="pure-button button-large kyselo-switch '.($membership ? 'on' : 'off').' '.(!empty($friendship['is_admin']) ? 'is-admin' : '').'"><i class="fa fa-user-plus"></i><span class="kyselo-hidden"> member</span></a>';	
 	}
 	// other blog:
 	if (!empty($blog) && $blog['name']!=$user['name'] && !$blog['is_group']) {
