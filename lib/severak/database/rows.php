@@ -1,6 +1,8 @@
 <?php
 namespace severak\database;
 
+// see https://phpdelusions.net/pdo
+
 class rows
 {
 	public $pdo;
@@ -13,17 +15,27 @@ class rows
 
 	public function one($table, $where)
 	{
-		// todo
+		$Q = $this->fragment('SELECT * FROM ' . $table);
+		$Q = $this->_addJoins($Q);
+		$Q = $this->_addWhere($Q, $where);
+		return $this->_execute($Q)->fetch(PDO::FETCH_ASSOC);
 	}
 	
 	public function more($table, $where, $order)
 	{
-		// todo
+		$Q = $this->fragment('SELECT * FROM ' . $table);
+		$Q = $this->_addJoins($Q);
+		$Q = $this->_addWhere($Q, $where);
+		$Q = $this->_addOrder($Q, $order);
+		return $this->_execute($Q)->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	public function count($table, $where)
 	{
-		// todo
+		$Q = $this->fragment('SELECT count(*) FROM ' . $table);
+		$Q = $this->_addJoins($Q);
+		$Q = $this->_addWhere($Q, $where);
+		return $this->_execute($Q)->fetchColumn();
 	}
 	
 	public function page($table, $where, $order, $page, $perPage)
@@ -50,4 +62,11 @@ class rows
 	{
 		// todo
 	}
+	
+	public function fragment($sql, $params=[])
+	{
+		// todo
+	}
+	
+	
 }
