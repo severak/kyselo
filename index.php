@@ -85,5 +85,6 @@ require __DIR__ . '/lib/routes/blogs.php';
 require __DIR__ . '/lib/routes/authorization.php';
 require __DIR__ . '/lib/routes/posting.php';
 require __DIR__ . '/lib/routes/other.php';
+require __DIR__ . '/lib/routes/test.php';
 
 Flight::start();
