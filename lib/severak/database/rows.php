@@ -11,7 +11,7 @@ class rows
 	protected $_with = [];
 	
 	public $pdo;
-	public $pageCount = -1;
+	public $pages = -1;
 	public $log = [];
 	
 	public function __construct(PDO $pdo)
@@ -25,6 +25,7 @@ class rows
 		$Q = $this->fragment('SELECT '.$this->_what($table).' FROM ' . $table);
 		$Q = $this->_addJoins($Q, $table);
 		$Q = $this->_addWhere($Q, $where, $table);
+		$this->_reset();
 		return $this->_execute($Q)->fetch(PDO::FETCH_ASSOC);
 	}
 	
@@ -35,6 +36,7 @@ class rows
 		$Q = $this->_addWhere($Q, $where, $table);
 		$Q = $this->_addOrder($Q, $order);
 		$Q = $this->_addLimit($Q, $limit);
+		$this->_reset();
 		return $this->_execute($Q)->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
@@ -43,12 +45,27 @@ class rows
 		$Q = $this->fragment('SELECT count(*) FROM ' . $table);
 		$Q = $this->_addJoins($Q, $table);
 		$Q = $this->_addWhere($Q, $where, $table);
+		$this->_reset();
 		return (int) $this->_execute($Q)->fetchColumn();
 	}
 	
-	public function page($table, $where=[], $order=[], $page=0, $perPage=30)
+	public function page($table, $where=[], $order=[], $page=1, $perPage=30)
 	{
-		// todo
+		$Q = $this->fragment('SELECT count(*) FROM ' . $table);
+		$Q = $this->_addJoins($Q, $table);
+		$Q = $this->_addWhere($Q, $where, $table);
+		$count = $this->_execute($Q)->fetchColumn();
+		
+		$Q = $this->fragment('SELECT '.$this->_what($table).' FROM ' . $table);
+		$Q = $this->_addJoins($Q, $table);
+		$Q = $this->_addWhere($Q, $where, $table);
+		$Q = $this->_addOrder($Q, $order);
+		$Q = $this->_addLimit($Q, $perPage);
+		$Q = $this->_addOffset($Q, $perPage * ($page-1));
+		
+		$this->_reset();
+		$this->pages = ceil($count/$perPage);
+		return $this->_execute($Q)->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
 	public function with($table, $from='id', $to='id', $where=[])
@@ -158,15 +175,26 @@ class rows
 		return $Q->add('LIMIT ' . sprintf('%d', $limit));
 	}
 	
+	protected function _addOffset($Q, $offset)
+	{
+		return $Q->add('OFFSET ' . sprintf('%d', $offset));
+	}
+	
 	protected function _execute(query $Q)
 	{
 		$this->log[] = $Q->interpolate();
 		
+		//echo $Q->interpolate();die;
+		
 		$stmt = $this->pdo->prepare($Q->sql);
 		$stmt->execute($Q->params);
 		
-		$this->_with = [];
-		
 		return $stmt;
+	}
+	
+	protected function _reset()
+	{
+		$this->_with = [];
+		$this->pages = -1;
 	}
 }
