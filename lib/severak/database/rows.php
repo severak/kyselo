@@ -1,6 +1,6 @@
 <?php
 namespace severak\database;
-use usageException;
+use severak\database\usageException;
 use severak\database\query;
 use \PDO;
 
@@ -76,17 +76,43 @@ class rows
 	
 	public function insert($table, $data)
 	{
-		// todo
+		if (!empty($this->_with)) throw new usageException('Method rows::insert doesn\'t work with JOINs.');
+		$questions = array_fill(0, count($data), '?');
+		$Q = $this->fragment('INSERT INTO ' . $table . '(' . implode(',', array_keys($data)) . ') VALUES (' . implode(',', $questions) . ')', array_values($data));
+		$this->_execute($Q);
+		$this->_reset();
+		return $this->pdo->lastInsertId();
 	}
 	
 	public function update($table, $data, $where)
 	{
-		// todo
+		if (!empty($this->_with)) throw new usageException('Method rows::update doesn\'t work with JOINs.');
+		if (empty($where)) throw new usageException('Method rows::update with empty WHERE is insecure.');
+		
+		$Q = $this->fragment('UPDATE ' . $table . ' SET');
+		$and = '';
+		foreach ($data as $k=>$v) {
+			$Q = $Q->add($and . $k.'=?', [$v]);
+			$and = ', ';
+		}
+		$Q = $this->_addWhere($Q, $where, $table);
+		
+		$this->_reset();
+		
+		return $this->_execute($Q)->rowCount();
 	}
 	
 	public function delete($table, $where)
 	{
-		// todo
+		if (!empty($this->_with)) throw new usageException('Method rows::delete doesn\'t work with JOINs.');
+		if (empty($where)) throw new usageException('Method rows::delete with empty WHERE is insecure.');
+		
+		$Q = $this->fragment('DELETE FROM ' . $table);
+		$Q = $this->_addWhere($Q, $where, $table);
+		
+		$this->_reset();
+		
+		return $this->_execute($Q)->rowCount();
 	}
 	
 	public function fragment($sql, $params=[])
