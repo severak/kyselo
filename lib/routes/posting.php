@@ -5,6 +5,7 @@ Flight::route('/act/post', function() {
 	$db = Flight::db();
 	$request = Flight::request();
 	$user = Flight::user();
+	$postType = isset($_GET['type']) ? $_GET['type'] : 1;
 	
 	$postTypes = [
 		1 => 'text',
@@ -22,46 +23,56 @@ Flight::route('/act/post', function() {
 	// todo: groups
 	
 	$form = new severak\forms\form(['method'=>'post']);
-	$form->field('post_to', ['type'=>'select', 'options'=>$canPostAs, 'label'=>'Post to']);
-	$form->field('type', ['type'=>'select', 'options'=>$postTypes]);
-	$form->field('title', []);
-	$form->field('body', ['type'=>'textarea', 'rows'=>5, 'cols'=>30, 'label'=>'Text']);
-	$form->field('url', ['label'=>'URL']);
-	$form->field('upload', ['type'=>'file', 'label'=>'Attachment']);
+	
+	$form->field('blog_id', ['type'=>'select', 'options'=>$canPostAs, 'label'=>'Post to']);
+	
+	$form->rule('blog_id', function($blog_id) use ($canPostAs){
+		return !empty($canPostAs[$blog_id]);
+	}, 'Cannot post as this user!');
+	
+	$form->field('type', ['type'=>'hidden', 'value'=>$postType]);
+	
+	//$form->field('type', ['type'=>'select', 'options'=>$postTypes]);
+	
+	if ($postType==1) {
+		$form->field('title', ['placeholder'=>'title']);
+		$form->field('body', ['type'=>'textarea', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Text', 'required'=>true]);
+	} elseif ($postType==2) {
+		$form->field('source', ['required'=>true, 'label'=>'URL', 'placeholder'=>'http://example.org']);
+		// todo: parse_url checking
+		$form->field('title', ['placeholder'=>'title']);
+		$form->field('body', ['type'=>'textarea', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Text']);
+	} elseif ($postType==3) {	
+		$form->field('body', ['type'=>'textarea', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Quote', 'required'=>true]);
+		$form->field('title', ['placeholder'=>'Joe Doe', 'label'=>'by']);
+	} elseif ($postType==4) {
+		$form->field('upload', ['type'=>'file', 'label'=>'Upload']);
+		$form->field('source', ['label'=>'OR download from', 'placeholder'=>'http://example.org/cat.jpg']);
+		$form->field('body', ['type'=>'textarea', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Description']);
+	} elseif ($postType==5) {
+		$form->field('source', ['label'=>'Video URL', 'placeholder'=>'https://www.youtube.com/watch?v=YT0k99hCY5I', 'required'=>true]);
+	}
+	
 	$form->field('tags', ['label'=>'Tags']);
 	$form->field('is_nsfw', ['type'=>'checkbox', 'label'=>'is NSFW']);
 	$form->field('post', ['type'=>'submit', 'label'=>'Post it!']);
 	
-	if ($request->method=='POST') {
-		$form->fill($_POST);
+	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
+		$newPost = $form->values;
 		
-		if (!isset($canPostAs[$_POST['post_to']])) {
-			$form->error('post_to', 'Hacking attempt!'); // log it?
-		}
-		
-		$newPost = [];
-		$newPost['blog_id'] = $_POST['post_to'];
+		unset($newPost['tags'], $newPost['post'], $newPost['upload']);
 		$newPost['author_id'] = $user['blog_id'];
-		$newPost['type'] = $_POST['type'];
-		$newPost['guid'] = uniqid();
+		$newPost['guid'] = generate_uuid();
 		$newPost['datetime'] = strtotime('now');
 		
-		if ($_POST['type']==1) {
-			// text
-			if (empty($_POST['body'])) $form->error('body', 'Cannot save empty text!');
-			$newPost['body'] = $_POST['body'];
-			$newPost['title'] = $_POST['title'];
-		} else {
-			$form->error('type', 'Not implemeted yet!');
+		if ($form->values['type']>3) {
+			$form->error('blog_id', 'Post type not yet implemented.');
 		}
 		
 		if ($form->isValid) {
-			$postOK = $db->from('posts')->insert($newPost)->execute();
-			if ($postOK) {
-				$postId = $db->insert_id;
-				// todo: tagy
-				Flight::redirect('/'.$canPostAs[$_POST['post_to']]);
-			}
+			dump($form->values, $form->values['type']>3);exit;
+			Flight::rows()->insert('posts', $newPost);
+			Flight::redirect('/'.Flight::user('name'));
 		}
 	}
 	
@@ -70,4 +81,15 @@ Flight::route('/act/post', function() {
 		'form' => $form,
 	]);
 	Flight::render('footer', []);
-});	
+});
+
+
+function generate_uuid() {
+    return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
+        mt_rand( 0, 0xffff ),
+        mt_rand( 0, 0x0fff ) | 0x4000,
+        mt_rand( 0, 0x3fff ) | 0x8000,
+        mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
+    );
+}	

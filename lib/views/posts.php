@@ -164,5 +164,6 @@ echo '</div>';
 <script>
 $('#new_post').on('click', function(){
 	$('#post_types').show();
+	return false;
 });
 </script>
