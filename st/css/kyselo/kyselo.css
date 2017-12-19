@@ -28,6 +28,11 @@
 	color: red;
 }
 
+.kyselo-float #post_types {
+	display: none;
+	margin-left: 3em;
+}
+
 /* main menu */
 
 .kyselo-dark, .kyselo-dark .pure-menu-children {

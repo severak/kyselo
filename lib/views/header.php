@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="/st/css/font-awesome/css/font-awesome.css">
 	<link rel="stylesheet" href="/st/css/kyselo/kyselo.css">
 	<meta property="og:title" content="<?php $title; ?>" />
+	<script src="/st/js/zepto.min.js"></script>
 </head>
 <body>
 	<!-- hlavni menu -->
