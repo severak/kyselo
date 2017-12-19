@@ -95,3 +95,10 @@ hr {
 	border: none;
 	border-bottom: 2px solid #ccc;
 }
+
+blockquote {
+    border-left: 3px solid #ccc;
+    -webkit-margin-start: 0;
+	margin-left: 0;
+    padding-left: 1em;
+}
