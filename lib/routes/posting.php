@@ -65,7 +65,20 @@ Flight::route('/act/post', function() {
 		$newPost['guid'] = generate_uuid();
 		$newPost['datetime'] = strtotime('now');
 		
-		if ($form->values['type']>3) {
+		if ($newPost['type']==4) {
+			// photo uploading
+			$newPhoto = kyselo_upload_image($form, 'upload');
+			if ($newPhoto) {
+				$newPost['url'] = $newPhoto;
+			}
+			if (!empty($newPost['source'])) {
+				// todo: potom budeme stahovat a uchovávat si lokální kopii
+				$newPost['url'] = $newPost['source'];
+			}
+			if (empty($newPost['url'])) $form->error('source', 'You have to upload photo or download it from outside.');
+		}
+		
+		if ($newPost['type']>4) {
 			$form->error('blog_id', 'Post type not yet implemented.');
 		}
 		
