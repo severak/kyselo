@@ -44,8 +44,13 @@ foreach ($posts as $post) {
 		if (!empty($post['source'])) {
 			echo '<p>from <a href="' . $post['source'] . '">' . $post['source'] . '</a></p>';
 		}
-	} else if ($post['type']==5) { // video (URL for now)
-		echo '<a href="' . $post['url'] . '">' . $post['body'] . '</a>';
+	} else if ($post['type']==5) { // video
+		if (!empty($post['preview_html'])) {
+			echo $post['preview_html'];
+		}
+		if (!empty($post['body'])) {
+			echo '<p>' . $post['body'] . '</p>';
+		}
 		if (!empty($post['source'])) {
 			echo '<p>from <a href="' . $post['source'] . '">' . $post['source'] . '</a></p>';
 		}

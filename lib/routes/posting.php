@@ -78,7 +78,18 @@ Flight::route('/act/post', function() {
 			if (empty($newPost['url'])) $form->error('source', 'You have to upload photo or download it from outside.');
 		}
 		
-		if ($newPost['type']>4) {
+		if ($newPost['type']==5) {
+			$info = Embed\Embed::create($newPost['source']);
+			if ($info->type=='video') {
+				$newPost['url'] = $newPost['source'];
+				$newPost['preview_html'] = $info->code;
+				$newPost['body'] = $info->title;
+			} else {
+				$form->error('source', 'Not a valid video.');
+			}
+		}
+		
+		if ($newPost['type']>6) {
 			$form->error('blog_id', 'Post type not yet implemented.');
 		}
 		
