@@ -47,7 +47,7 @@ class html
 		$attr = $attr + $this->_form->attr;
 		$field = $form->fields[$fieldName];
 		
-		if (in_array($field['type'], ['submit', 'reset', 'checkbox'])) {
+		if (in_array($field['type'], ['submit', 'reset', 'checkbox', 'hidden'])) {
 			return ''; // these input types has no label
 		}
 		
@@ -60,7 +60,9 @@ class html
 		if (empty($form->fields[$fieldName])) throw new usageException('Label ' . $fieldName . ' not defined.');
 	
 		$field = $attr + $form->fields[$fieldName];
-		$fieldValue = isset($form->values[$fieldName]) ? $form->values[$fieldName] : '';
+		$fieldValue = '';
+		if ($field['type']!='checkbox' && isset($field['value'])) $fieldValue = $field['value'];
+		if (isset($form->values[$fieldName])) $fieldValue = $form->values[$fieldName];
 		$out = '';
 		
 		if ($field['type']=='textarea') {
