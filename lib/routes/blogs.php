@@ -72,9 +72,9 @@ Flight::route('/@name/post/@postid', function($name, $postId){
 
 	Flight::render('header', ['title' => $blog["title"] ]);
 	Flight::render('blog_header', [
-		'title'=> $blog['title'],
-		'about'=> $blog['about'],
-		'avatar_url'=> $blog['avatar_url']
+		'blog'=>$blog,
+		'user'=>Flight::user(),
+		'tab'=>'blog'
 	]);
 	Flight::render('posts', [
 		'posts'=> [$post],
