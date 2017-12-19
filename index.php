@@ -47,6 +47,15 @@ Flight::register('db', 'sparrow', [], function($db) use($config) {
 	$db->show_sql = true;
 });
 
+Flight::map('rows', function() use($config) {
+	static $rows = null;
+	if (!$rows) {
+		$pdo = new PDO('sqlite:' . __DIR__ . '/' .  $config['database'], null, null, [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
+		$rows = new severak\database\rows($pdo);
+	}
+	return $rows;
+});
+
 function kyselo_upload_image($form, $name)
 {
 	$uploader = new fUpload();
