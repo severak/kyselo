@@ -52,6 +52,21 @@
 
 .kyselo-form-error {
 	color: red;
+
+}
+
+/* todo: toto jsou ugly hacky */
+
+.pure-form-aligned textarea.medium-editor-hidden {
+	display: none;
+}
+
+.pure-form-aligned .medium-editor-element { 
+	margin-left: 11em;
+	padding: 0.3em;
+	border: 1px dotted #ccc;
+	position: relative;
+	top: -1em;
 }
 
 /* tabs*/

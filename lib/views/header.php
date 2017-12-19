@@ -8,6 +8,9 @@
 	<link rel="stylesheet" href="/st/css/kyselo/kyselo.css">
 	<meta property="og:title" content="<?php $title; ?>" />
 	<script src="/st/js/zepto.min.js"></script>
+	<script src="/st/js/medium-editor.min.js"></script>
+	<link rel="stylesheet" href="/st/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">
+	<link rel="stylesheet" href="/st/css/themes/default.min.css" type="text/css" media="screen" charset="utf-8">
 </head>
 <body>
 	<!-- hlavni menu -->

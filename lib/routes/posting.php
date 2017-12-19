@@ -79,6 +79,7 @@ Flight::route('/act/post', function() {
 	Flight::render('form', [
 		'form' => $form,
 	]);
+	echo '<script>new MediumEditor("textarea");</script>';
 	Flight::render('footer', []);
 });
 
