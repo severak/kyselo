@@ -70,7 +70,6 @@ Flight::route('/act/post', function() {
 		}
 		
 		if ($form->isValid) {
-			dump($form->values, $form->values['type']>3);exit;
 			Flight::rows()->insert('posts', $newPost);
 			Flight::redirect('/'.Flight::user('name'));
 		}
