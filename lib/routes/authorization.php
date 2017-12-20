@@ -17,6 +17,14 @@ Flight::route('/act/register', function() {
 	$form->field('email', ['label'=>'E-mail', 'type'=>'email', 'required'=>true]);
 	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
 	$form->field('password_again', ['label'=>'and again', 'type'=>'password', 'required'=>true]);
+	
+	if (Flight::config('invitation_code')) {
+		$form->field('invitation_code', ['label'=>'Invitation code', ''=>'xyzzy', 'required'=>true]);
+		$form->rule('invitation_code', function($v){
+			return in_array($v, Flight::config('invitation_code'));
+		}, 'You cannot register without valid invitation code.');
+	}
+	
 	$form->field('terms_agreement', ['label'=>'I agree with terms of service', 'type'=>'checkbox']);
 	$form->field('register', ['label'=>'Sing in', 'type'=>'submit']);
 	// todo: catchpa - viz http://jecas.cz/recaptcha
@@ -59,8 +67,8 @@ Flight::route('/act/register', function() {
 			$db->from('blogs')->insert([
 				'name' => $form->values['username'],
 				'title' => $form->values['username'],
-				'about' => '(komencanto)',
-				'avatar_url'=> '/st/johnny-automatic-horse-head-50px.png',
+				'about' => 'I am new here',
+				'avatar_url'=> '/st/johnny-automatic-horse-head-50px.png', // todo - zkusit tahat fotku z Gravataru
 				'user_id' => $userId,
 				'since' => date('Y-m-d H:i:s')
 			])->execute();
@@ -69,7 +77,7 @@ Flight::route('/act/register', function() {
 
 			$db->from('users')->update(['blog_id'=>$blogId])->where(['id'=>$userId])->execute();
 
-			// todo: flash msg
+			Flight::flash('Successfully registered. You can login now.');
 			Flight::redirect('/act/login');
 		}
 	}
@@ -100,7 +108,6 @@ Flight::route('/act/login', function() {
 		$form->fill(['username'=>$_GET['as']]);
 	}
 	
-	
 	if ($request->method=='POST') {
 		$form->fill($_POST);
 		
@@ -120,9 +127,8 @@ Flight::route('/act/login', function() {
 				}
 			}
 		}
-		$form->errors['password'] = 'Bad login/password!';
+		$form->error('password', 'Bad login/password!');
 	}
-	
 
 	Flight::render('header', ['title' => 'login' ]);
 	Flight::render('form', [
