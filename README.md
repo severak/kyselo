@@ -29,7 +29,7 @@ self-hosted Soup.io open source clone
 ## Milestones
 
  - v 0.5 - easy import and read only display of backup ✔ 
- - v 0.6 - it's possible to post updates ⌛  
+ - v 0.6 - it's possible to post updates ✔ 
  - v 1.0 - usable multiuser Soup.io clone ⌛ 
  - v 2.0 - distributed social network
 
@@ -53,3 +53,5 @@ I used following components:
  - [Medoo](http://medoo.in) database framework by Catfan
  - [Pure CSS](https://purecss.io) framework by Yahoo! Inc
  - [Font Awesome](http://fontawesome.io) by Dave Gandy
+ - [Medium Editor](https://yabwe.github.io/medium-editor/)
+ 

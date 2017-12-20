@@ -6,14 +6,14 @@ Sorry - only in Czech for now.
 
 - registrace ✔
 - login/logout ✔
-- nastavení blogu (titulek, popis, avatar)
+- nastavení blogu (titulek, popis, avatar) ✔
 - nastavení barviček blogu
-- postování 
+- postování ⌛
 - předvyplnění skrz bookmarklet
 - repostování {ajax}
 - editace postů
-- následování jiných blogů {ajax}
-- feed sledovaných - `/blog/friends`
+- následování jiných blogů {ajax} ✔
+- feed sledovaných - `/blog/friends` ✔
 - feed fof - `/blog/fof`
 - feed všech příspěvků (*tady to žije*) - `/all`
 - RSS podoba feedů
@@ -31,9 +31,9 @@ Sorry - only in Czech for now.
 
 ## technika
 
-- Flight::flash()
-- Flight::requireLogin()
-- Flight::config() ✔
+- Flight::flash() ✔
+- Flight::requireLogin() ✔
+- Flight::config($property) ✔
 - Flight::user($property) ✔
 
 ## způsoby řešení
