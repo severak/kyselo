@@ -23,8 +23,11 @@ Flight::map('rootpath', function() {
 	return __DIR__;
 });
 
-Flight::map('config', function() {
+Flight::map('config', function($property=null) {
 	global $config;
+	if ($property) {
+		return isset($config[$property]) ? $config[$property] : null;
+	}
 	return $config;
 });
 
@@ -36,6 +39,10 @@ Flight::map('user', function($property=null) {
 		return $_SESSION['user'];
 	}
 	return null;
+});
+
+Flight::map('flash', function($msg, $success=true) {
+	$_SESSION['flash'][] = ['msg'=>$msg, 'class'=>$success ? 'success' : 'error'];
 });
 
 Flight::map('requireLogin', function() {

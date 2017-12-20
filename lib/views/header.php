@@ -51,3 +51,9 @@
     </div>
     <!-- /hlavni menu -->
     <div class="kyselo-content">
+<?php if (!empty($_SESSION['flash'])) {
+	while ($message = array_shift($_SESSION['flash'])) {
+		echo '<div class="kyselo-message kyselo-message-'.$message['class'].'">'.htmlspecialchars($message['msg']).'</div>';
+	}
+}	
+	

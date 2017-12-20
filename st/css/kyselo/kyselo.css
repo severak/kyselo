@@ -6,6 +6,20 @@
 	margin-top: 40px;
 }
 
+.kyselo-message {
+	background-color: #ccc;
+	padding: 0.3em;
+	margin-bottom: 0.6em;
+}
+
+.kyselo-message-success {
+	background-color: #4eb255;
+}
+
+.kyselo-message-error {
+	background-color: #f1932d;
+}
+
 /* float */
 
 .kyselo-float {
