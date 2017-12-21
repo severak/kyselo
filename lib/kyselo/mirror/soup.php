@@ -127,9 +127,10 @@ class kyselo_mirror_soup
 			if ($this->_db->has('posts', ['guid'=>$this->_post['guid']])) {
 				echo 'found duplicate while import ' . $this->_post['guid'] . PHP_EOL;
 			} else {
+				$this->_post['tags'] = implode(' ', $this->_tags);
 				$newPostId = $this->_db->insert('posts', $this->_post);
 				foreach ($this->_tags as $tag) {
-					$this->_db->insert('post_tags', ['post_id'=>$newPostId, 'tag'=>$tag]);
+					$this->_db->insert('post_tags', ['blog_id'=>$this->_destination, 'post_id'=>$newPostId, 'tag'=>$tag]);
 				}
 			}
 		}

@@ -35,6 +35,7 @@ CREATE TABLE posts (
 	end_date TEXT,
 	location TEXT,
 	preview_html TEXT,
+	tags TEXT,
 	is_visible INT DEFAULT 1,
 	is_nsfw INT DEFAULT 0,
 	is_spam INT DEFAULT 0
@@ -42,6 +43,7 @@ CREATE TABLE posts (
 
 CREATE TABLE post_tags (
 	post_id INT,
+	blog_id INT,
 	tag TEXT
 );
 

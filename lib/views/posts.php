@@ -83,6 +83,14 @@ foreach ($posts as $post) {
 		echo '<p>to: ' . $post['end_date'] . '</p>';
 		echo '<p>where: ' . $post['location'] . '</p>';
 	}
+	
+	echo '<div class="kyselo-tags">';
+	if (!empty($post['tags'])) {
+		foreach (explode(' ', $post['tags']) as $tag) {
+			echo '<a href="/'.$post['name'].'?tag='.$tag.'">#'.$tag.'</a> ';
+		}
+	}
+	echo '</div>';
 
 	$permalink = '/' . $post['name'] . '/post/' . $post['id'];
 	?>

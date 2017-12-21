@@ -60,7 +60,7 @@ Flight::route('/act/post', function() {
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		$newPost = $form->values;
 		
-		unset($newPost['tags'], $newPost['post'], $newPost['upload']);
+		unset($newPost['post'], $newPost['upload']);
 		$newPost['author_id'] = $user['blog_id'];
 		$newPost['guid'] = generate_uuid();
 		$newPost['datetime'] = strtotime('now');
@@ -94,7 +94,12 @@ Flight::route('/act/post', function() {
 		}
 		
 		if ($form->isValid) {
-			Flight::rows()->insert('posts', $newPost);
+			$postId = Flight::rows()->insert('posts', $newPost);
+			if (!empty($newPost['tags'])) {
+				foreach (explode(' ', $newPost['tags']) as $tag) {
+					Flight::rows()->insert('post_tags', ['blog_id'=>$newPost['blog_id'], 'post_id'=>$postId, 'tag'=>$tag]);
+				}
+			}
 			Flight::redirect('/'.Flight::user('name'));
 		}
 	}

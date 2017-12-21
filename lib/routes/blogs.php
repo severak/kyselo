@@ -96,12 +96,16 @@ Flight::route('/@name', function($name){
 	
 	$sel = $db
 		->from('posts')
-		->join('blogs', ['blog_id'=>'blogs.id'])
-		->where('blog_id', $blog['id'])
+		->join('blogs', ['posts.blog_id'=>'blogs.id'])
+		->where('posts.blog_id', $blog['id'])
 		->where('posts.is_visible', 1);
 	
 	if (!empty($_GET['since'])) {
 		$sel->where('datetime <= ', strtotime($_GET['since']) );
+	}
+	
+	if (!empty($_GET['tag'])) {
+		$sel->join('post_tags', ['posts.id'=>'post_tags.post_id', 'post_tags.tag'=>$db->quote($_GET['tag'])]);
 	}
 	
 	$sel->limit(31)
