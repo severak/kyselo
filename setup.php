@@ -51,7 +51,7 @@ echo 'creating admin account...' . PHP_EOL;
 $userId = $db->insert('users', [
 	'blog_id' => 0,
 	'email' => $adminEmail,
-	'password' => fCryptography::hashPassword($adminPw),
+	'password' => password_hash($adminPw, PASSWORD_DEFAULT),
 	'is_active' => 1
 ]);
 
