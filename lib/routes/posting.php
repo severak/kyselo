@@ -108,7 +108,7 @@ Flight::route('/act/post', function() {
 	Flight::render('form', [
 		'form' => $form,
 	]);
-	echo '<script>new MediumEditor("textarea", {buttonLabels:"fontawesome", placeholder:{text:"text..."}, paste:{forcePlainText:false}, autoLink: true, toolbar: {buttons: ["h1", "h2", "bold", "italic", "quote", "pre", "unorderedlist","orderedlist"]}});</script>';
+	echo '<script>new MediumEditor("textarea", {buttonLabels:"fontawesome", placeholder:{text:"text..."}, paste:{forcePlainText:false}, autoLink: true, toolbar: {buttons: ["bold", "italic", "anchor", "quote", "pre", "unorderedlist","orderedlist"]}});</script>';	
 	Flight::render('footer', []);
 });
 
