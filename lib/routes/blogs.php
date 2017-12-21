@@ -1,7 +1,7 @@
 <?php
 // homepage
 Flight::route('/', function(){
-	Flight::render('header', array('title' => 'resoUp'));
+	Flight::render('header', array('title' => 'Kyselo'));
 	Flight::render('homepage');
 	Flight::render('footer', []);
 });
@@ -35,7 +35,7 @@ Flight::route('/all', function(){
 		$theEnd = false;
 	}
 
-	Flight::render('header', ['title' => '{{ all soups }}' ]);
+	Flight::render('header', ['title' => '{{ all blogs }}' ]);
 	Flight::render('posts', [
 		'posts'=>$posts,
 		'more_link'=>$moreLink,

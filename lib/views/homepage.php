@@ -1,3 +1,4 @@
-<h1>Soup is down...</h1>
-<p>So I am working on <em>resoUp</em>, Soup.io self-hosted clone.</p>
+<p>This is</p>
+<h1>Kyselo</h1>
+<p>an <a href="https://bitbucket.org/severak/kyselo">opensource</a> Soup.io self-hosted clone by <a href="http://severak.svita.cz/">Severák</a></p>
 <img src='/st/404.jpg'>
