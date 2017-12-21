@@ -79,7 +79,9 @@ Flight::route('/act/post', function() {
 		}
 		
 		if ($newPost['type']==5) {
-			$info = Embed\Embed::create($newPost['source']);
+			$cookieJar = str_replace('//', '/', Flight::rootdir().'/embed-cookies.'.uniqid());
+			$CURL = new Embed\Http\CurlDispatcher([CURLOPT_COOKIEJAR=>$cookieJar]);
+			$info = Embed\Embed::create($newPost['source'], null, $CURL);
 			if ($info->type=='video') {
 				$newPost['url'] = $newPost['source'];
 				$newPost['preview_html'] = $info->code;
