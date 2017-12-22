@@ -124,7 +124,67 @@ Flight::route('/@name', function($name){
 	Flight::render('footer', []);
 });
 
-// todo: /@blog/rss
+// /@blog/rss
+Flight::route('/@name/rss', function($name){
+	$rows = Flight::rows();
+	
+	$blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
+	
+	if (empty($blog)) {
+		Flight::notFound();
+	}
+	
+	$posts = blog_posts($rows, $blog, []);
+	
+	// https://www.mnot.net/rss/tutorial/
+	
+	header('Content-type: text/xml');
+	$xw = new XMLWriter();
+	$xw->openMemory();
+	$xw->startDocument("1.0");
+	$xw->startElement("rss");
+	$xw->writeAttribute("version", "2.0");
+	$xw->startElement("channel");
+	$xw->writeElement("title", $blog['title']);
+	$xw->writeElement("link", 'http://' . $_SERVER['SERVER_NAME'] . '/' . $blog['name']);
+	$xw->writeElement("description", strip_tags($blog['about']));
+	
+	foreach ($posts as $post) {
+		$xw->startElement("item");
+		$xw->writeElement("title", !empty($post['title']) ? $post['title'] : '(no title)');
+		$xw->writeElement("link", 'http://' . $_SERVER['SERVER_NAME'] . '/' . $blog['name'] . '/post/' . $post['id']);
+		
+		$desc = '';
+		if ($post['type']==1 || $post['type']==3) {
+			$desc = $post['body'];
+		} elseif (in_array($post['type'], [2, 5, 6])) {
+			// link, video, file
+			$desc = '<a href="'.$post['url'].'">'.$post['url'].'</a>';
+		} elseif ($post['type']==4) {
+			$desc = '<img src="'.$post['url'].'">';
+		}
+		
+		$xw->writeElement("description", $desc);
+		$xw->writeElement("guid", $post['guid']);
+		$xw->writeElement("pubDate", date('r', $post['datetime']));
+		
+		/*
+		if ($post['type']==4) {
+			$xw->startElement("enclosure");
+			$xw->writeAttribute("url", $post['url']);
+			$xw->writeAttribute("type", "image/jpeg");
+			$xw->endElement();
+		}
+		*/
+		
+		$xw->endElement();
+	}
+	
+	$xw->endElement();
+	$xw->endElement();
+	$xw->endDocument();
+	echo $xw->outputMemory();
+});	
 
 // /@blog/friends
 Flight::route('/@name/friends', function($name){
