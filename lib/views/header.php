@@ -45,7 +45,7 @@
 	<?php else: ?>
 		<li class="pure-menu-item"><a href="/all" class="pure-menu-link"><i class="fa fa-home"></i> all blogs</a></li>
 		<li class="pure-menu-item"><a href="/act/login" class="pure-menu-link"> login</a></li>
-		<li class="pure-menu-item"><a href="/act/register" class="pure-menu-link"> sing-up</a></li>
+		<li class="pure-menu-item"><a href="/act/register" class="pure-menu-link"> sign-up</a></li>
 	<?php endif; ?>
         </ul>
     </div>
