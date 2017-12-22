@@ -27,6 +27,7 @@ Sorry - only in Czech for now.
 - adresář skupin/blogů
 - [filtrování blogů](http://didyouknow.soup.io/post/481207241/You-can-easily-filter-your-Soup-and)
 - statický export
+- soukromé zprávy
 - superadministrace
 
 ## technika
@@ -46,3 +47,12 @@ Sorry - only in Czech for now.
 - média se spouští až po kliku (jak to udělat pro gify?)
 - kešovat výpisy + detaily (http://flightphp.com/learn/#httpcaching)
 - [zabezpečit](http://flourishlib.com/docs/Security) až nakonec + [útoky breach, heist](https://www.fg.cz/cs/deje-se/prolomeni-sifrovaneho-protokolu-https-10930)
+
+## todo
+
+- CSRF ochrana
+- refaktor follow tlačítek (na AJAX s fallbackem na POST)
+- nové typy obsahu: nahrávka, snippet a galerie
+- postování citací bookmarkletem
+- přestylovat hlavičku blogu
+- nějaké základní mobilní CSS
