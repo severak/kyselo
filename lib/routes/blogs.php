@@ -87,39 +87,24 @@ Flight::route('/@name/post/@postid', function($name, $postId){
 // blog posts
 Flight::route('/@name', function($name){
 	$db = Flight::db();
+	$rows = Flight::rows();
 	
-	$blog = $db->from('blogs')->where('name', $name)->where('is_visible', 1)->select()->one();
+	$blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
 	
 	if (empty($blog)) {
 		Flight::notFound();
 	}
 	
-	$sel = $db
-		->from('posts')
-		->join('blogs', ['posts.blog_id'=>'blogs.id'])
-		->where('posts.blog_id', $blog['id'])
-		->where('posts.is_visible', 1);
-	
-	if (!empty($_GET['since'])) {
-		$sel->where('datetime <= ', strtotime($_GET['since']) );
-	}
-	
-	if (!empty($_GET['tag'])) {
-		$sel->join('post_tags', ['posts.id'=>'post_tags.post_id', 'post_tags.tag'=>$db->quote($_GET['tag'])]);
-	}
-	
-	$sel->limit(31)
-		->sortDesc('datetime')
-		->select('posts.*, blogs.name as name, blogs.avatar_url');
-	
-	$posts = $sel->many();
+	$posts = blog_posts($rows, $blog, $_GET);
 
 	$moreLink = null;
 	$theEnd = true;
 
 	if (count($posts)==31) {
 		$lastPost = array_pop($posts);
-		$moreLink = '/' . $blog['name'] . '?since=' . date('Y-m-d\TH:i:s', $lastPost['datetime']);
+		$query = array_intersect_key($_GET, ['since'=>true, 'date'=>true, 'type'=>true, 'tags'=>true]);
+		$query['since'] = date('Y-m-d\TH:i:s', $lastPost['datetime']);
+		$moreLink = '/' . $blog['name'] . '?' . http_build_query($query);
 		$theEnd = false;
 	}
 
@@ -138,6 +123,8 @@ Flight::route('/@name', function($name){
 	]);
 	Flight::render('footer', []);
 });
+
+// todo: /@blog/rss
 
 // /@blog/friends
 Flight::route('/@name/friends', function($name){
@@ -190,4 +177,32 @@ Flight::route('/@name/friends', function($name){
 	]);
 	Flight::render('footer', []);
 });
+
+function blog_posts($rows, $blog, $filter=[])
+{
+	$postsWhere = ['blog_id'=>$blog['id'], 'is_visible'=>1];
+	
+	if (!empty($filter['date'])) {
+		$filter['since'] = $filter['date']; // backward compatibility with soup
+	}
+	
+	if (!empty($filter['since'])) {
+		$postsWhere[] = $rows->fragment('posts.datetime <= ?', [strtotime($filter['since'])]);
+	}
+	
+	$type2code = ['text'=>1, 'link'=>2, 'quote'=>3, 'image'=>4, 'video'=>5, 'file'=>6, 'review'=>7, 'event'=>8];
+	if (!empty($filter['type']) && $type2code[$filter['type']]) {
+		$postsWhere['type'] = $type2code[$filter['type']];
+	}
+	
+	if (!empty($filter['tags'])) {
+		foreach (explode(',', $filter['tags']) as $tag) {
+			$rows->with('post_tags', 'id', 'post_id',  ['blog_id'=>$blog['id'], 'tag'=>$tag]);
+		}
+	}
+	
+	return $rows
+		->with('blogs', 'blog_id')
+		->more('posts', $postsWhere, ['datetime'=>'desc'], 31);
+}
 

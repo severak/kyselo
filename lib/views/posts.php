@@ -87,7 +87,7 @@ foreach ($posts as $post) {
 	echo '<div class="kyselo-tags">';
 	if (!empty($post['tags'])) {
 		foreach (explode(' ', $post['tags']) as $tag) {
-			echo '<a href="/'.$post['name'].'?tag='.$tag.'">#'.$tag.'</a> ';
+			echo '<a href="/'.$post['name'].'?tags='.$tag.'">#'.$tag.'</a> ';
 		}
 	}
 	echo '</div>';
