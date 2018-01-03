@@ -69,7 +69,7 @@ function kyselo_upload_image($form, $name)
 	$uploader->setMIMETypes(
 		array(
 			'image/gif',
-			'image/jpeg', // todo - fotky vygenerované pomocí primitive se nechtějí uploadovat
+			'image/jpeg',
 			'image/jpeg',
 			'image/pjpeg',
 			'image/png'
