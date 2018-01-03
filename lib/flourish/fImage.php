@@ -380,6 +380,7 @@ class fImage extends fFile
 		$contents = fread($handle, 12);
 		fclose($handle);
 		
+		$_0_3  = substr($contents, 0, 3);
 		$_0_8  = substr($contents, 0, 8);
 		$_0_4  = substr($contents, 0, 4);
 		$_6_4  = substr($contents, 6, 4);
@@ -397,7 +398,7 @@ class fImage extends fFile
 			return 'gif';
 		}
 		
-		if ($_6_4 == 'JFIF' || $_6_4 == 'Exif' || ($_0_4 == "\xFF\xD8\xFF\xED" && $_20_4 == "8BIM")) {
+		if ($_6_4 == 'JFIF' || $_6_4 == 'Exif' || ($_0_4 == "\xFF\xD8\xFF\xED" && $_20_4 == "8BIM") || $_0_3 == "\xFF\xD8\xFF") {
 			return 'jpg';
 		}
 		

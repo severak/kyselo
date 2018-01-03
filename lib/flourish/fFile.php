@@ -180,7 +180,8 @@ class fFile implements Iterator, Countable
 		
 		$normal_jpeg    = $length > 10 && in_array(substr($content, 6, 4), array('JFIF', 'Exif'));
 		$photoshop_jpeg = $length > 24 && $_0_4 == "\xFF\xD8\xFF\xED" && substr($content, 20, 4) == '8BIM';
-		if ($normal_jpeg || $photoshop_jpeg) {
+		$jpeg_prefix = $_0_3 == "\xFF\xD8\xFF";
+		if ($normal_jpeg || $photoshop_jpeg || $jpeg_prefix) {
 			return 'image/jpeg';	
 		}
 		
