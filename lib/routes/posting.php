@@ -5,7 +5,29 @@ Flight::route('/act/post', function() {
 	$db = Flight::db();
 	$request = Flight::request();
 	$user = Flight::user();
-	$postType = isset($_GET['type']) ? $_GET['type'] : 1;
+	$postType = 1;
+	$hint = null;
+	
+	if (isset($_GET['type'])) {
+		$postType = $_GET['type'];
+	}
+	
+	if (isset($_POST['type'])) {
+		$postType = $_POST['type'];
+	}
+	
+	if (!empty($_GET['url'])) {
+		$hint = get_info($_GET['url']);
+		//dump($hint->title);
+		//dump($hint->description);
+		//dump($hint->type);
+		
+		if ($hint->type=='video') {
+			$postType = 5;
+		} else {
+			$postType = 2;
+		}
+	}
 	
 	$postTypes = [
 		1 => 'text',
@@ -57,6 +79,16 @@ Flight::route('/act/post', function() {
 	$form->field('is_nsfw', ['type'=>'checkbox', 'label'=>'is NSFW']);
 	$form->field('post', ['type'=>'submit', 'label'=>'Post it!']);
 	
+	if ($hint) {
+		if ($hint->type=='video') {
+			$form->fill(['source'=>$hint->url]);
+		} elseif (!empty($_GET['quote'])) {
+			$form->fill(['source'=>$hint->url, 'title'=>$hint->title, 'body'=>'<blockquote>'.$_GET['quote'].'</blockquote>']);
+		} else {
+			$form->fill(['source'=>$hint->url, 'title'=>$hint->title, 'body'=>'<blockquote>'.$hint->description.'</blockquote>']);
+		}
+	}
+	
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		$newPost = $form->values;
 		
@@ -79,9 +111,7 @@ Flight::route('/act/post', function() {
 		}
 		
 		if ($newPost['type']==5) {
-			$cookieJar = str_replace('//', '/', Flight::rootdir().'/embed-cookies.'.uniqid());
-			$CURL = new Embed\Http\CurlDispatcher([CURLOPT_COOKIEJAR=>$cookieJar]);
-			$info = Embed\Embed::create($newPost['source'], null, $CURL);
+			$info = get_info($newPost['url']);
 			if ($info->type=='video') {
 				$newPost['url'] = $newPost['source'];
 				$newPost['preview_html'] = $info->code;
@@ -114,6 +144,12 @@ Flight::route('/act/post', function() {
 	Flight::render('footer', []);
 });
 
+function get_info($url)
+{
+	$cookieJar = str_replace('//', '/', Flight::rootdir().'/embed-cookies.'.uniqid());
+	$CURL = new Embed\Http\CurlDispatcher([CURLOPT_COOKIEJAR=>$cookieJar]);
+	return Embed\Embed::create($url, null, $CURL);
+}
 
 function generate_uuid() {
     return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',

@@ -126,6 +126,7 @@ Flight::route('/act/settings/@name', function($name){
 		'tab'=>'settings'
 	]);
 	Flight::render('form', ['form'=>$form]);
+	Flight::render('bookmarklet', ['blog'=>$blog]);
 	echo '<script>new MediumEditor("textarea", {buttonLabels:"fontawesome", placeholder:{text:"text..."}, paste:{forcePlainText:false}, autoLink: true, toolbar: {buttons: ["bold", "italic", "anchor", "quote", "pre", "unorderedlist","orderedlist"]}});</script>';
 	Flight::render('footer', []);
 });
