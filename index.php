@@ -98,6 +98,35 @@ function kyselo_upload_image($form, $name)
 	return null;
 }
 
+function kyselo_download_image($form, $name)
+{
+	$tmpDir = Flight::rootdir() . '/tmp';
+	$url = $form->values[$name];
+	$tmpName = tempnam($tmpDir, 'download');
+	$bytes = file_put_contents($tmpName, file_get_contents($url));
+	if ($bytes===false || $bytes==0) {
+		$form->error($name, 'Cannot download this file.');
+		return null;
+	}
+	$md5 = md5_file($tmpName);
+	try {
+		$image = new fImage($tmpName);
+	} catch (fValidationException $e) {
+		$form->error($name, 'This is not valid image');
+		return null;
+	}
+	$md5_path = '/pub/' . substr($md5, 0, 2) . '/' . substr($md5, 2, 2) . '/' . substr($md5, 4, 2) . '/' . $md5 . '.'. $image->getType();
+	$prefix = Flight::rootpath();
+	$dirname = pathinfo($md5_path, PATHINFO_DIRNAME);
+	if (!is_dir($prefix. $dirname)) {
+		mkdir($prefix . $dirname, 0777, true);
+	}
+	if (rename($tmpName, $prefix. $md5_path)) {
+		return $md5_path;
+	}
+	return null;
+}
+
 require __DIR__ . '/lib/routes/blogs.php';
 require __DIR__ . '/lib/routes/authorization.php';
 require __DIR__ . '/lib/routes/posting.php';

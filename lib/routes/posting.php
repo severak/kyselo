@@ -104,9 +104,12 @@ Flight::route('/act/post', function() {
 			if ($newPhoto) {
 				$newPost['url'] = $newPhoto;
 			}
+			// photo mirroring
 			if (!empty($newPost['source'])) {
-				// todo: potom budeme stahovat a uchovávat si lokální kopii
-				$newPost['url'] = $newPost['source'];
+				$newPhoto = kyselo_download_image($form, 'source');
+				if ($newPhoto) {
+					$newPost['url'] = $newPhoto;
+				}
 			}
 			if (empty($newPost['url'])) $form->error('source', 'You have to upload photo or download it from outside.');
 		}
