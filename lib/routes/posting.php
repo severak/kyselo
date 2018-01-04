@@ -18,12 +18,11 @@ Flight::route('/act/post', function() {
 	
 	if (!empty($_GET['url'])) {
 		$hint = get_info($_GET['url']);
-		//dump($hint->title);
-		//dump($hint->description);
-		//dump($hint->type);
 		
 		if ($hint->type=='video') {
 			$postType = 5;
+		} elseif ($hint->type=='photo') {
+			$postType = 4;
 		} else {
 			$postType = 2;
 		}
@@ -82,6 +81,8 @@ Flight::route('/act/post', function() {
 	if ($hint) {
 		if ($hint->type=='video') {
 			$form->fill(['source'=>$hint->url]);
+		} elseif ($hint->type=='photo') {
+			$form->fill(['source'=>$hint->image]);
 		} elseif (!empty($_GET['quote'])) {
 			$form->fill(['source'=>$hint->url, 'title'=>$hint->title, 'body'=>'<blockquote>'.$_GET['quote'].'</blockquote>']);
 		} else {
