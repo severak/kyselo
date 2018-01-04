@@ -94,6 +94,7 @@ function kyselo_upload_image($form, $name)
 		if (move_uploaded_file($_FILES[$name]['tmp_name'], $prefix . $md5_path)) {
 			return $md5_path;
 		}
+		$form->error($name, 'File upload error!');
 	}
 	return null;
 }
@@ -102,8 +103,12 @@ function kyselo_download_image($form, $name)
 {
 	$tmpDir = Flight::rootdir() . '/tmp';
 	$url = $form->values[$name];
+	if (empty($url)) {
+		return null; // empty download throws no error
+	}
 	$tmpName = tempnam($tmpDir, 'download');
-	$bytes = file_put_contents($tmpName, file_get_contents($url));
+	$content = @file_get_contents($url);
+	$bytes = file_put_contents($tmpName, $content);
 	if ($bytes===false || $bytes==0) {
 		$form->error($name, 'Cannot download this file.');
 		return null;
@@ -124,6 +129,7 @@ function kyselo_download_image($form, $name)
 	if (rename($tmpName, $prefix. $md5_path)) {
 		return $md5_path;
 	}
+	$form->error($name, 'File download error!');
 	return null;
 }
 

@@ -111,7 +111,7 @@ Flight::route('/act/post', function() {
 					$newPost['url'] = $newPhoto;
 				}
 			}
-			if (empty($newPost['url'])) $form->error('source', 'You have to upload photo or download it from outside.');
+			if (empty($newPost['url']) && empty($newPost['source'])) $form->error('source', 'You have to upload photo or download it from outside.');
 		}
 		
 		if ($newPost['type']==5) {
