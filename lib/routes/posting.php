@@ -115,7 +115,7 @@ Flight::route('/act/post', function() {
 		}
 		
 		if ($newPost['type']==5) {
-			$info = get_info($newPost['url']);
+			$info = get_info($newPost['source']);
 			if ($info->type=='video') {
 				$newPost['url'] = $newPost['source'];
 				$newPost['preview_html'] = $info->code;
