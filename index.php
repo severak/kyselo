@@ -87,6 +87,9 @@ function kyselo_upload_image($form, $name)
 		$image = new fImage($_FILES[$name]['tmp_name']);
 		$md5_path = '/pub/' . substr($md5, 0, 2) . '/' . substr($md5, 2, 2) . '/' . substr($md5, 4, 2) . '/' . $md5 . '.'. $image->getType();
 		$prefix = Flight::rootpath();
+		if (file_exists($prefix . $md5_path)) {
+			return $md5_path; // file exists already, no need to rewrite it
+		}
 		$dirname = pathinfo($md5_path, PATHINFO_DIRNAME);
 		if (!is_dir($prefix. $dirname)) {
 			mkdir($prefix . $dirname, 0777, true);
@@ -122,6 +125,9 @@ function kyselo_download_image($form, $name)
 	}
 	$md5_path = '/pub/' . substr($md5, 0, 2) . '/' . substr($md5, 2, 2) . '/' . substr($md5, 4, 2) . '/' . $md5 . '.'. $image->getType();
 	$prefix = Flight::rootpath();
+	if (file_exists($prefix . $md5_path)) {
+		return $md5_path; // file exists already, no need to rewrite it
+	}
 	$dirname = pathinfo($md5_path, PATHINFO_DIRNAME);
 	if (!is_dir($prefix. $dirname)) {
 		mkdir($prefix . $dirname, 0777, true);
