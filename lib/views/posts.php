@@ -9,6 +9,8 @@
 
 $icons = ['', 'book', 'link', 'paragraph', 'camera', 'youtube-play', 'file', 'star', 'calendar'];
 
+$showFullVideo = count($posts)==1;
+
 foreach ($posts as $post) {
 ?>
 <div class="pure-g">
@@ -46,7 +48,13 @@ foreach ($posts as $post) {
 		}
 	} else if ($post['type']==5) { // video
 		if (!empty($post['preview_html'])) {
-			echo $post['preview_html'];
+			echo '<div class="kyselo-video" data-id="'.$post['id'].'">';
+			if ($showFullVideo) {
+				echo $post['preview_html'];
+			} else {
+				echo '<a href="' . $post['source'] . '" class="kyselo-play-video pure-button button-large"><i class="fa fa-youtube-play"></i><span class="kyselo-hidden"> play video</span></a>';
+			}
+			echo '</div>';
 		}
 		if (!empty($post['body'])) {
 			echo '<p>' . $post['body'] . '</p>';

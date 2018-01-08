@@ -130,6 +130,16 @@ Flight::route('/act/settings/@name', function($name){
 	echo '<script>new MediumEditor("textarea", {buttonLabels:"fontawesome", placeholder:{text:"text..."}, paste:{forcePlainText:false}, autoLink: true, toolbar: {buttons: ["bold", "italic", "anchor", "quote", "pre", "unorderedlist","orderedlist"]}});</script>';
 	Flight::render('footer', []);
 });
+
+Flight::route('/act/iframe/@id', function($id) {
+	$rows = Flight::rows();
+	$post = $rows->one('posts', ['id'=>$id, 'is_visible'=>true]);
+	
+	if (!$post) {
+		Flight::notFound();
+	}
+	echo $post['preview_html'];
+});
 	
 	
 
