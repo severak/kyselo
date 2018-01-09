@@ -104,7 +104,7 @@ function kyselo_upload_image($form, $name)
 
 function kyselo_download_image($form, $name)
 {
-	$tmpDir = Flight::rootdir() . '/tmp';
+	$tmpDir = Flight::rootpath() . '/tmp';
 	$url = $form->values[$name];
 	if (empty($url)) {
 		return null; // empty download throws no error
