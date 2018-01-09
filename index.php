@@ -70,8 +70,6 @@ function kyselo_upload_image($form, $name)
 		array(
 			'image/gif',
 			'image/jpeg',
-			'image/jpeg',
-			'image/pjpeg',
 			'image/png'
 		),
 		'The file uploaded is not an image.'
