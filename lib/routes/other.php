@@ -101,6 +101,7 @@ Flight::route('/act/settings/@name', function($name){
 	$form->field('about', ['label'=>'Blog description', 'class'=>'kyselo-editor', 'type'=>'textarea', 'rows'=>6, 'required'=>true]);
 	$form->field('is_nsfw', ['label'=>'is NSFW blog', 'type'=>'checkbox']);
 	$form->field('upload', ['label'=>'Change logo', 'type'=>'file']);
+	kyselo_csrf($form);
 	$form->field('save', ['label'=>'Save', 'type'=>'submit']);
 	
 	$form->fill($blog);

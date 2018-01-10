@@ -152,6 +152,7 @@ Flight::route('/act/post/delete/@id', function($id){
 	
 	$form = new severak\forms\form(['method'=>'post']);
 	$form->field('confirmed', ['type'=>'checkbox', 'label'=>'I want to delete this post permanently.']);
+	kyselo_csrf($form);
 	$form->field('delete', ['type'=>'submit']);
 	
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
@@ -200,6 +201,7 @@ function get_post_form($postType)
 	
 	$form->field('tags', ['label'=>'Tags']);
 	$form->field('is_nsfw', ['type'=>'checkbox', 'label'=>'is NSFW']);
+	kyselo_csrf($form);
 	$form->field('post', ['type'=>'submit', 'label'=>'Post it!']);
 	
 	return $form;

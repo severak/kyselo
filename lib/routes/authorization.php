@@ -26,6 +26,7 @@ Flight::route('/act/register', function() {
 	}
 	
 	$form->field('terms_agreement', ['label'=>'I agree with terms of service', 'type'=>'checkbox']);
+	kyselo_csrf($form);
 	$form->field('register', ['label'=>'Sing in', 'type'=>'submit']);
 	// todo: catchpa - viz http://jecas.cz/recaptcha
 
@@ -102,6 +103,7 @@ Flight::route('/act/login', function() {
 	$form = new severak\forms\form(['method'=>'POST']);
 	$form->field('username', ['label'=>'User name', 'required'=>true]);
 	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
+	kyselo_csrf($form);
 	$form->field('login', ['label'=>'Login', 'type'=>'submit']);
 	
 	if (!empty($_GET['as'])) {
