@@ -30,16 +30,16 @@ class form
 		}
 		$attr['name'] = $name;
 
-		// defaulty
+		// sensible defaults:
 		if (empty($attr['type'])) $attr['type'] = 'text';
 		if (empty($attr['label'])) $attr['label'] = ucfirst($name);
 
 		if ($attr['type']=='submit') $attr['value'] = $attr['label'];
 
-		if ($attr['type']=='checkbox' && empty($attr['value'])) $attr['value']=1;
-		if ($attr['type']=='select' && empty($attr['options'])) $attr['options']=[];
+		if ($attr['type']=='checkbox' && empty($attr['value'])) $attr['value'] = 1;
+		if ($attr['type']=='select' && empty($attr['options'])) $attr['options'] = [];
 
-		// automatic ID
+		// automatic element ID:
 		if (empty($attr['id'])) $attr['id'] = $this->attr['id'] . '_' . $name;
 		// ---
 		$this->fields[$name] = $attr;
@@ -48,6 +48,7 @@ class form
 
 		// implicit rule's
 		if (!empty($attr['required'])) $this->rule($name, 'severak\forms\rules::required', $this->messages['required']);
+		// todo: numeric, email etc...
 	}
 
 	public function rule($name, $callback, $message)
@@ -57,6 +58,13 @@ class form
 
 	public function fill($data)
 	{
+		// prefill checkboxes:
+		foreach ($this->fields as $key=>$val) {
+			if ($val['type']=='checkbox') {
+				$this->values[$key] = 0;
+			}
+		}
+		// fill data:
 		foreach ($data as $key=>$val) {
 			if (!empty($this->fields[$key])) {
 				$this->values[$key] = $val;
@@ -74,7 +82,6 @@ class form
 
 	public function validate()
 	{
-		$this->isValid = true;
 		foreach ($this->_rules as $name => $rules) {
 			$fieldValue = isset($this->values[$name]) ? $this->values[$name] : '';
 
