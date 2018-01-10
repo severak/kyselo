@@ -135,6 +135,42 @@ Flight::route('/act/post/edit/@id', function($id){
 	Flight::render('footer', []);
 });
 
+// /act/post/delete/@id
+Flight::route('/act/post/delete/@id', function($id){
+	Flight::requireLogin();
+	$rows = Flight::rows();
+	$user = Flight::user();
+	$request = Flight::request();
+	
+	$post = $rows
+		->with('blogs', 'blog_id')
+		->one('posts', $id);
+	
+	if (!$post) Flight::notFound();
+	if ($post['blog_id']!=$user['blog_id']) Flight::forbidden();
+	$blog = $rows->one('blogs', $post['blog_id']);
+	
+	$form = new severak\forms\form(['method'=>'post']);
+	$form->field('confirmed', ['type'=>'checkbox', 'label'=>'I want to delete this post permanently.']);
+	$form->field('delete', ['type'=>'submit']);
+	
+	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
+		if ($form->values['confirmed']) {
+			$rows->update('posts', ['is_visible'=>0], $id);
+		} else {
+			Flight::flash('Nothing was deleted.', false);
+		}
+		Flight::redirect('/'.$blog['name']);
+	}	
+	
+	Flight::render('header', ['title' => 'delete post' ]);
+	Flight::render('posts', ['posts'=>[$post] ]);
+	Flight::render('form', [
+		'form' => $form,
+	]);
+	Flight::render('footer', []);
+});	
+
 function get_post_form($postType)
 {
 	$form = new severak\forms\form(['method'=>'post']);
