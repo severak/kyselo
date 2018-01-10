@@ -98,7 +98,7 @@ Flight::route('/act/settings/@name', function($name){
 	
 	$form = new severak\forms\form(['method'=>'post']);
 	$form->field('title', ['label'=>'Blog title', 'required'=>true]);
-	$form->field('about', ['label'=>'Blog description', 'type'=>'textarea', 'rows'=>6, 'required'=>true]);
+	$form->field('about', ['label'=>'Blog description', 'class'=>'kyselo-editor', 'type'=>'textarea', 'rows'=>6, 'required'=>true]);
 	$form->field('is_nsfw', ['label'=>'is NSFW blog', 'type'=>'checkbox']);
 	$form->field('upload', ['label'=>'Change logo', 'type'=>'file']);
 	$form->field('save', ['label'=>'Save', 'type'=>'submit']);
@@ -127,7 +127,6 @@ Flight::route('/act/settings/@name', function($name){
 	]);
 	Flight::render('form', ['form'=>$form]);
 	Flight::render('bookmarklet', ['blog'=>$blog]);
-	echo '<script>new MediumEditor("textarea", {buttonLabels:"fontawesome", placeholder:{text:"text..."}, paste:{forcePlainText:false}, autoLink: true, toolbar: {buttons: ["bold", "italic", "anchor", "quote", "pre", "unorderedlist","orderedlist"]}});</script>';
 	Flight::render('footer', []);
 });
 

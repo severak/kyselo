@@ -6,5 +6,15 @@ Zepto(function(){
 		return false;
 	});
 	
+	new MediumEditor("textarea.kyselo-editor", {
+		buttonLabels:"fontawesome", 
+		placeholder:{text:"text..."}, 
+		paste:{forcePlainText:false}, 
+		autoLink: true, 
+		toolbar: {
+			buttons: ["bold", "italic", "anchor", "quote", "pre", "unorderedlist","orderedlist"]
+		}
+	});
+	
 	console.log('kyselo javascripts OK');
 });
