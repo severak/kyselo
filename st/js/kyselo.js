@@ -6,6 +6,7 @@ Zepto(function(){
 		return false;
 	});
 	
+	// medium editor
 	new MediumEditor("textarea.kyselo-editor", {
 		buttonLabels:"fontawesome", 
 		placeholder:{text:"text..."}, 
@@ -14,6 +15,17 @@ Zepto(function(){
 		toolbar: {
 			buttons: ["bold", "italic", "anchor", "quote", "pre", "unorderedlist","orderedlist"]
 		}
+	});
+	
+	// 
+	$('textarea.kyselo-editor').on('invalid', function(ev){
+		var target = $(ev.target);
+		var meDiv = $('#'+target.attr('medium-editor-textarea-id'));
+		meDiv.addClass('invalid');
+		if (!meDiv.data('error-span')) {
+			meDiv.after('<span class="pure-form-message-inline kyselo-form-error">'+ev.target.validationMessage+'</span>');
+			meDiv.data('error-span', 'ok');
+		}	
 	});
 	
 	console.log('kyselo javascripts OK');
