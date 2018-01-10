@@ -150,7 +150,7 @@ Flight::route('/act/post', function() {
 
 function get_info($url)
 {
-	$cookieJar = str_replace('//', '/', Flight::rootdir().'/embed-cookies.'.uniqid());
+	$cookieJar = str_replace('//', '/', Flight::rootpath().'/embed-cookies.'.uniqid());
 	$CURL = new Embed\Http\CurlDispatcher([CURLOPT_COOKIEJAR=>$cookieJar]);
 	return Embed\Embed::create($url, null, $CURL);
 }
