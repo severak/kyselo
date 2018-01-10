@@ -148,6 +148,7 @@ Flight::route('/act/logout', function() {
 	}
 	
 	$_SESSION['user'] = false;
+	fSession::clear('fRequest');
 	Flight::redirect('/');
 });
 
