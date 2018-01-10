@@ -108,7 +108,7 @@ Flight::route('/act/settings/@name', function($name){
 	
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		$update = $form->values;
-		unset($update['upload'], $update['save']);
+		unset($update['upload'], $update['save'], $update['csrf_token']);
 		
 		$newPhoto = kyselo_upload_image($form, 'upload');
 		if ($newPhoto) $update['avatar_url'] = $newPhoto;

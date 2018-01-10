@@ -68,7 +68,7 @@ Flight::route('/act/post', function() {
 	
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		$newPost = $form->values;
-		unset($newPost['post'], $newPost['upload']);
+		unset($newPost['post'], $newPost['upload'], $newPost['csrf_token']);
 		$newPost['blog_id'] = $user['blog_id'];
 		$newPost['author_id'] = $user['blog_id'];
 		$newPost['guid'] = generate_uuid();
@@ -112,7 +112,7 @@ Flight::route('/act/post/edit/@id', function($id){
 	
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		$newPost = $form->values;
-		unset($newPost['post'], $newPost['upload']);
+		unset($newPost['post'], $newPost['upload'], $newPost['csrf_token']);
 		
 		$newPost = finish_post($newPost, $form, false);
 		
