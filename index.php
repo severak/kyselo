@@ -4,21 +4,28 @@ if (!file_exists(__DIR__ . '/config.php')) {
 }
 $config = require __DIR__ . '/config.php';
 
+// init framework
 require 'lib/flight/Flight.php';
 require "lib/flight/autoload.php";
 
 Flight::init();
 Flight::set('flight.handle_errors', false);
 Flight::set('flight.views.path', __DIR__ . '/lib/views');
+
+// init debugger
 require "lib/tracy/src/tracy.php";
 use \Tracy\Debugger;
-Debugger::enable();
+Debugger::enable(!empty($config['show_debug']) ? Debugger::DEVELOPMENT : Debugger::DETECT);
+Debugger::$showBar = false;
+Debugger::$errorTemplate = __DIR__ . '/lib/views/500.htm';
 
+// init flourish
 flight\core\Loader::addDirectory("lib/flourish");
 
 // start session
 session_start();
 
+// global helpers:
 Flight::map('rootpath', function() {
 	return __DIR__;
 });
@@ -61,6 +68,24 @@ Flight::map('rows', function() use($config) {
 		$rows = new severak\database\rows($pdo);
 	}
 	return $rows;
+});
+
+Flight::map('notFound', function(){
+	Flight::response(false)
+            ->status(404)
+            ->write(
+                file_get_contents(__DIR__ . '/lib/views/404.htm')
+            )
+            ->send();
+});
+
+Flight::map('forbidden', function(){
+	Flight::response(false)
+            ->status(404)
+            ->write(
+                file_get_contents(__DIR__ . '/lib/views/403.htm')
+            )
+            ->send();
 });
 
 function kyselo_upload_image($form, $name)
@@ -136,6 +161,8 @@ function kyselo_download_image($form, $name)
 	$form->error($name, 'File download error!');
 	return null;
 }
+
+// routes:
 
 require __DIR__ . '/lib/routes/blogs.php';
 require __DIR__ . '/lib/routes/authorization.php';
