@@ -2,7 +2,7 @@
 // /act/post
 Flight::route('/act/post', function() {
 	Flight::requireLogin();
-	$db = Flight::db();
+	$rows = Flight::rows();
 	$request = Flight::request();
 	$user = Flight::user();
 	$postType = 1;
@@ -39,44 +39,20 @@ Flight::route('/act/post', function() {
 		'event'
 	];
 	
+	$form = get_post_form($postType);
+	
+	/*
+	
 	$canPostAs = [];
 	$canPostAs[$user['blog_id']] = $user['name'];
 	// todo: groups
-	
-	$form = new severak\forms\form(['method'=>'post']);
-	
-	$form->field('blog_id', ['type'=>'select', 'options'=>$canPostAs, 'label'=>'Post to']);
 	
 	$form->rule('blog_id', function($blog_id) use ($canPostAs){
 		return !empty($canPostAs[$blog_id]);
 	}, 'Cannot post as this user!');
 	
-	$form->field('type', ['type'=>'hidden', 'value'=>$postType]);
+	*/
 	
-	//$form->field('type', ['type'=>'select', 'options'=>$postTypes]);
-	
-	if ($postType==1) {
-		$form->field('title', ['placeholder'=>'title']);
-		$form->field('body', ['type'=>'textarea', 'class'=>'kyselo-editor', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Text', 'required'=>true]);
-	} elseif ($postType==2) {
-		$form->field('source', ['required'=>true, 'label'=>'URL', 'placeholder'=>'http://example.org']);
-		// todo: parse_url checking
-		$form->field('title', ['placeholder'=>'title']);
-		$form->field('body', ['type'=>'textarea', 'class'=>'kyselo-editor', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Text']);
-	} elseif ($postType==3) {	
-		$form->field('body', ['type'=>'textarea', 'class'=>'kyselo-editor', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Quote', 'required'=>true]);
-		$form->field('title', ['placeholder'=>'Joe Doe', 'label'=>'by']);
-	} elseif ($postType==4) {
-		$form->field('upload', ['type'=>'file', 'label'=>'Upload']);
-		$form->field('source', ['label'=>'OR download from', 'placeholder'=>'http://example.org/cat.jpg']);
-		$form->field('body', ['type'=>'textarea', 'class'=>'kyselo-editor', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Description']);
-	} elseif ($postType==5) {
-		$form->field('source', ['label'=>'Video URL', 'placeholder'=>'https://www.youtube.com/watch?v=YT0k99hCY5I', 'required'=>true]);
-	}
-	
-	$form->field('tags', ['label'=>'Tags']);
-	$form->field('is_nsfw', ['type'=>'checkbox', 'label'=>'is NSFW']);
-	$form->field('post', ['type'=>'submit', 'label'=>'Post it!']);
 	
 	if ($hint) {
 		if ($hint->type=='video') {
@@ -92,8 +68,8 @@ Flight::route('/act/post', function() {
 	
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		$newPost = $form->values;
-		
 		unset($newPost['post'], $newPost['upload']);
+		$newPost['blog_id'] = $user['blog_id'];
 		$newPost['author_id'] = $user['blog_id'];
 		$newPost['guid'] = generate_uuid();
 		$newPost['datetime'] = strtotime('now');
@@ -126,14 +102,14 @@ Flight::route('/act/post', function() {
 		}
 		
 		if ($newPost['type']>6) {
-			$form->error('blog_id', 'Post type not yet implemented.');
+			$form->error('type', 'Post type not yet implemented.');
 		}
 		
 		if ($form->isValid) {
-			$postId = Flight::rows()->insert('posts', $newPost);
+			$postId = $rows->insert('posts', $newPost);
 			if (!empty($newPost['tags'])) {
 				foreach (explode(' ', $newPost['tags']) as $tag) {
-					Flight::rows()->insert('post_tags', ['blog_id'=>$newPost['blog_id'], 'post_id'=>$postId, 'tag'=>$tag]);
+					$rows->insert('post_tags', ['blog_id'=>$newPost['blog_id'], 'post_id'=>$postId, 'tag'=>$tag]);
 				}
 			}
 			Flight::redirect('/'.Flight::user('name'));
@@ -146,6 +122,80 @@ Flight::route('/act/post', function() {
 	]);
 	Flight::render('footer', []);
 });
+
+// /act/post/edit/@id
+Flight::route('/act/post/edit/@id', function($id){
+	Flight::requireLogin();
+	$rows = Flight::rows();
+	$user = Flight::user();
+	$request = Flight::request();
+	
+	$post = $rows->one('posts', $id);
+	
+	if (!$post) Flight::notFound();
+	if ($post['blog_id']!=$user['blog_id']) Flight::forbidden();
+	$blog = $rows->one('blogs', $post['blog_id']);
+	
+	$form = get_post_form($post['type']);
+	$form->fill($post);
+	
+	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
+		$newPost = $form->values;
+		unset($newPost['post'], $newPost['upload']);
+		
+		if ($form->isValid) {
+			$rows->update('posts', $newPost, $id);
+			$rows->delete('post_tags', ['post_id'=>$id]);
+			if (!empty($newPost['tags'])) {
+				foreach (explode(' ', $newPost['tags']) as $tag) {
+					$rows->insert('post_tags', ['blog_id'=>$post['blog_id'], 'post_id'=>$id, 'tag'=>$tag]);
+				}
+			}
+			Flight::redirect('/'.$blog['name'].'/post/'.$id);
+		}
+	}	
+	
+	Flight::render('header', ['title' => 'new post' ]);
+	Flight::render('form', [
+		'form' => $form,
+	]);
+	Flight::render('footer', []);
+});
+
+function get_post_form($postType)
+{
+	$form = new severak\forms\form(['method'=>'post']);
+	
+	$form->field('type', ['type'=>'hidden', 'value'=>$postType]);
+	
+	if ($postType==1) {
+		$form->field('title', ['placeholder'=>'title']);
+		$form->field('body', ['type'=>'textarea', 'class'=>'kyselo-editor', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Text', 'required'=>true]);
+	} elseif ($postType==2) {
+		$form->field('source', ['required'=>true, 'label'=>'URL', 'placeholder'=>'http://example.org']);
+		// todo: parse_url checking
+		$form->field('title', ['placeholder'=>'title']);
+		$form->field('body', ['type'=>'textarea', 'class'=>'kyselo-editor', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Text']);
+	} elseif ($postType==3) {	
+		$form->field('body', ['type'=>'textarea', 'class'=>'kyselo-editor', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Quote', 'required'=>true]);
+		$form->field('title', ['placeholder'=>'Joe Doe', 'label'=>'by']);
+	} elseif ($postType==4) {
+		$form->field('upload', ['type'=>'file', 'label'=>'Upload']);
+		$form->field('source', ['label'=>'OR download from', 'placeholder'=>'http://example.org/cat.jpg']);
+		$form->field('body', ['type'=>'textarea', 'class'=>'kyselo-editor', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Description']);
+	} elseif ($postType==5) {
+		$form->field('source', ['label'=>'Video URL', 'placeholder'=>'https://www.youtube.com/watch?v=YT0k99hCY5I', 'required'=>true]);
+	} else {
+		throw new Exception('Not yet!');
+	}
+	
+	$form->field('tags', ['label'=>'Tags']);
+	$form->field('is_nsfw', ['type'=>'checkbox', 'label'=>'is NSFW']);
+	$form->field('post', ['type'=>'submit', 'label'=>'Post it!']);
+	
+	return $form;
+}
+
 
 function get_info($url)
 {

@@ -108,17 +108,10 @@ foreach ($posts as $post) {
                 <div class="pure-menu pure-menu-horizontal">
                     <ul class="pure-menu-list pull-right">
                         <li class="pure-menu-item"><a href="<?php echo $permalink; ?>" class="pure-button">#permalink</a></li>
-						<?php if (!empty($user) && false) { ?>
-                        <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
-                            <a href="#" class="pure-menu-link pure-button">repost</a>
-                            <ul class="pure-menu-children">
-                                <li class="pure-menu-item"><a href="#" class="pure-menu-link">lorem</a></li>
-                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">ipsum</a></li>
-                            <li class="pure-menu-item"><a href="#" class="pure-menu-link">dedit</a></li>
-                    </ul>
-                    </li>
-                    <li class="pure-menu-item"><a href="#" class="pure-button">react</a></li>
-					<?php } ?>
+						<?php if (!empty($user['blog_id']) && !empty($blog) && $user['blog_id']==$blog['id']) { ?>
+						<li class="pure-menu-item"><a href="/act/post/edit/<?=$post['id']; ?>" class="pure-button" title="edit"><i class="fa fa-pencil"></i><span class="kyselo-hidden"> edit post</span></a></li>
+						<li class="pure-menu-item"><a href="/act/post/edit/<?=$post['id']; ?>" class="pure-button" title="delete"><i class="fa fa-trash"></i><span class="kyselo-hidden"> delete post</span></a></li>
+						<?php } ?>
                     </ul>
                 </div>
 		</div>

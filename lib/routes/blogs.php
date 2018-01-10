@@ -116,7 +116,7 @@ Flight::route('/@name', function($name){
 	]);
 	Flight::render('posts', [
 		'posts'=>$posts,
-		'blog' => $blog,
+		'blog'=>$blog,
 		'user' => Flight::user(),
 		'more_link'=>$moreLink,
 		'the_end'=>$theEnd
@@ -230,8 +230,8 @@ Flight::route('/@name/friends', function($name){
 	]);
 	Flight::render('posts', [
 		'posts'=>$posts,
-		'blog' => $blog,
 		'user' => Flight::user(),
+		'blog'=>false,
 		'more_link'=>$moreLink,
 		'the_end'=>$theEnd
 	]);
