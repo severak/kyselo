@@ -162,6 +162,20 @@ function kyselo_download_image($form, $name)
 	return null;
 }
 
+function kyselo_csrf($form)
+{	
+	$form->field('csrf_token', ['type'=>'hidden', 'value'=>fRequest::generateCSRFToken()]);
+	
+	$form->rule('csrf_token', function($token) use ($form) {
+		try {
+			fRequest::validateCSRFToken($token);
+		} catch (fExpectedException $e) {
+			return false;
+		}
+		return true;
+	}, 'Invalid CSRF token!');
+}
+
 // routes:
 
 require __DIR__ . '/lib/routes/blogs.php';
