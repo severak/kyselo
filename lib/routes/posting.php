@@ -74,36 +74,7 @@ Flight::route('/act/post', function() {
 		$newPost['guid'] = generate_uuid();
 		$newPost['datetime'] = strtotime('now');
 		
-		if ($newPost['type']==4) {
-			// photo uploading
-			$newPhoto = kyselo_upload_image($form, 'upload');
-			if ($newPhoto) {
-				$newPost['url'] = $newPhoto;
-			}
-			// photo mirroring
-			if (!empty($newPost['source'])) {
-				$newPhoto = kyselo_download_image($form, 'source');
-				if ($newPhoto) {
-					$newPost['url'] = $newPhoto;
-				}
-			}
-			if (empty($newPost['url']) && empty($newPost['source'])) $form->error('source', 'You have to upload photo or download it from outside.');
-		}
-		
-		if ($newPost['type']==5) {
-			$info = get_info($newPost['source']);
-			if ($info->type=='video') {
-				$newPost['url'] = $newPost['source'];
-				$newPost['preview_html'] = $info->code;
-				$newPost['body'] = $info->title;
-			} else {
-				$form->error('source', 'Not a valid video.');
-			}
-		}
-		
-		if ($newPost['type']>6) {
-			$form->error('type', 'Post type not yet implemented.');
-		}
+		$newPost = finish_post($newPost, $form, true);
 		
 		if ($form->isValid) {
 			$postId = $rows->insert('posts', $newPost);
@@ -142,6 +113,8 @@ Flight::route('/act/post/edit/@id', function($id){
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		$newPost = $form->values;
 		unset($newPost['post'], $newPost['upload']);
+		
+		$newPost = finish_post($newPost, $form, false);
 		
 		if ($form->isValid) {
 			$rows->update('posts', $newPost, $id);
@@ -194,6 +167,42 @@ function get_post_form($postType)
 	$form->field('post', ['type'=>'submit', 'label'=>'Post it!']);
 	
 	return $form;
+}
+
+function finish_post($newPost, $form, $required=true)
+{
+	if ($newPost['type']==4) {
+		// photo uploading
+		$newPhoto = kyselo_upload_image($form, 'upload');
+		if ($newPhoto) {
+			$newPost['url'] = $newPhoto;
+		}
+		// photo mirroring
+		if (!empty($newPost['source'])) {
+			$newPhoto = kyselo_download_image($form, 'source');
+			if ($newPhoto) {
+				$newPost['url'] = $newPhoto;
+			}
+		}
+		if (empty($newPost['url']) && empty($newPost['source']) && $required) $form->error('source', 'You have to upload photo or download it from outside.');
+	}
+	
+	if ($newPost['type']==5) {
+		$info = get_info($newPost['source']);
+		if ($info->type=='video') {
+			$newPost['url'] = $newPost['source'];
+			$newPost['preview_html'] = $info->code;
+			$newPost['body'] = $info->title;
+		} elseif ($required) {
+			$form->error('source', 'Not a valid video.');
+		}
+	}
+	
+	if ($newPost['type']>6) {
+		$form->error('type', 'Post type not yet implemented.');
+	}
+	
+	return $newPost;
 }
 
 
