@@ -164,9 +164,9 @@ Flight::route('/act/post/delete/@id', function($id){
 	}	
 	
 	Flight::render('header', ['title' => 'delete post' ]);
-	Flight::render('posts', ['posts'=>[$post] ]);
+	Flight::render('posts', ['posts'=>[$post], 'user'=>$user, 'blog'=>false ]);
 	Flight::render('form', [
-		'form' => $form,
+		'form' => $form
 	]);
 	Flight::render('footer', []);
 });	
