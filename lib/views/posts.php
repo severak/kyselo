@@ -109,8 +109,8 @@ foreach ($posts as $post) {
                     <ul class="pure-menu-list pull-right">
                         <li class="pure-menu-item"><a href="<?php echo $permalink; ?>" class="pure-button">#permalink</a></li>
 						<?php if (!empty($user['blog_id']) && !empty($blog) && $user['blog_id']==$blog['id']) { ?>
-						<li class="pure-menu-item"><a href="/act/post/edit/<?=$post['id']; ?>" class="pure-button" title="edit"><i class="fa fa-pencil"></i><span class="kyselo-hidden"> edit post</span></a></li>
-						<li class="pure-menu-item"><a href="/act/post/edit/<?=$post['id']; ?>" class="pure-button" title="delete"><i class="fa fa-trash"></i><span class="kyselo-hidden"> delete post</span></a></li>
+						<li class="pure-menu-item"><a href="/act/post/edit/<?=$post['id']; ?>" class="pure-button" title="edit"><i class="fa fa-pencil"></i>&#8203;<span class="kyselo-hidden">edit post</span></a></li>
+						<li class="pure-menu-item"><a href="/act/post/delete/<?=$post['id']; ?>" class="pure-button" title="delete"><i class="fa fa-trash"></i>&#8203;<span class="kyselo-hidden">delete post</span></a></li>
 						<?php } ?>
                     </ul>
                 </div>
