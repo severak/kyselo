@@ -106,9 +106,8 @@ Flight::route('/act/settings/@name', function($name){
 	$form->fill($blog);
 	
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
-		$update['title'] = $_POST['title'];
-		$update['about'] = $_POST['about'];
-		$update['is_nsfw'] = isset($_POST['is_nsfw']) ? 1 : 0; // todo - podobnou konstrukci mít spíš ve formuláři
+		$update = $form->values;
+		unset($update['upload'], $update['save']);
 		
 		$newPhoto = kyselo_upload_image($form, 'upload');
 		if ($newPhoto) $update['avatar_url'] = $newPhoto;
