@@ -103,6 +103,7 @@ Flight::route('/act/login', function() {
 	$form = new severak\forms\form(['method'=>'POST']);
 	$form->field('username', ['label'=>'User name', 'required'=>true]);
 	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
+	$form->field('persistent', ['label'=>'Keep me logged in', 'type'=>'checkbox']);
 	kyselo_csrf($form);
 	$form->field('login', ['label'=>'Login', 'type'=>'submit']);
 	
@@ -118,6 +119,9 @@ Flight::route('/act/login', function() {
 			if (!empty($blog)) {
 				$user = $db->from('users')->where('id',$blog['user_id'])->one();
 				if (password_verify($_POST['password'], $user['password'])) {
+					if ($_POST['persistent']) {
+						fSession::enablePersistence();
+					}
 					$_SESSION['user'] = [
 						'name' => $blog['name'],
 						'blog_id' => $blog['id'],
@@ -148,7 +152,7 @@ Flight::route('/act/logout', function() {
 	}
 	
 	$_SESSION['user'] = false;
-	fSession::clear('fRequest');
+	fSession::destroy();
 	Flight::redirect('/');
 });
 

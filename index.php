@@ -23,7 +23,9 @@ Debugger::$errorTemplate = __DIR__ . '/lib/views/500.htm';
 flight\core\Loader::addDirectory("lib/flourish");
 
 // start session
-session_start();
+fSession::setPath(__DIR__ . '/tmp/session');
+fSession::setLength('30 minutes', '3 days');
+fSession::open();
 
 // global helpers:
 Flight::map('rootpath', function() {
