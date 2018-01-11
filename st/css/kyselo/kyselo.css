@@ -99,6 +99,31 @@ div.kyselo-editor.invalid {
 	border-bottom: none;
 }
 
+/* cenzura NSFW obrázků */
+.kyselo-hide-nsfw .is-nsfw img {
+	background-color: lightgrey;
+	filter: blur(10px) sepia(1) opacity(0.3);
+	-webkit-filter: blur(10px) sepia(1) opacity(0.3);
+}
+
+/* TODO: ještě pro IE */
+
+/* NSFW switch */
+#kyselo_nsfw_switch .show {
+	color: yellow;
+}
+
+#kyselo_nsfw_switch .hide {
+	color: #ccc;
+}
+
+.kyselo-hide-nsfw #kyselo_nsfw_switch .hide {
+	color: yellow;
+}
+
+.kyselo-hide-nsfw #kyselo_nsfw_switch .show {
+	color: #ccc;
+}
 
 /* various */
 .kyselo-hidden {

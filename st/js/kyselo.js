@@ -28,5 +28,21 @@ Zepto(function(){
 		}	
 	});
 	
+	// NSFW switch
+	$('#kyselo_nsfw_switch').on('click', function(){
+		$.ajax({
+			'url':'/act/toggle_nsfw',
+			'data':{},
+			'success': function(data){
+				if (data.hide_nsfw) {
+					$(document.body).addClass('kyselo-hide-nsfw');
+				} else {
+					$(document.body).removeClass('kyselo-hide-nsfw');
+				}
+			}
+		})
+		return false;
+	});
+	
 	console.log('kyselo javascripts OK');
 });

@@ -12,12 +12,13 @@ $icons = ['', 'book', 'link', 'paragraph', 'camera', 'youtube-play', 'file', 'st
 $showFullVideo = count($posts)==1;
 
 foreach ($posts as $post) {
+$nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';	
 ?>
 <div class="pure-g">
 	<div class="pure-u-1-5">
 		<i class="fa fa-<?php echo $icons[$post['type']]; ?> fa-3x"></i>
 	</div>
-	<div class="pure-u-4-5">
+	<div class="pure-u-4-5 <?=$nsfwClass; ?>">
 	<div>
 		<img src="<?php echo $post['avatar_url']; ?>" style="width: 1em"> <a href="/<?php echo $post['name']; ?>"><?php echo $post['name']; ?></a>
 		<small><?php echo date('j.n.Y H:i:s', $post['datetime']); ?></small>

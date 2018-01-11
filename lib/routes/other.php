@@ -139,6 +139,11 @@ Flight::route('/act/iframe/@id', function($id) {
 	}
 	echo $post['preview_html'];
 });
+
+Flight::route('/act/toggle_nsfw', function(){
+	$_SESSION['hide_nsfw'] = empty($_SESSION['hide_nsfw']) ? 1 : 0;
+	Flight::json(['hide_nsfw'=>$_SESSION['hide_nsfw']]);
+});
 	
 	
 
