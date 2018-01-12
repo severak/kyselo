@@ -90,4 +90,13 @@ CREATE TABLE users (
 );
 
 -- todo: notification
--- todo: pm
+
+CREATE TABLE messages (
+	id INTEGER PRIMARY KEY,
+	id_from INT NOT NULL,
+	id_to INT NOT NULL,
+	text TEXT,
+	image_url TEXT,
+	datetime INT NOT NULL,
+	is_read INT NOT NULL DEFAULT 0
+);
