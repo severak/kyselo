@@ -20,11 +20,13 @@ class rows
 		$this->pdo = $pdo;
 	}
 
-	public function one($table, $where=[])
+	public function one($table, $where=[], $order=[])
 	{
 		$Q = $this->fragment('SELECT '.$this->_what($table).' FROM ' . $table);
 		$Q = $this->_addJoins($Q, $table);
 		$Q = $this->_addWhere($Q, $where, $table);
+		$Q = $this->_addOrder($Q, $order);
+		$Q = $this->_addLimit($Q, 1);
 		$this->_reset();
 		return $this->_execute($Q)->fetch(PDO::FETCH_ASSOC);
 	}
@@ -120,6 +122,16 @@ class rows
 		return new query($sql, $params);
 	}
 	
+	public function query($sql, $params)
+	{
+		if (func_num_args()>1 && !is_array($params)) {
+			$args = func_get_args();
+			array_shift($args);
+			$params = $args;
+		}
+		return new query($sql, $params);
+	}
+	
 	protected function _addJoins(query $Q, $table)
 	{
 		if (empty($this->_with)) {
@@ -208,9 +220,12 @@ class rows
 	
 	protected function _execute(query $Q)
 	{
-		$this->log[] = $Q->interpolate();
-		
-		//echo $Q->interpolate();die;
+		return $this->execute($Q);
+	}
+	
+	public function execute(query $Q)
+	{
+		$this->log[] = $Q;
 		
 		$stmt = $this->pdo->prepare($Q->sql);
 		$stmt->execute($Q->params);
