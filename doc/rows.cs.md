@@ -31,17 +31,16 @@ Knihovna není určena lidem co hledají [ORM](https://en.wikipedia.org/wiki/Obj
 $article = $rows->one('articles', 192);
 
 // podle složeného klíče
-$article = $rows->one('articles', ['author_name'=>'Ferdinand Peroutka', 'title'=>'Hitler byl gentleman']);
+$thatArticle = $rows->one('articles', ['author_name'=>'Ferdinand Peroutka', 'title'=>'Hitler je gentleman']);
 
 // podle pořadí
 $lastArticle = $rows->one('articles', [], ['time'=>'DESC']);
-
 ```
 
 ### získávání více záznamů
 
 ```
-
+// todo
 ```
 
 ### počítání záznamů
