@@ -45,7 +45,7 @@
 	<?php else: ?>
 		<li class="pure-menu-item"><a href="/all" class="pure-menu-link"><i class="fa fa-home"></i> all blogs</a></li>
 		<li class="pure-menu-item"><a href="/act/login" class="pure-menu-link"> login</a></li>
-		<li class="pure-menu-item"><a href="/act/register" class="pure-menu-link"> sign-up</a></li>
+		<li class="pure-menu-item"><a href="/act/register" class="pure-menu-link"> register</a></li>
 	<?php endif; ?>
 		<li class="pure-menu-item"><a href="#" class="pure-menu-link" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW</a></li>
         </ul>

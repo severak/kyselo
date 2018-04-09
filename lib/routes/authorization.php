@@ -18,8 +18,9 @@ Flight::route('/act/register', function() {
 	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
 	$form->field('password_again', ['label'=>'and again', 'type'=>'password', 'required'=>true]);
 	
+	// BIG TODO: wording of error messages
 	if (Flight::config('invitation_code')) {
-		$form->field('invitation_code', ['label'=>'Invitation code', ''=>'xyzzy', 'required'=>true]);
+		$form->field('invitation_code', ['label'=>'Invitation code', 'placeholder'=>'xyzzy', 'required'=>true]);
 		$form->rule('invitation_code', function($v){
 			return in_array($v, Flight::config('invitation_code'));
 		}, 'You cannot register without valid invitation code.');
@@ -27,7 +28,7 @@ Flight::route('/act/register', function() {
 	
 	$form->field('terms_agreement', ['label'=>'I agree with terms of service', 'type'=>'checkbox']);
 	kyselo_csrf($form);
-	$form->field('register', ['label'=>'Sing in', 'type'=>'submit']);
+	$form->field('register', ['label'=>'Register new account', 'type'=>'submit']);
 	// todo: catchpa - viz http://jecas.cz/recaptcha
 
 	$form->rule('username', function($name) {
