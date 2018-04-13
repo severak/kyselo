@@ -30,6 +30,7 @@ if (!empty($_SESSION['user'])) {
         <ul class="pure-menu-list">
 	<?php if (!empty($_SESSION['user'])): ?>
             <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>" class="pure-menu-link"><i class="fa fa-home"></i> My blog</a></li>
+            <!--
             <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
                 <a href="#" class="pure-menu-link">Groups</a>
                 <ul class="pure-menu-children">
@@ -39,13 +40,15 @@ if (!empty($_SESSION['user'])) {
 		    <li class="pure-menu-item"><a href="/act/groups" class="pure-menu-link">Find &amp; create…</a></li>
                 </ul>
             </li>
+            -->
             <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
-                <a href="#" class="pure-menu-link">People</a>
+                <a href="#" class="pure-menu-link"><i class="fa fa-users"></i> People</a>
                 <ul class="pure-menu-children">
                     <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>/friends" class="pure-menu-link">My friends</a></li>
-                    <!-- <li class="pure-menu-item"><a href="#" class="pure-menu-link">My followers</a></li> -->
+                    <!-- <li class="pure-menu-item"><a href="#" class="pure-menu-link">My followers</a></li> 
                     <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>/fof" class="pure-menu-link">Friends of a friend</a></li>
-                    <li class="pure-menu-item"><a href="/act/invite" class="pure-menu-link">Find &amp; invite…</a></li>
+                    <li class="pure-menu-item"><a href="/act/invite" class="pure-menu-link">Find &amp; invite…</a></li> -->
+                    <li class="pure-menu-item"><a href="/all" class="pure-menu-link">Everyone</a></li>
                 </ul>
             </li>
             <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
