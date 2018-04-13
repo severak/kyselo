@@ -170,7 +170,7 @@ if (empty($user)) {
 		// follow
 		echo '<a href="/act/follow?who='.$blog['name'].'" class="pure-button button-large kyselo-switch '.($friendshipExists ? 'on' : 'off').'"><i class="fa fa-heart"></i><span class="kyselo-hidden"> follow</span></a>';	
 		// message
-		// echo '<a href="#" class="pure-button button-large"><i class="fa fa-envelope"></i><span class="kyselo-hidden"> message</span></a>';	
+		echo '<a href="/act/messages/with/'.$blog['name'].'" class="pure-button button-large"><i class="fa fa-paper-plane"></i><span class="kyselo-hidden"> message</span></a>';	
 	}
 }
 echo '</div>';
