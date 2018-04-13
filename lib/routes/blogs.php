@@ -114,12 +114,42 @@ Flight::route('/@name', function($name){
 		'user'=>Flight::user(),
 		'tab'=>'blog'
 	]);
+	echo '<div class="pure-g"><div class="pure-u-1-5">&nbsp;</div><div class="pure-u-4-5"><a href="/'.$blog['name'].'/tags" style="text-decoration: none;">###</a><br><br></div></div>';
 	Flight::render('posts', [
 		'posts'=>$posts,
 		'blog'=>$blog,
 		'user' => Flight::user(),
 		'more_link'=>$moreLink,
 		'the_end'=>$theEnd
+	]);
+	Flight::render('footer', []);
+});
+
+// /@blog/tags
+Flight::route('/@name/tags', function($name){
+	$rows = Flight::rows();
+	
+	$blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
+	
+	if (empty($blog)) {
+		Flight::notFound();
+	}
+	
+	$tags = $rows->execute($rows->fragment('select tag, count(*) as cnt
+	from post_tags
+	where blog_id=?
+	group by tag
+	order by count(*) desc', [$blog['id']]))->fetchAll(PDO::FETCH_KEY_PAIR);
+
+	Flight::render('header', ['title' => $blog["title"] . ' - tags' ]);
+	Flight::render('blog_header', [
+		'blog'=>$blog,
+		'user'=>Flight::user(),
+		'tab'=>'blog'
+	]);
+	Flight::render('tags', [
+		'tags'=>$tags,
+		'blog'=>$blog
 	]);
 	Flight::render('footer', []);
 });
