@@ -1,3 +1,15 @@
+<?php
+$msgCount = 0;
+if (!empty($_SESSION['user'])) {
+    $rows = Flight::rows();
+    $msgCount = $rows->execute($rows->query('SELECT COUNT(cnt) FROM (
+        SELECT COUNT(*) AS cnt
+        FROM messages 
+        WHERE id_to=? AND is_read=0
+        GROUP BY id_from
+        )', $_SESSION['user']['blog_id']))->fetchColumn(); 
+}
+?>
 <html>
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -39,7 +51,9 @@
             <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
                 <a href="#" class="pure-menu-link"><i class="fa fa-coffee"></i></a>
                 <ul class="pure-menu-children">
-                    <li class="pure-menu-item"><a href="/act/logout" class="pure-menu-link"><i class="fa fa-sing-out"></i>logout</a></li>
+                    <li class="pure-menu-item"><a href="/act/messages/inbox" class="pure-menu-link"><i class="fa fa-envelope"></i> inbox</a></li>
+                    <li class="pure-menu-item"><a href="/act/messages/outbox" class="pure-menu-link"><i class="fa fa-paper-plane"></i> outbox</a></li>
+                    <li class="pure-menu-item"><a href="/act/logout" class="pure-menu-link"><i class="fa fa-sign-out"></i> logout</a></li>
                 </ul>
             </li>
 	<?php else: ?>
@@ -48,6 +62,9 @@
 		<li class="pure-menu-item"><a href="/act/register" class="pure-menu-link"> register</a></li>
 	<?php endif; ?>
 		<li class="pure-menu-item"><a href="#" class="pure-menu-link" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW</a></li>
+        <?php if ($msgCount>0) { ?>
+            <li class="pure-menu-item"><a href="/act/messages/inbox" class="pure-menu-link"><i class="fa fa-envelope"></i> <?=$msgCount; ?> new messages</a></li>
+        <?php } ?>    
         </ul>
 		
     </div>
