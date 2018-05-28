@@ -35,6 +35,16 @@ Flight::route('/all', function(){
 		$theEnd = false;
 	}
 
+	$filter = new kyselo\filter(Flight::rows());
+	$filter->mode = 'all';
+	if (!empty($_GET['since'])) {
+		$filter->since = $_GET['since'];
+	}
+
+	$posts = $filter->posts();
+	$moreLink = $filter->moreLink;
+	$theEnd = !$filter->moreLink;
+
 	Flight::render('header', ['title' => '{{ all blogs }}' ]);
 	Flight::render('posts', [
 		'posts'=>$posts,
@@ -108,6 +118,19 @@ Flight::route('/@name', function($name){
 		$theEnd = false;
 	}
 
+	$filter = new kyselo\filter(Flight::rows());
+	$filter->mode = 'own';
+	if (!empty($_GET['since'])) {
+		$filter->since = $_GET['since'];
+	}
+	if (!empty($_GET['tags'])) {
+		$filter->tags = $_GET['tags'];
+	}
+
+	$posts = $filter->posts();
+	$moreLink = $filter->moreLink;
+	$theEnd = !$filter->moreLink;
+
 	Flight::render('header', ['title' => $blog["title"] ]);
 	Flight::render('blog_header', [
 		'blog'=>$blog,
@@ -165,6 +188,11 @@ Flight::route('/@name/rss', function($name){
 	}
 	
 	$posts = blog_posts($rows, $blog, []);
+
+	$filter = new kyselo\filter(Flight::rows());
+	$filter->mode = 'own';
+
+	$posts = $filter->posts();
 	
 	// https://www.mnot.net/rss/tutorial/
 	
@@ -251,6 +279,20 @@ Flight::route('/@name/friends', function($name){
 		$moreLink = '/' . $blog['name'] . '/friends?since=' . date('Y-m-d\TH:i:s', $lastPost['datetime']);
 		$theEnd = false;
 	}
+
+	$filter = new kyselo\filter(Flight::rows());
+	$filter->mode = 'friends';
+	if (!empty($_GET['since'])) {
+		$filter->since = $_GET['since'];
+	}
+	if (!empty($_GET['tags'])) {
+		$filter->tags = $_GET['tags'];
+	}
+
+	$posts = $filter->posts();
+	$moreLink = $filter->moreLink;
+	$theEnd = !$filter->moreLink;
+
 
 	Flight::render('header', ['title' => $blog["title"] ]);
 	Flight::render('blog_header', [
