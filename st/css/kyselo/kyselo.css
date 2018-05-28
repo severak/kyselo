@@ -182,3 +182,12 @@ blockquote {
 	color: red;
 }
 
+.kyselo-message-text {
+	text-decoration: none;
+	color: #000;
+}
+
+.kyselo-message-text.new {
+	font-weight: bold;
+}
+
