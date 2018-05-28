@@ -21,5 +21,6 @@ class filter
     public function posts()
     {
         // todo
+        // rovnou zapracovat skupiny
     }
 }
