@@ -122,7 +122,7 @@ class rows
 		return new query($sql, $params);
 	}
 	
-	public function query($sql, $params)
+	public function query($sql, $params=[])
 	{
 		if (func_num_args()>1 && !is_array($params)) {
 			$args = func_get_args();
