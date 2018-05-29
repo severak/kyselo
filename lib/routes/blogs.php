@@ -9,31 +9,6 @@ Flight::route('/', function(){
 // everyone page
 Flight::route('/all', function(){
 	$db = Flight::db();
-	
-	$sel = $db
-		->from('posts')
-		->join('blogs', ['blog_id'=>'blogs.id'])
-		->where('blogs.is_visible', 1)
-		->where('posts.is_visible', 1);
-	
-	if (!empty($_GET['since'])) {
-		$sel->where('datetime <= ', strtotime($_GET['since']) );
-	}
-	
-	$sel->limit(31)
-		->sortDesc('datetime')
-		->select('posts.*, blogs.name as name, blogs.avatar_url');
-	
-	$posts = $sel->many();
-
-	$moreLink = null;
-	$theEnd = true;
-
-	if (count($posts)==31) {
-		$lastPost = array_pop($posts);
-		$moreLink = '/all?since=' . date('Y-m-d\TH:i:s', $lastPost['datetime']);
-		$theEnd = false;
-	}
 
 	$filter = new kyselo\filter(Flight::rows());
 	$filter->mode = 'all';
@@ -104,22 +79,10 @@ Flight::route('/@name', function($name){
 	if (empty($blog)) {
 		Flight::notFound();
 	}
-	
-	$posts = blog_posts($rows, $blog, $_GET);
-
-	$moreLink = null;
-	$theEnd = true;
-
-	if (count($posts)==31) {
-		$lastPost = array_pop($posts);
-		$query = array_intersect_key($_GET, ['since'=>true, 'date'=>true, 'type'=>true, 'tags'=>true]);
-		$query['since'] = date('Y-m-d\TH:i:s', $lastPost['datetime']);
-		$moreLink = '/' . $blog['name'] . '?' . http_build_query($query);
-		$theEnd = false;
-	}
 
 	$filter = new kyselo\filter(Flight::rows());
 	$filter->mode = 'own';
+	$filter->blogId = $blog['id'];
 	if (!empty($_GET['since'])) {
 		$filter->since = $_GET['since'];
 	}
