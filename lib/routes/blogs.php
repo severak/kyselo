@@ -10,7 +10,7 @@ Flight::route('/', function(){
 Flight::route('/all', function(){
 	$db = Flight::db();
 
-	$filter = new kyselo\filter(Flight::rows());
+	$filter = new kyselo\timeline(Flight::rows());
 	$filter->mode = 'all';
 	if (!empty($_GET['since'])) {
 		$filter->since = $_GET['since'];
@@ -80,7 +80,7 @@ Flight::route('/@name', function($name){
 		Flight::notFound();
 	}
 
-	$filter = new kyselo\filter(Flight::rows());
+	$filter = new kyselo\timeline(Flight::rows());
 	$filter->mode = 'own';
 	$filter->blogId = $blog['id'];
 	if (!empty($_GET['since'])) {
@@ -88,6 +88,9 @@ Flight::route('/@name', function($name){
 	}
 	if (!empty($_GET['tags'])) {
 		$filter->tags = $_GET['tags'];
+	}
+	if (!empty($_GET['type'])) {
+		$filter->type = $_GET['type'];
 	}
 
 	$posts = $filter->posts();
@@ -121,6 +124,7 @@ Flight::route('/@name/tags', function($name){
 		Flight::notFound();
 	}
 	
+	// todo: zde fix nechceme smazané tagy
 	$tags = $rows->execute($rows->fragment('select tag, count(*) as cnt
 	from post_tags
 	where blog_id=?
@@ -152,7 +156,7 @@ Flight::route('/@name/rss', function($name){
 	
 	$posts = blog_posts($rows, $blog, []);
 
-	$filter = new kyselo\filter(Flight::rows());
+	$filter = new kyselo\timeline(Flight::rows());
 	$filter->mode = 'own';
 
 	$posts = $filter->posts();
@@ -217,39 +221,17 @@ Flight::route('/@name/friends', function($name){
 		Flight::notFound();
 	}
 	
-	$sel = $db
-		->from('posts')
-		->join('blogs', ['blog_id'=>'blogs.id'])
-		->join('friendships', ['friendships.to_blog_id'=>'blogs.id'])
-		->where('friendships.from_blog_id', $blog['id'])
-		->where('posts.is_visible', 1);
-	
-	if (!empty($_GET['since'])) {
-		$sel->where('datetime <= ', strtotime($_GET['since']) );
-	}
-	
-	$sel->limit(31)
-		->sortDesc('datetime')
-		->select('posts.*, blogs.name as name, blogs.avatar_url');
-	
-	$posts = $sel->many();
-
-	$moreLink = null;
-	$theEnd = true;
-
-	if (count($posts)==31) {
-		$lastPost = array_pop($posts);
-		$moreLink = '/' . $blog['name'] . '/friends?since=' . date('Y-m-d\TH:i:s', $lastPost['datetime']);
-		$theEnd = false;
-	}
-
-	$filter = new kyselo\filter(Flight::rows());
+	$filter = new kyselo\timeline(Flight::rows());
 	$filter->mode = 'friends';
+	$filter->blogId = $blog['id'];
 	if (!empty($_GET['since'])) {
 		$filter->since = $_GET['since'];
 	}
 	if (!empty($_GET['tags'])) {
 		$filter->tags = $_GET['tags'];
+	}
+	if (!empty($_GET['type'])) {
+		$filter->type = $_GET['type'];
 	}
 
 	$posts = $filter->posts();
@@ -272,32 +254,4 @@ Flight::route('/@name/friends', function($name){
 	]);
 	Flight::render('footer', []);
 });
-
-function blog_posts($rows, $blog, $filter=[])
-{
-	$postsWhere = ['blog_id'=>$blog['id'], 'is_visible'=>1];
-	
-	if (!empty($filter['date'])) {
-		$filter['since'] = $filter['date']; // backward compatibility with soup
-	}
-	
-	if (!empty($filter['since'])) {
-		$postsWhere[] = $rows->fragment('posts.datetime <= ?', [strtotime($filter['since'])]);
-	}
-	
-	$type2code = ['text'=>1, 'link'=>2, 'quote'=>3, 'image'=>4, 'video'=>5, 'file'=>6, 'review'=>7, 'event'=>8];
-	if (!empty($filter['type']) && $type2code[$filter['type']]) {
-		$postsWhere['type'] = $type2code[$filter['type']];
-	}
-	
-	if (!empty($filter['tags'])) {
-		foreach (explode(',', $filter['tags']) as $tag) {
-			$rows->with('post_tags', 'id', 'post_id',  ['blog_id'=>$blog['id'], 'tag'=>$tag]);
-		}
-	}
-	
-	return $rows
-		->with('blogs', 'blog_id')
-		->more('posts', $postsWhere, ['datetime'=>'desc'], 31);
-}
 
