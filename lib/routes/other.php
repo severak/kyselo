@@ -93,7 +93,7 @@ Flight::route('/act/settings/@name', function($name){
 	}
 	
 	if ($user['blog_id']!=$blog['id'] && !isset($user['groups'][$blog['id']])) {
-		Flight::halt(403, 'Not authorized!');
+		Flight::forbidden();
 	}
 	
 	$form = new severak\forms\form(['method'=>'post']);
