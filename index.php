@@ -83,7 +83,7 @@ Flight::map('notFound', function(){
 
 Flight::map('forbidden', function(){
 	Flight::response(false)
-            ->status(404)
+            ->status(403)
             ->write(
                 file_get_contents(__DIR__ . '/lib/views/403.htm')
             )
