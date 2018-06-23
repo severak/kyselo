@@ -1,0 +1,8 @@
+- rework přihlášení
+- postování do skupin
+- repostování
+- hledání & zakládání skupin
+- logo kysela
+- úpravy menu
+- seznam přátel
+- seznam čelnů skupiny
