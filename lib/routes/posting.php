@@ -213,6 +213,9 @@ Flight::route('/act/repost', function(){
 		}
 	}
 	
+	$rows->insert('reposts', ['post_id'=>$originalId, 'repost_id'=>$postId, 'reposted_by'=>$newPost['blog_id'] ]);
+	// todo - update reposts_count originálu
+	
 	if ($request->ajax) {
 		echo 'OK ' . $postId;
 	} else {

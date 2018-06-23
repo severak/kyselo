@@ -1,13 +1,14 @@
-- postování do skupin
-- repostování
+- reposted by a repost of
+- když vlezu do skupiny, přidat skupinu do $user['groups']
 - hledání & zakládání skupin
 - logo kysela
 - seznam přátel
-- seznam čelnů skupiny
+- seznam členů skupiny
 - rework registrace
 - maintance mode
 - pinování (stahování nestatžených) obrázků
 - podstrkávání URL mimo bookmarklet
 - archiv
-- tagy
+- tagy (na samostaný tab)
 - přestylování postů
+- komentáře

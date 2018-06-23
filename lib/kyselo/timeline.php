@@ -64,6 +64,11 @@ class timeline
         //echo $Q->interpolate(); die;
 
         $posts = $rows->execute($Q)->fetchAll(PDO::FETCH_ASSOC);
+		
+		// zde přidáváme 
+		// - reposted_by
+		// - repost_of
+		
 
         if (count($posts)==31) {
             $lastPost = array_pop($posts);

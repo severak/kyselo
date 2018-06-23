@@ -36,6 +36,8 @@ CREATE TABLE posts (
 	location TEXT,
 	preview_html TEXT,
 	tags TEXT,
+	reposts_count INT DEFAULT 0,
+	comments_rount INT DEFAULT 0,
 	is_visible INT DEFAULT 1,
 	is_nsfw INT DEFAULT 0,
 	is_spam INT DEFAULT 0
@@ -53,11 +55,14 @@ CREATE TABLE reposts (
 	reposted_by INT NOT NULL
 );
 
-CREATE TABLE reactions (
+CREATE TABLE comments (
 	id INTEGER PRIMARY KEY,
 	post_id INT NOT NULL,
 	author_id INT NOT NULL,
-	text TEXT
+	datetime INT,
+	text TEXT,
+	is_visible INT DEFAULT 1,
+	is_spam INT DEFAULT 0
 );
 
 CREATE TABLE friendships (
