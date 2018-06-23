@@ -175,6 +175,50 @@ Flight::route('/act/post/delete/@id', function($id){
 		'form' => $form
 	]);
 	Flight::render('footer', []);
+});
+
+Flight::route('/act/repost', function(){
+	$rows = Flight::rows();
+	$user = Flight::user();
+	
+	if (empty($user)) {
+		Flight::forbidden();
+	}
+	
+	$request = Flight::request();
+	
+	$originalId = $_GET['post_id'];
+	$blogId = $_GET['blog_id'];
+	
+	if (!($blogId==$user['id'] || isset($user['groups'][$blogId]) )) {
+		Flight::forbidden();
+	}
+	
+	$newPost = $rows->one('posts', ['id'=>$originalId, 'is_visible'=>1]);
+	if (empty($newPost)) {
+		Flight::notFound();
+	}
+	
+	unset($newPost['id']);
+	$newPost['blog_id'] = $blogId;
+	$newPost['author_id'] = $user['blog_id'];
+	$newPost['guid'] = generate_uuid();
+	$newPost['datetime'] = strtotime('now');
+	
+	$postId = $rows->insert('posts', $newPost);
+	
+	if (!empty($newPost['tags'])) {
+		foreach (explode(' ', $newPost['tags']) as $tag) {
+			$rows->insert('post_tags', ['blog_id'=>$newPost['blog_id'], 'post_id'=>$postId, 'tag'=>$tag]);
+		}
+	}
+	
+	if ($request->ajax) {
+		echo 'OK ' . $postId;
+	} else {
+		$blog = $rows->one('blogs', $blogId);
+		Flight::redirect('/'.$blog['name'].'/post/'.$postId);
+	}
 });	
 
 function get_post_form($postType, $canPostAs=null)

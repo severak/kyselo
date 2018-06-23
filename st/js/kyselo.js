@@ -44,5 +44,19 @@ Zepto(function(){
 		return false;
 	});
 	
-	console.log('kyselo javascripts OK');
+	$('.kyselo-repost').on('click', function(ev){
+		var target = $(ev.target);
+		if (!target.attr('disabled')) {
+			target.attr('disabled', 'disabled');
+			$.ajax({
+				'url':target.attr('href'),
+				'success': function(data){
+					target.addClass('kyselo-hidden');
+				}
+			});
+		}
+		return false;
+	});
+	
+	console.log('kyselo javascripts OK 23.6.2018');
 });

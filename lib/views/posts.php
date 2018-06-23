@@ -112,6 +112,17 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                 <div class="pure-menu pure-menu-horizontal">
                     <ul class="pure-menu-list pull-right">
                         <li class="pure-menu-item"><a href="<?php echo $permalink; ?>" class="pure-button"><i class="fa fa-link"></i>&#8203;<span class="kyselo-hidden">permalink</span></a></li>
+                        
+						<?php if (!empty($user)) { ?>
+						<li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children"><a href="#" class="pure-button"><i class="fa fa-share"></i>&#8203;<span class="kyselo-hidden">repost to</span></a>
+							<ul class="pure-menu-children kyselo-dark">
+								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$user['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=$user['avatar_url']; ?>" style="width:1em"> <?=$user['name']; ?> </a></li>
+								<?php foreach ($user['groups'] as $group) { ?>
+								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$group['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=$group['avatar_url']; ?>" style="width:1em"> <?=$group['name']; ?> </a></li>
+								<?php } ?>
+							</ul>
+						</li>
+						<?php } // repost ?>
 						<?php if (!empty($user['blog_id']) && !empty($blog) && ($user['blog_id']==$blog['id'] || isset($user['groups'][$blog['id']]) )) { ?>
 						<li class="pure-menu-item"><a href="/act/post/edit/<?=$post['id']; ?>" class="pure-button" title="edit"><i class="fa fa-pencil"></i>&#8203;<span class="kyselo-hidden">edit post</span></a></li>
 						<li class="pure-menu-item"><a href="/act/post/delete/<?=$post['id']; ?>" class="pure-button" title="delete"><i class="fa fa-trash"></i>&#8203;<span class="kyselo-hidden">delete post</span></a></li>
