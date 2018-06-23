@@ -30,25 +30,23 @@ if (!empty($_SESSION['user'])) {
         <ul class="pure-menu-list">
 	<?php if (!empty($_SESSION['user'])): ?>
             <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>" class="pure-menu-link"><i class="fa fa-home"></i> My blog</a></li>
-            <!--
             <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
-                <a href="#" class="pure-menu-link">Groups</a>
+                <a href="/act/groups" class="pure-menu-link"><i class="fa fa-umbrella"></i> Groups</a>
                 <ul class="pure-menu-children">
 		    <?php foreach($_SESSION['user']['groups'] as $group): ?>
-                    <li class="pure-menu-item"><a href="/<?= $group['name']; ?>" class="pure-menu-link"><?= $group['name']; ?></a></li>
+                    <li class="pure-menu-item">
+						
+						<a href="/<?= $group['name']; ?>" class="pure-menu-link"><img src="<?= $group['avatar_url']; ?>" style="width: 1em">&nbsp;<?= $group['name']; ?></a>
+					</li>
                     <?php endforeach; ?>
-		    <li class="pure-menu-item"><a href="/act/groups" class="pure-menu-link">Find &amp; create…</a></li>
+		    <li class="pure-menu-item"><a href="/act/groups" class="pure-menu-link"><i class="fa fa-umbrella"></i> Find &amp; create…</a></li>
                 </ul>
             </li>
-            -->
             <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
-                <a href="#" class="pure-menu-link"><i class="fa fa-users"></i> People</a>
+                <a href="/all" class="pure-menu-link"><i class="fa fa-users"></i> People</a>
                 <ul class="pure-menu-children">
-                    <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>/friends" class="pure-menu-link">My friends</a></li>
-                    <!-- <li class="pure-menu-item"><a href="#" class="pure-menu-link">My followers</a></li> 
-                    <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>/fof" class="pure-menu-link">Friends of a friend</a></li>
-                    <li class="pure-menu-item"><a href="/act/invite" class="pure-menu-link">Find &amp; invite…</a></li> -->
-                    <li class="pure-menu-item"><a href="/all" class="pure-menu-link">Everyone</a></li>
+                    <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>/friends" class="pure-menu-link"><i class="fa fa-users"></i>  My friends</a></li>
+                    <li class="pure-menu-item"><a href="/all" class="pure-menu-link"><i class="fa fa-globe"></i>  Everyone</a></li>
                 </ul>
             </li>
             <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
@@ -60,9 +58,9 @@ if (!empty($_SESSION['user'])) {
                 </ul>
             </li>
 	<?php else: ?>
-		<li class="pure-menu-item"><a href="/all" class="pure-menu-link"><i class="fa fa-home"></i> all blogs</a></li>
-		<li class="pure-menu-item"><a href="/act/login" class="pure-menu-link"> login</a></li>
-		<li class="pure-menu-item"><a href="/act/register" class="pure-menu-link"> register</a></li>
+		<li class="pure-menu-item"><a href="/all" class="pure-menu-link"><i class="fa fa-globe"></i> all blogs</a></li>
+		<li class="pure-menu-item"><a href="/act/login" class="pure-menu-link"><i class="fa fa-key"></i>  login</a></li>
+		<li class="pure-menu-item"><a href="/act/register" class="pure-menu-link"><i class="fa fa-sign-in"></i>  register</a></li>
 	<?php endif; ?>
 		<li class="pure-menu-item"><a href="#" class="pure-menu-link" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW</a></li>
         <?php if ($msgCount>0) { ?>
