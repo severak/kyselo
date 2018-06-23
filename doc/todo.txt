@@ -1,8 +1,13 @@
-- rework přihlášení
 - postování do skupin
 - repostování
 - hledání & zakládání skupin
 - logo kysela
-- úpravy menu
 - seznam přátel
 - seznam čelnů skupiny
+- rework registrace
+- maintance mode
+- pinování (stahování nestatžených) obrázků
+- podstrkávání URL mimo bookmarklet
+- archiv
+- tagy
+- přestylování postů
