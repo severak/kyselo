@@ -39,20 +39,17 @@ Flight::route('/act/post', function() {
 		'event'
 	];
 	
-	$form = get_post_form($postType);
-	
-	/*
-	
 	$canPostAs = [];
 	$canPostAs[$user['blog_id']] = $user['name'];
-	// todo: groups
+	foreach ($_SESSION['user']['groups'] as $gId=>$group) {
+		$canPostAs[$gId] = $group['name'];
+	}
+	
+	$form = get_post_form($postType, $canPostAs);
 	
 	$form->rule('blog_id', function($blog_id) use ($canPostAs){
 		return !empty($canPostAs[$blog_id]);
 	}, 'Cannot post as this user!');
-	
-	*/
-	
 	
 	if ($hint) {
 		$linkUrl = $hint->url;
@@ -73,7 +70,7 @@ Flight::route('/act/post', function() {
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		$newPost = $form->values;
 		unset($newPost['post'], $newPost['upload'], $newPost['csrf_token']);
-		$newPost['blog_id'] = $user['blog_id'];
+		$newPost['blog_id'] = $newPost['blog_id'];
 		$newPost['author_id'] = $user['blog_id'];
 		$newPost['guid'] = generate_uuid();
 		$newPost['datetime'] = strtotime('now');
@@ -87,8 +84,12 @@ Flight::route('/act/post', function() {
 					$rows->insert('post_tags', ['blog_id'=>$newPost['blog_id'], 'post_id'=>$postId, 'tag'=>$tag]);
 				}
 			}
-			Flight::redirect('/'.Flight::user('name'));
+			Flight::redirect('/'.$canPostAs[ $newPost['blog_id'] ]);
 		}
+	}
+	
+	if ($_GET['as']) {
+		$form->values['blog_id'] = array_search($_GET['as'], $canPostAs);
 	}
 	
 	Flight::render('header', ['title' => 'new post' ]);
@@ -108,7 +109,7 @@ Flight::route('/act/post/edit/@id', function($id){
 	$post = $rows->one('posts', $id);
 	
 	if (!$post) Flight::notFound();
-	if ($post['blog_id']!=$user['blog_id']) Flight::forbidden();
+	if ($post['author_id']!=$user['blog_id']) Flight::forbidden();
 	$blog = $rows->one('blogs', $post['blog_id']);
 	
 	$form = get_post_form($post['type']);
@@ -176,7 +177,7 @@ Flight::route('/act/post/delete/@id', function($id){
 	Flight::render('footer', []);
 });	
 
-function get_post_form($postType)
+function get_post_form($postType, $canPostAs=null)
 {
 	$form = new severak\forms\form(['method'=>'post']);
 	
@@ -205,6 +206,8 @@ function get_post_form($postType)
 	
 	$form->field('tags', ['label'=>'Tags']);
 	$form->field('is_nsfw', ['type'=>'checkbox', 'label'=>'is NSFW']);
+	if ($canPostAs) 
+		$form->field('blog_id', ['type'=>'select', 'label'=>'Post to', 'options'=>$canPostAs]);
 	kyselo_csrf($form);
 	$form->field('post', ['type'=>'submit', 'label'=>'Post it!']);
 	

@@ -40,21 +40,14 @@ Flight::route('/@name/post/@postid', function($name, $postId){
 		Flight::notFound();
 	}
 
-	$sel = $db
-		->from('posts')
-		->join('blogs', ['blog_id'=>'blogs.id'])
-		->where('posts.id', $postId)
-		->where('posts.is_visible', 1);
+	$filter = new kyselo\timeline(Flight::rows());
+	$filter->mode = 'one';
+	$filter->blogId = $blog['id'];
+	$filter->postId = $postId;
+	$posts = $filter->posts();
 
-	$sel->select('posts.*, blogs.name as name, blogs.avatar_url');
-
-	$post = $sel->one();
-	if (!$post) {
-		Flight::notFound();
-	}
-
-	// todo: check if blog.id = posts.blog_id
-
+	if (empty($posts)) Flight::notFound();
+	
 	Flight::render('header', ['title' => $blog["title"] ]);
 	Flight::render('blog_header', [
 		'blog'=>$blog,
@@ -62,7 +55,7 @@ Flight::route('/@name/post/@postid', function($name, $postId){
 		'tab'=>'blog'
 	]);
 	Flight::render('posts', [
-		'posts'=> [$post],
+		'posts'=> $posts,
 		'blog' => $blog,
 		'user' => Flight::user()
 	]);
@@ -154,9 +147,8 @@ Flight::route('/@name/rss', function($name){
 		Flight::notFound();
 	}
 	
-	$posts = blog_posts($rows, $blog, []);
-
 	$filter = new kyselo\timeline(Flight::rows());
+	$filter->blogId = $blog['id'];
 	$filter->mode = 'own';
 
 	$posts = $filter->posts();
