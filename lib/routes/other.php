@@ -60,6 +60,10 @@ Flight::route('/act/member', function(){
 	
 	$blog = $db->from('blogs')->where('name', $_GET['who'])->where('is_visible', 1)->select()->one();
 
+	if (!$blog['is_group']) {
+		Flight::forbidden();
+	}
+	
 	if (empty($blog) || empty($_GET['who'])) {
 		Flight::notFound();
 	}
