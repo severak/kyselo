@@ -14,7 +14,7 @@ function adminer_object() {
 			return 'Kyselo admin';
 		}
 
-		function permanentLogin() {
+		function permanentLogin($i = false) {
 			// key used for permanent login
 			return md5($this->_kyseloConfig['secret']);
 		}
@@ -24,7 +24,7 @@ function adminer_object() {
 			return array('', '', '');
 		}
 
-		function databases() {
+		function databases($Jc = true) {
 			return array($this->_kyseloConfig['database']);
 		}
 
