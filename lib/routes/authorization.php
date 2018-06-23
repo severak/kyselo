@@ -97,8 +97,7 @@ Flight::route('/act/login', function() {
 		Flight::redirect('/' . $_SESSION['user']['name'] . '/friends');
 	}
 
-	/** @var Sparrow $db */
-	$db = Flight::db();
+	$rows = Flight::rows();
 	$request = Flight::request();
 	
 	$form = new severak\forms\form(['method'=>'POST']);
@@ -116,18 +115,35 @@ Flight::route('/act/login', function() {
 		$form->fill($_POST);
 		
 		if ($form->validate()) {
-			$blog = $db->from('blogs')->where('name', $_POST['username'])->one();
+			$blog = $rows->one('blogs', ['name'=>$form->values['username']]);
 			if (!empty($blog)) {
-				$user = $db->from('users')->where('id',$blog['user_id'])->one();
+				$user = $rows->one('users', $blog['user_id']);
 				if (password_verify($_POST['password'], $user['password'])) {
-					if ($_POST['persistent']) {
+					if ($form->values['persistent']) {
 						fSession::enablePersistence();
 					}
+					
+					$groupsFromDb = $rows
+						->with('memberships', 'id', 'blog_id', ['member_id'=>$blog['id'] ])
+						->more('blogs');
+						
+					
+					$groups = [];
+					foreach ($groupsFromDb as $group) {
+						$groups[$group['id']] = [
+							'id'=>$group['id'], 
+							'name'=>$group['name'], 
+							'title'=>$group['title'],
+							'avatar_url'=>$group['avatar_url']
+						];
+					}
+					
 					$_SESSION['user'] = [
+						'id' => $blog['id'],
 						'name' => $blog['name'],
 						'blog_id' => $blog['id'],
 						'avatar_url' => $blog['avatar_url'],
-						'groups'=> [], // todo - skupiny, kterych jsem clenem
+						'groups'=> $groups
 					];
 					
 					Flight::redirect('/' . $blog['name'] . '/friends');
