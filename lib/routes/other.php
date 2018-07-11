@@ -71,6 +71,7 @@ Flight::route('/act/member', function(){
 	$membershipExists = $db->from('memberships')->where('member_id', $user['blog_id'])->where('blog_id', $blog['id'])->count() > 0;
 	
 	if ($membershipExists) {
+		unset($_SESSION['user']['groups'][$blog['id']]);
 		$db->from('memberships')->where('member_id', $user['blog_id'])->where('blog_id', $blog['id'])->delete()->execute();
 	} else {
 		$db->from('memberships')->insert([
@@ -78,6 +79,13 @@ Flight::route('/act/member', function(){
 			'blog_id'=>$blog['id'],
 			'since'=>date('Y-m-d H:i:s')
 		])->execute();
+
+		$_SESSION['user']['groups'][$newGroupId] = [
+            'id'=>$blog['id'], 
+            'name'=>$blog['name'], 
+            'title'=>$blog['title'],
+            'avatar_url'=>$blog['avatar_url']
+        ];
 	}
 
 	Flight::redirect('/'.$blog['name']);
