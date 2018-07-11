@@ -1,8 +1,7 @@
-- když vlezu do skupiny, přidat skupinu do $user['groups']
-- hledání & zakládání skupin
 - logo kysela
 - seznam přátel
 - seznam členů skupiny
+- vyhazování a přidávání členů skupin
 - rework registrace
 - maintance mode
 - pinování (stahování nestažených) obrázků
