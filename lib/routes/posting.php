@@ -154,6 +154,9 @@ Flight::route('/act/post/delete/@id', function($id){
 	if (!$post) Flight::notFound();
 	if ($post['blog_id']!=$user['blog_id']) Flight::forbidden();
 	$blog = $rows->one('blogs', $post['blog_id']);
+
+	// docasny hack
+	$post['slug_name'] = $post['name'];
 	
 	$form = new severak\forms\form(['method'=>'post']);
 	$form->field('confirmed', ['type'=>'checkbox', 'label'=>'I want to delete this post permanently.']);
@@ -199,11 +202,14 @@ Flight::route('/act/repost', function(){
 		Flight::notFound();
 	}
 	
+	$newPost['repost_of'] = $originalId;
 	unset($newPost['id']);
 	$newPost['blog_id'] = $blogId;
 	$newPost['author_id'] = $user['blog_id'];
 	$newPost['guid'] = generate_uuid();
 	$newPost['datetime'] = strtotime('now');
+	$newPost['reposts_count'] = 0;
+	$newPost['comments_count'] = 0;
 	
 	$postId = $rows->insert('posts', $newPost);
 	
@@ -214,7 +220,7 @@ Flight::route('/act/repost', function(){
 	}
 	
 	$rows->insert('reposts', ['post_id'=>$originalId, 'repost_id'=>$postId, 'reposted_by'=>$newPost['blog_id'] ]);
-	// todo - update reposts_count originálu
+	$rows->execute($rows->fragment('UPDATE posts SET reposts_count=reposts_count+1 WHERE id=?', [$originalId]));
 	
 	if ($request->ajax) {
 		echo 'OK ' . $postId;

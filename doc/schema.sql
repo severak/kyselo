@@ -36,6 +36,7 @@ CREATE TABLE posts (
 	location TEXT,
 	preview_html TEXT,
 	tags TEXT,
+	repost_of INT DEFAULT NULL,
 	reposts_count INT DEFAULT 0,
 	comments_rount INT DEFAULT 0,
 	is_visible INT DEFAULT 1,

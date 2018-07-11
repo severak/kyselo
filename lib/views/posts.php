@@ -22,7 +22,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	<div>
 		<img src="<?php echo $post['avatar_url']; ?>" style="width: 1em"> <a href="/<?php echo $post['name']; ?>"><?php echo $post['name']; ?></a>
 		<small><?php echo date('j.n.Y H:i:s', $post['datetime']); ?></small>
-		<?php if ($post['group_name']) { ?>
+		<?php if (!empty($post['group_name'])) { ?>
 		<br>in <img src="<?php echo $post['group_avatar_url']; ?>" style="width: 1em"> <a href="/<?php echo $post['group_name']; ?>"><?php echo $post['group_name']; ?></a>
 		<?php } ?>
 	</div><br>
