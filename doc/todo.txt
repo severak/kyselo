@@ -1,4 +1,3 @@
-- reposted by a repost of
 - když vlezu do skupiny, přidat skupinu do $user['groups']
 - hledání & zakládání skupin
 - logo kysela
@@ -6,9 +5,14 @@
 - seznam členů skupiny
 - rework registrace
 - maintance mode
-- pinování (stahování nestatžených) obrázků
+- pinování (stahování nestažených) obrázků
 - podstrkávání URL mimo bookmarklet
 - archiv
+- iframe
 - tagy (na samostaný tab)
 - přestylování postů
 - komentáře
+- export ve stylu soup RSS
+- export ve formátu zip JSON + obrázky
+- název instance v configu - instance_name
+- OGF data v hlavičce, instance_name v titulku
