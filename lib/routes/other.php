@@ -80,7 +80,7 @@ Flight::route('/act/member', function(){
 			'since'=>date('Y-m-d H:i:s')
 		])->execute();
 
-		$_SESSION['user']['groups'][$newGroupId] = [
+		$_SESSION['user']['groups'][$blog['id']] = [
             'id'=>$blog['id'], 
             'name'=>$blog['name'], 
             'title'=>$blog['title'],
