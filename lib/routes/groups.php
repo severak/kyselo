@@ -43,7 +43,7 @@ Flight::route('/act/groups', function(){
 
         $newGroupId = $rows->insert('blogs', $update);
 
-        $rows->insert('memberships', ['blog_id'=>$newGroupId, 'member_id'=>$user['blog_id'], 'is_admin'=>1, 'is_founder'=>1]);
+        $rows->insert('memberships', ['blog_id'=>$newGroupId, 'member_id'=>$user['blog_id'], 'is_admin'=>1, 'is_founder'=>1, 'since'=>date('Y-m-d H:i:s')]);
 
         $_SESSION['user']['groups'][$newGroupId] = [
             'id'=>$newGroupId, 
