@@ -65,12 +65,7 @@ class timeline
 
         $posts = $rows->execute($Q)->fetchAll(PDO::FETCH_ASSOC);
 		
-		// zde přidáváme 
-		// - reposted_by
-		// - repost_of
-		
-
-        if (count($posts)==31) {
+		if (count($posts)==31) {
             $lastPost = array_pop($posts);
 
             $moreParams = ['since'=>date('Y-m-d\TH:i:s', $lastPost['datetime'])];
@@ -90,6 +85,20 @@ class timeline
                 $this->moreLink = '/all?' . http_build_query($moreParams);
             }
 
+        }
+
+        foreach ($posts as $ord=>$post) {
+            if (!empty($post['repost_of'])) {
+                $posts[$ord]['reposted_from'] = $rows
+                    ->with('blogs', 'blog_id')
+                    ->one('posts', $post['repost_of']);
+            }
+
+            if ($post['reposts_count']>0) {
+                $posts[$ord]['reposted_by'] = $rows
+                    ->with('blogs', 'reposted_by')
+                    ->more('reposts', ['post_id'=>$post['id']]);
+            }
         }
 
         return $posts;

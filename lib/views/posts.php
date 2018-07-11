@@ -27,6 +27,11 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 		<?php } ?>
 	</div><br>
 	<?php 
+
+	if (!empty($post['reposted_from'])) {
+		echo '<i class="fa fa-share"></i> reposted from <img src="'.$post['reposted_from']['avatar_url'].'" style="width:1em"> <a href="/'.$post['reposted_from']['name'].'/post/'.$post['repost_of'].'">' . $post['reposted_from']['name'] . '</a><br>';
+	}
+
 	if ($post['type']==1) { // text
 		if (!empty($post['title'])) {
 			echo '<h2>' . $post['title'] . '</h2>';
@@ -103,6 +108,13 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 		}
 	}
 	echo '</div>';
+
+	if (!empty($post['reposted_by'])) {
+		echo '<br><i class="fa fa-share"></i> reposted by ';
+		foreach ($post['reposted_by'] as $repost) {
+			echo '<img src="'.$repost['avatar_url'].'" style="width:1em"> <a href="/'.$repost['name'].'/post/'.$repost['repost_id'].'">' . $repost['name'] . '</a> ';
+		}
+	}
 
 	$permalink = '/' . $post['slug_name'] . '/post/' . $post['id'];
 	?>
