@@ -11,6 +11,9 @@
     </div>
     <div class="pure-u-1-5">
         <i class="fa fa-users"></i> <?=$group['member_count']; ?> members
+        <?php if (isset($_SESSION['user']['groups'][$group['id']])) { ?>
+        <br>including me
+        <?php } ?>
     </div>
 </div>
 <hr>
