@@ -1,0 +1,17 @@
+<h1><i class="fa fa-umbrella"></i> Find &amp; create groups</h1>
+<?php foreach ($groups as $group) { ?>
+<div class="pure-g">
+    <div class="pure-u-1-5 kyselo-big-profile">
+        <img src="<?=$group['avatar_url']; ?>" class="pure-img">
+    </div>
+    <div class="pure-u-3-5">
+        <a href="/<?=$group['name']; ?>"><?=$group['name']; ?></a>
+        <h2><?= $group['title']; ?></h2>
+		<small><?= $group['about']; ?></small>
+    </div>
+    <div class="pure-u-1-5">
+        <i class="fa fa-users"></i> <?=$group['member_count']; ?> members
+    </div>
+</div>
+<hr>
+<?php } ?>
