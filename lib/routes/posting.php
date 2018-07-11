@@ -150,10 +150,13 @@ Flight::route('/act/post/delete/@id', function($id){
 	$post = $rows
 		->with('blogs', 'blog_id')
 		->one('posts', $id);
+
+	$blog = $rows->one('blogs', $post['blog_id']);	
 	
 	if (!$post) Flight::notFound();
-	if ($post['blog_id']!=$user['blog_id']) Flight::forbidden();
-	$blog = $rows->one('blogs', $post['blog_id']);
+	
+	// todo - možnost mazání postů pro správce a zakladatele skupin
+	if ($post['author_id']!=$user['blog_id']) Flight::forbidden();
 
 	// docasny hack
 	$post['slug_name'] = $post['name'];
