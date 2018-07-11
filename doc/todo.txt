@@ -15,3 +15,4 @@
 - export ve formátu zip JSON + obrázky
 - název instance v configu - instance_name
 - OGF data v hlavičce, instance_name v titulku
+- TOS do configu
