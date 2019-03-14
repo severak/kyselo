@@ -51,13 +51,13 @@ $rows->count('');
 
 ## metody
 
-- `one($table, $where=[], $order=[])`
+- `one($table, $where=[], $order=[])` - vrací `null` pokud záznam neexistuje
 - `more($table, $where=[], $order=[], $limit=30)`
 - `count($table, $where=[])`
 - `page($table, $where=[], $order=[], $page=1, $perPage=30)` - celkový počet stránek se (po dotazu) určuje pomocí `$rows->pages`
 - `with($table, $from='id', $to='id', $where=[])` - s tím že se jedná o INNER JOIN ve stylu ON $with.$from=>$table.$to
 - `$insertId = insert($table, $data)`
-- `$updatedRecords = update($table, $data, $where)`
+- `$updatedRecords = update($table, $data, $where)` - vrací počet updatnutých záznamů, update +1 ještě není implementován
 - `$deletedRecords = delete($table, $where)`
 - `query($sql, $params)`
 
