@@ -38,7 +38,7 @@ CREATE TABLE posts (
 	tags TEXT,
 	repost_of INT DEFAULT NULL,
 	reposts_count INT DEFAULT 0,
-	comments_rount INT DEFAULT 0,
+	comments_count INT DEFAULT 0,
 	is_visible INT DEFAULT 1,
 	is_nsfw INT DEFAULT 0,
 	is_spam INT DEFAULT 0
