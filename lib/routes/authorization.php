@@ -37,7 +37,7 @@ Flight::route('/act/register', function() {
 	}, 'Username already in use. Choose another.');
 	
 	$form->rule('username', function($name) {
-		return preg_match('~^[a-z]([a-z0-9]{3,})$~', $name)===1;
+		return preg_match('~^[a-z]([a-z0-9]{2,})$~', $name)===1;
 	}, 'Bad username format: 3 or more lower case letters and numbers allowed, must start with letter.');
 	
 	// todo: validovat mail + posílat mailem ověření
