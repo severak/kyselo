@@ -165,7 +165,8 @@ function kyselo_download_image($form, $name)
 }
 
 function kyselo_csrf($form)
-{	
+{
+    return; // vypneme, nefunguje
 	$form->field('csrf_token', ['type'=>'hidden', 'value'=>fRequest::generateCSRFToken()]);
 	
 	$form->rule('csrf_token', function($token) use ($form) {
