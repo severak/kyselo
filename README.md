@@ -24,20 +24,22 @@ self-hosted Soup.io open source clone
  - be able to import soup backups - done ✔ 
  - make self-hosted Soup.io clone - work in progress ⌛ 
  - create social network, which respect it's users
- - try to create distribute social network
+ - try to create distributed social network
  
 ## Milestones
 
  - v 0.5 - easy import and read only display of backup ✔ 
  - v 0.6 - it's possible to post updates ✔ 
  - v 1.0 - usable multiuser Soup.io clone ⌛ 
- - v 2.0 - distributed social network
+ - v 2.0 - ~~distributed social network~~ integrated RSS reader
 
 ## Current status
 
 I am able to import backup/archived RSS feed and display it in an ugly interface.
 
-See examples of imported content:
+See [public beta](https://kyselo-beta.svita.cz/all) (you need invitation code).
+
+Also see examples of imported content:
 
  - [severak's soup](http://resoup.svita.cz/severak) (made from my own soup backup from September 2015)
  - [cat's soup](http://resoup.svita.cz/cats) (made from [RSS fragments](http://web.archive.org/web/*/http://cats.soup.io/rss) acquired via archive.org)
@@ -50,7 +52,7 @@ I used following components:
 
  - [Flight framework](http://flightphp.com) and [Sparrow](https://github.com/mikecao/sparrow) database toolkit by Mike Cao
  - [Flourish unframework](http://flourishlib.com) by Will Bond
- - [Medoo](http://medoo.in) database framework by Catfan
+ - [Medoo](http://medoo.in) database framework by Catfan (they are also [nice social network](https://catfan.me/))
  - [Pure CSS](https://purecss.io) framework by Yahoo! Inc
  - [Font Awesome](http://fontawesome.io) by Dave Gandy
  - [Medium Editor](https://yabwe.github.io/medium-editor/)
