@@ -6,6 +6,8 @@ TODO
 - 'post to this group' button?
 - nastavení skupiny (pro zakladatele)
 - RSS / OGP v hlavičce
+- alt text u tlačítkových ikon
+- výchozí (tj. bez session) bude skrýt NSFW
 
 BUGY
 
