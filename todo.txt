@@ -1,24 +1,15 @@
 TODO
 
-- lepší HP
-- autofollow admina při registraci
-- pingnout admina, když se někdo zaregistruje / vytvoří skupina
-- 'post to this group' button?
-- nastavení skupiny (pro zakladatele)
 - RSS / OGP v hlavičce
 - alt text u tlačítkových ikon
-- výchozí (tj. bez session) bude skrýt NSFW
 
 BUGY
 
 - mizející repost ikona
 - neukazují se skupiny, které nemají členy
-- regex jména skupiny
-- neukazovat NSFW v all
 
 PLÁN
 
-- grafika / ilustrace (zatím undraw)
 - komentáře
 - notifikace
 - bonzovací tlačítko
