@@ -12,14 +12,16 @@ Flight::route('/act/messages/inbox', function(){
 	INNER JOIN blogs b ON m.id_from=b.id
 	WHERE id_to=?
 	GROUP BY id_from
-	ORDER BY datetime DESC', [ $user['blog_id'] ]))->fetchAll(PDO::FETCH_ASSOC);
+	HAVING MAX(datetime)
+	ORDER BY datetime DESC
+	', [ $user['blog_id'] ]))->fetchAll(PDO::FETCH_ASSOC);
 
 	Flight::render('header', ['title' => 'inbox']);
 	Flight::render('inbox', ['messages'=>$messages]);
 	Flight::render('footer', []);
 });	
 
-// todo: outbox
+// outbox
 Flight::route('/act/messages/outbox', function(){
 	Flight::requireLogin();
 	$user = Flight::user();
@@ -32,6 +34,7 @@ Flight::route('/act/messages/outbox', function(){
 	INNER JOIN blogs b ON m.id_to=b.id
 	WHERE id_from=?
 	GROUP BY id_to
+	HAVING MAX(datetime)
 	ORDER BY datetime DESC', [ $user['blog_id'] ]))->fetchAll(PDO::FETCH_ASSOC);
 
 	Flight::render('header', ['title' => 'inbox']);
