@@ -116,7 +116,7 @@ Flight::route('/act/register', function() {
 	if (Flight::config('tos_post')) {
         /** @var rows $rows */
 	    $rows = Flight::rows();
-        $post = $rows->with('blogs')->one('posts', Flight::config('tos_post'));
+        $post = $rows->with('blogs', 'blog_id')->one('posts', Flight::config('tos_post'));
         $post['slug_name'] = $post['name'];
         echo '<hr>';
         Flight::render('posts', ['posts'=>[$post]]);
