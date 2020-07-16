@@ -56,4 +56,5 @@ I used following components:
  - [Pure CSS](https://purecss.io) framework by Yahoo! Inc
  - [Font Awesome](http://fontawesome.io) by Dave Gandy
  - [Medium Editor](https://yabwe.github.io/medium-editor/)
+ - [Undraw](https://undraw.co/) illustrations
  
