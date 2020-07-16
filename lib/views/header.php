@@ -18,7 +18,7 @@ if (!empty($_SESSION['user'])) {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="/st/css/pure/pure.css">
 	<link rel="stylesheet" href="/st/css/font-awesome/css/font-awesome.css">
-	<link rel="stylesheet" href="/st/css/kyselo/kyselo.css?v=2018-01-11">
+	<link rel="stylesheet" href="/st/css/kyselo/kyselo.css?v=2020-07-17">
 	<meta property="og:title" content="<?php $title; ?>" />
 	<script src="/st/js/zepto.min.js"></script>
 	<script src="/st/js/medium-editor.min.js"></script>

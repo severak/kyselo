@@ -1,3 +1,3 @@
-<script src="/st/js/kyselo.js?v=2018-06-23"></script>
+<script src="/st/js/kyselo.js?v=2020-07-17"></script>
 </body>
 </html>
