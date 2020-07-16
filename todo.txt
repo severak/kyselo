@@ -20,6 +20,9 @@ PLÁN
 
 - grafika / ilustrace (zatím undraw)
 - komentáře
+- notifikace
+- bonzovací tlačítko
+- lepší share
 - CSSko pro mobily
 - vlastní vzhled blogů
 
