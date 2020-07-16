@@ -25,7 +25,7 @@ if (!empty($_SESSION['user'])) {
 	<link rel="stylesheet" href="/st/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">
 	<link rel="stylesheet" href="/st/css/themes/default.min.css" type="text/css" media="screen" charset="utf-8">
 </head>
-<body class="<?php if (!empty($_SESSION['hide_nsfw'])) echo 'kyselo-hide-nsfw'; ?>">
+<body class="<?php if (empty($_SESSION['show_nsfw'])) echo 'kyselo-hide-nsfw'; ?>">
 	<!-- hlavni menu -->
 	<div class="pure-menu pure-menu-horizontal pure-menu-fixed kyselo-dark">
         <ul class="pure-menu-list">

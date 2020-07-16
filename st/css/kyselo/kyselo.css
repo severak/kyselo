@@ -121,7 +121,7 @@ hr.kyselo-tabs-base {
 
 
 /* cenzura NSFW obrázků */
-.kyselo-hide-nsfw .is-nsfw img {
+.kyselo-hide-nsfw .is-nsfw .kyselo-post-body img {
 	background-color: lightgrey;
 	filter: blur(10px) sepia(1) opacity(0.3);
 	-webkit-filter: blur(10px) sepia(1) opacity(0.3);

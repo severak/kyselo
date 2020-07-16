@@ -26,6 +26,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 		<br>in <img src="<?php echo $post['group_avatar_url']; ?>" style="width: 1em"> <a href="/<?php echo $post['group_name']; ?>"><?php echo $post['group_name']; ?></a>
 		<?php } ?>
 	</div><br>
+    <div class="kyselo-post-body">
 	<?php 
 
 	if (!empty($post['reposted_from'])) {
@@ -100,7 +101,8 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 		echo '<p>to: ' . $post['end_date'] . '</p>';
 		echo '<p>where: ' . $post['location'] . '</p>';
 	}
-	
+
+	echo '</div>';
 	echo '<div class="kyselo-tags">';
 	if (!empty($post['tags'])) {
 		foreach (explode(' ', $post['tags']) as $tag) {
