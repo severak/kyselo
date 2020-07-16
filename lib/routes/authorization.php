@@ -13,7 +13,7 @@ Flight::route('/act/register', function() {
 	$request = Flight::request();
 	
 	$form = new severak\forms\form(['method'=>'POST']);
-	$form->field('username', ['label'=>'User name', 'required'=>true]);
+	$form->field('username', ['label'=>'User name / URL', 'required'=>true]);
 	$form->field('email', ['label'=>'E-mail', 'type'=>'email', 'required'=>true]);
 	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
 	$form->field('password_again', ['label'=>'and again', 'type'=>'password', 'required'=>true]);
@@ -78,6 +78,28 @@ Flight::route('/act/register', function() {
 			$blogId = $db->insert_id;
 
 			$db->from('users')->update(['blog_id'=>$blogId])->where(['id'=>$userId])->execute();
+
+			// autofollow on registration
+            $db->from('friendships')
+                ->insert([
+                    'from_blog_id'=>$blogId,
+                    'to_blog_id'=>1,
+                    'since'=>date('Y-m-d H:i:s'),
+                    'is_bilateral'=>0
+                ])
+                ->execute();
+
+            // ping admin when someone registers
+            $db->from('messages')
+                ->insert([
+                    'id_from'=>1,
+                    'id_to'=>2,
+                    'text'=>sprintf('SYSTEM: New user %s registered!', $form->values['username']),
+                    'datetime'=>strtotime('now'),
+                    'is_read'=>0
+                ])
+                ->execute();
+
 
 			Flight::flash('Successfully registered. You can login now.');
 			Flight::redirect('/act/login');

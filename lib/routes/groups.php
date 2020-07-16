@@ -13,7 +13,7 @@ Flight::route('/act/groups', function(){
     ORDER BY b.name ASC'))->fetchAll(PDO::FETCH_ASSOC);
 
     $form = new severak\forms\form(['method'=>'post']);
-    $form->field('name', ['label'=>'Group name (URL)', 'required'=>true]);
+    $form->field('name', ['label'=>'Group name  / URL', 'required'=>true]);
     $form->field('title', ['label'=>'Group title', 'required'=>true]);
     $form->field('about', ['label'=>'Blog description', 'class'=>'kyselo-editor', 'type'=>'textarea', 'rows'=>6, 'required'=>true]);
     $form->field('upload', ['label'=>'Change logo', 'type'=>'file']);
@@ -21,8 +21,8 @@ Flight::route('/act/groups', function(){
     $form->field('save', ['label'=>'Create group', 'type'=>'submit']);
     
     $form->rule('name', function($name) {
-		return preg_match('~^[a-z]([a-z0-9]{3,})$~', $name)===1;
-    }, 'Bad username format: 3 or more letters and numbers allowed, must start with letter.');
+		return preg_match('~^[a-z]([a-z0-9]{2,})$~', $name)===1;
+    }, 'Bad group name format: 3 or more lower case letters and numbers allowed, must start with letter.');
     
     $form->rule('name', function($name) {
 		$rows = Flight::rows();
@@ -45,6 +45,14 @@ Flight::route('/act/groups', function(){
 
         $rows->insert('memberships', ['blog_id'=>$newGroupId, 'member_id'=>$user['blog_id'], 'is_admin'=>1, 'is_founder'=>1, 'since'=>date('Y-m-d H:i:s')]);
         $rows->insert('friendships', ['to_blog_id'=>$newGroupId, 'from_blog_id'=>$user['blog_id'], 'is_bilateral'=>0, 'since'=>date('Y-m-d H:i:s')]);
+
+        $rows->insert('messages', [
+            'id_from'=>1,
+            'id_to'=>2,
+            'text'=>sprintf('SYSTEM: Group %s was created!', $form->values['name']),
+            'datetime'=>strtotime('now'),
+            'is_read'=>0
+        ]);
 
         $_SESSION['user']['groups'][$newGroupId] = [
             'id'=>$newGroupId, 
