@@ -20,7 +20,7 @@ Flight::route('/all', function(){
 	$moreLink = $filter->moreLink;
 	$theEnd = !$filter->moreLink;
 
-	Flight::render('header', ['title' => '{{ all blogs }}' ]);
+	Flight::render('header', ['title' => 'all on kyselo' ]);
 	Flight::render('posts', [
 		'posts'=>$posts,
 		'more_link'=>$moreLink,
