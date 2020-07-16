@@ -12,6 +12,8 @@ PLÁN
 
 - komentáře
 - notifikace
+- mentions
+- friends/followers lists
 - bonzovací tlačítko
 - lepší share
 - CSSko pro mobily
