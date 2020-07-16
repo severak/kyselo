@@ -191,3 +191,8 @@ blockquote {
 	font-weight: bold;
 }
 
+.kyselo-blockbutton {
+	display: block;
+	margin-bottom: 0.5em;
+	font-size: 125%;
+}

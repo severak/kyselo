@@ -66,7 +66,8 @@ if (!empty($_SESSION['user'])) {
 		<li class="pure-menu-item"><a href="#" class="pure-menu-link" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW</a></li>
         <?php if ($msgCount>0) { ?>
             <li class="pure-menu-item"><a href="/act/messages/inbox" class="pure-menu-link"><i class="fa fa-envelope"></i> <?=$msgCount; ?> new messages</a></li>
-        <?php } ?>    
+        <?php } ?>
+        <li class="pure-menu-item"><a href="/" class="pure-menu-link"><i class="fa fa-question"></i>  about Kyselo</a></li>
         </ul>
 		
     </div>
