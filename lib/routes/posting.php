@@ -1,5 +1,7 @@
 <?php
 // /act/post
+use severak\database\rows;
+
 Flight::route('/act/post', function() {
 	Flight::requireLogin();
 	$rows = Flight::rows();
@@ -143,6 +145,7 @@ Flight::route('/act/post/edit/@id', function($id){
 // /act/post/delete/@id
 Flight::route('/act/post/delete/@id', function($id){
 	Flight::requireLogin();
+	/** @var rows $rows */
 	$rows = Flight::rows();
 	$user = Flight::user();
 	$request = Flight::request();
@@ -169,6 +172,8 @@ Flight::route('/act/post/delete/@id', function($id){
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		if ($form->values['confirmed']) {
 			$rows->update('posts', ['is_visible'=>0], $id);
+            $rows->delete('post_tags', ['post_id'=>$id]);
+            // TODO - skrýt reposty
 		} else {
 			Flight::flash('Nothing was deleted.', false);
 		}
