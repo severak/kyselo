@@ -1,4 +1,6 @@
 <?php
+
+use severak\database\rows;
 const KYSELO_PASSWORD_ALG = PASSWORD_DEFAULT;
 
 // famous 1-step registration process
@@ -110,6 +112,16 @@ Flight::route('/act/register', function() {
 	Flight::render('form', [
 		'form' => $form,
 	]);
+
+	if (Flight::config('tos_post')) {
+        /** @var rows $rows */
+	    $rows = Flight::rows();
+        $post = $rows->with('blogs')->one('posts', Flight::config('tos_post'));
+        $post['slug_name'] = $post['name'];
+        echo '<hr>';
+        Flight::render('posts', ['posts'=>[$post]]);
+    }
+
 	Flight::render('footer', []);
 });
 
