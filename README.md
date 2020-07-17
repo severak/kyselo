@@ -2,11 +2,38 @@
 
 self-hosted Soup.io open source clone
 
-**[download here](https://bitbucket.org/severak/kyselo/get/0.5.zip)**
+**[public beta here](https://kyselo-beta.svita.cz/)**
 
-## Requirements
+## Current status
 
- - PHP 5.6
+I am able to import backup/archived RSS feed and display it in an ugly interface. It's also possible to post new content, repost, create & join groups and send DMs to other users.
+
+Lot of features are missing or in development currently (see `todo.txt` if you understand czech).
+
+See [public beta](https://kyselo-beta.svita.cz/all) (you need invitation code).
+
+Also see examples of imported content (on older version of Kyselo):
+
+ - [severak's soup](http://resoup.svita.cz/severak) (made from my own soup backup from September 2015)
+ - [cat's soup](http://resoup.svita.cz/cats) (made from [RSS fragments](http://web.archive.org/web/*/http://cats.soup.io/rss) acquired via archive.org)
+
+## Project goals
+
+ - be able to import soup backups - done ✔ 
+ - make self-hosted Soup.io clone - work in progress ⌛ 
+ - create social network, which respect it's users - I am trying to ⌛ 
+ - try to create distributed social network (via built-in RSS client and easy reposting from sister sites, namely [souper.io]())
+ 
+## Milestones
+
+ - v 0.5 - easy import and read only display of backup ✔ 
+ - v 0.6 - it's possible to post updates ✔ 
+ - v 1.0 - usable multiuser Soup.io clone ⌛ 
+ - v 2.0 - ~~distributed social network~~ integrated RSS reader
+
+## Software equirements
+
+ - PHP 7 (5.6 probably works too)
  - PDO with SQlite3
  - command line access to server or PHP at localhost
  - some web development/PHP knowledge
@@ -18,31 +45,6 @@ self-hosted Soup.io open source clone
 3. (optional) run `php download_images.php yourname` to download images from soup CDN
 4. upload to web hosting (or run local web server)
 5. visit `your-kyselo-instance.what/yourname`
-
-## Project goals
-
- - be able to import soup backups - done ✔ 
- - make self-hosted Soup.io clone - work in progress ⌛ 
- - create social network, which respect it's users
- - try to create distributed social network
- 
-## Milestones
-
- - v 0.5 - easy import and read only display of backup ✔ 
- - v 0.6 - it's possible to post updates ✔ 
- - v 1.0 - usable multiuser Soup.io clone ⌛ 
- - v 2.0 - ~~distributed social network~~ integrated RSS reader
-
-## Current status
-
-I am able to import backup/archived RSS feed and display it in an ugly interface.
-
-See [public beta](https://kyselo-beta.svita.cz/all) (you need invitation code).
-
-Also see examples of imported content:
-
- - [severak's soup](http://resoup.svita.cz/severak) (made from my own soup backup from September 2015)
- - [cat's soup](http://resoup.svita.cz/cats) (made from [RSS fragments](http://web.archive.org/web/*/http://cats.soup.io/rss) acquired via archive.org)
 
 ## Credits
 

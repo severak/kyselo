@@ -2,11 +2,14 @@ TODO
 
 - RSS / OGP v hlavičce
 - alt text u tlačítkových ikon
+- zapomenuté heslo
+- výpis uživatelů, sledujících a členů skupiny
 
 BUGY
 
 - mizející repost ikona
 - neukazují se skupiny, které nemají členy
+- vyřešit velikost uploadu
 
 PLÁN
 
@@ -18,6 +21,7 @@ PLÁN
 - lepší share
 - CSSko pro mobily
 - vlastní vzhled blogů
+- optimalizace pro velký provoz
 
 VIZE
 
@@ -26,3 +30,11 @@ VIZE
 - nonprofit družstvo
 - RSSkový klient
 - porn
+
+---
+
+some tips from someone who host high traffic services for living -- your code always sends Set-Cookie and no-cache, this will really hammer your system. You should send set-cookie for logged users, so you can add microcaching (like up to 3s). Also, switching to some API rather than generating full html will help you a lot, as you would be able to cache posts on API evne for logged users
+or even have javascript+api to handle logged in users, while whole HTML being the same for logged in and not logged users
+this allows you to do harmless 3s microcaching and handle 100x more traffic
+also, when you put cloudflare in front of your service without cookies and with cache, cloudflare can also handle lots of traffic for you
+having javascript add the tiny 'repost' button would mean html stays the same
