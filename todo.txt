@@ -10,6 +10,7 @@ BUGY
 
 PLÁN
 
+- reposty z loforo
 - komentáře
 - notifikace
 - mentions
