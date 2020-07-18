@@ -4,6 +4,12 @@ if (!file_exists(__DIR__ . '/config.php')) {
 }
 $config = require __DIR__ . '/config.php';
 
+if (!empty($config['maintance_mode'])) {
+    header("HTTP/1.0 500 Server Error");
+    echo file_get_contents(__DIR__ . '/lib/views/maintance.html');
+    exit;
+}
+
 // init framework
 require 'lib/flight/Flight.php';
 require "lib/flight/autoload.php";
