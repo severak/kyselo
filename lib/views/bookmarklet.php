@@ -29,4 +29,5 @@ $js = trim($js);
 
 ?>
 <hr>
+<p>Save this bookmarklet to post to kyselo from outside:</p>
 <a href="<?=$js; ?>" class="pure-button button-large">post to Kyselo as <?=$blog['name']; ?></a>
