@@ -6,8 +6,17 @@
 // - $user
 // - $more_link
 // - $the_end
+// - friends
 
 $icons = ['', 'book', 'link', 'paragraph', 'camera', 'youtube-play', 'file', 'star', 'calendar'];
+
+if (!empty($friends)) {
+    echo '<div classs="pure-g"><div class="pure-u-1-5"><i class="fa fa-group fa-3x"></i></div><div class="pure-u-4-5">';
+    foreach ($friends as $friend) {
+        echo '<a href="/'.$friend['name'].'"><img src="'.$friend['avatar_url'].'" title="'.$friend['title'].'" width="50"></a>';
+    }
+    echo '</div><hr>';
+}
 
 $showFullVideo = count($posts)==1;
 

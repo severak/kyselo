@@ -214,6 +214,7 @@ Flight::route('/@name/rss', function($name){
 // /@blog/friends
 Flight::route('/@name/friends', function($name){
 	$db = Flight::db();
+	$rows = Flight::rows();
 	
 	$blog = $db->from('blogs')->where('name', $name)->where('is_visible', 1)->select()->one();
 	
@@ -238,6 +239,13 @@ Flight::route('/@name/friends', function($name){
 	$moreLink = $filter->moreLink;
 	$theEnd = !$filter->moreLink;
 
+    $friends = [];
+    if (empty($filter->since)) {
+        $friends = $rows
+            ->with('friendships', 'id', 'to_blog_id', ['from_blog_id'=>$blog['id']])
+            ->more('blogs');
+    }
+
 
 	Flight::render('header', ['title' => $blog["title"] ]);
 	Flight::render('blog_header', [
@@ -250,7 +258,8 @@ Flight::route('/@name/friends', function($name){
 		'user' => Flight::user(),
 		'blog'=>false,
 		'more_link'=>$moreLink,
-		'the_end'=>$theEnd
+		'the_end'=>$theEnd,
+        'friends'=>$friends
 	]);
 	Flight::render('footer', []);
 });

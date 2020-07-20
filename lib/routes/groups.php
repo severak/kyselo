@@ -1,5 +1,7 @@
 <?php
 // /act/groups
+use severak\database\rows;
+
 Flight::route('/act/groups', function(){
 	Flight::requireLogin();
 	$request = Flight::request();
@@ -68,4 +70,53 @@ Flight::route('/act/groups', function(){
     Flight::render('groups', ['groups' => $existing ]);
     Flight::render('form', ['form' => $form, 'h2'=>'Create group' ]);
     Flight::render('footer', []);
-});    
+});
+
+Flight::route('/all/members', function (){
+    /** @var rows $rows */
+    $rows = Flight::rows();
+
+    $members = $rows->more('blogs', ['is_visible'=>1, 'is_group'=>0]);
+
+    Flight::render('header', ['title' => 'all on kyselo' ]);
+    Flight::render('blog_header', [
+        'blog'=>['name'=>'all', 'title'=>'all on kyselo', 'is_group'=>true, 'id'=>-1, 'about'=>''],
+        'user'=>Flight::user(),
+        'tab'=>'members'
+    ]);
+    Flight::render('members', [
+        'members'=>$members
+    ]);
+    Flight::render('footer', []);
+});
+
+Flight::route('/@name/members', function($name){
+    /** @var rows $rows */
+    $rows = Flight::rows();
+
+    $blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
+
+    if (empty($blog)) {
+        Flight::notFound();
+    }
+
+    if (!$blog['is_group']) {
+        Flight::forbidden();
+    }
+
+    $members = $rows
+        ->with('memberships', 'id', 'member_id', ['blog_id'=>$blog['id']])
+        ->more('blogs');
+
+    Flight::render('header', ['title' => $blog["title"] ]);
+    Flight::render('blog_header', [
+        'blog'=>$blog,
+        'user'=>Flight::user(),
+        'tab'=>'members'
+    ]);
+    Flight::render('members', [
+        'members'=>$members
+    ]);
+    Flight::render('footer', []);
+
+});
