@@ -57,6 +57,9 @@ Zepto(function(){
 		}
 		return false;
 	});
-	
-	console.log('kyselo javascripts OK 23.6.2018');
+
+	$('#new_post').on('click', function(){
+		$('#post_types').show();
+		return false;
+	});
 });
