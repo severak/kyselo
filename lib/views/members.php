@@ -12,7 +12,6 @@ foreach ($members as $member) { ?>
             <small><?= $member['about']; ?></small>
         </div>
         <div class="pure-u-1-5">
-
         </div>
     </div>
     <hr>
