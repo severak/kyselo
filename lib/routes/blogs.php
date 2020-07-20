@@ -21,6 +21,11 @@ Flight::route('/all', function(){
 	$theEnd = !$filter->moreLink;
 
 	Flight::render('header', ['title' => 'all on kyselo' ]);
+    Flight::render('blog_header', [
+        'blog'=>['name'=>'all', 'title'=>'all on kyselo', 'is_group'=>true, 'id'=>-1, 'about'=>''],
+        'user'=>Flight::user(),
+        'tab'=>'blog'
+    ]);
 	Flight::render('posts', [
 		'posts'=>$posts,
 		'more_link'=>$moreLink,
@@ -104,6 +109,10 @@ Flight::route('/@name', function($name){
 		'more_link'=>$moreLink,
 		'the_end'=>$theEnd
 	]);
+    Flight::render('buttons', [
+        'blog'=>$blog,
+        'user'=>Flight::user()
+    ]);
 	Flight::render('footer', []);
 });
 
@@ -117,7 +126,6 @@ Flight::route('/@name/tags', function($name){
 		Flight::notFound();
 	}
 	
-	// todo: zde fix nechceme smazané tagy
 	$tags = $rows->execute($rows->fragment('select tag, count(*) as cnt
 	from post_tags
 	where blog_id=?
