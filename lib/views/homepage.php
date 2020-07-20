@@ -16,7 +16,7 @@
         <h2>You can</h2>
         <a href="/all" class="pure-button kyselo-blockbutton"><i class="fa fa-globe"></i> look around</a>
         <a href="/act/register" class="pure-button kyselo-blockbutton"><i class="fa fa-sign-in"></i> join us</a>
-        <a href="/act/post" class="pure-button pure-button-primary kyselo-blockbutton"><i class="fa fa-photo"></i> post some cats</a>
+        <a href="/act/post?type=4" class="pure-button pure-button-primary kyselo-blockbutton"><i class="fa fa-photo"></i> post some cats</a>
         <a href="https://bitbucket.org/severak/kyselo" class="pure-button kyselo-blockbutton"><i class="fa fa-git"></i> improve our code</a>
     </div>
 </div>
