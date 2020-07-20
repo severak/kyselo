@@ -170,6 +170,23 @@ function kyselo_download_image($form, $name)
 	return null;
 }
 
+function kyselo_small_image($path, $size, $square=false)
+{
+    if (empty($path)) return '';
+    $prefix = Flight::rootpath();
+    $smallPath = str_replace('.', '_'.($square ? 'sq' : 'w'). $size . '.', $path);
+    if (file_exists($smallPath)) return $smallPath;
+
+    copy($prefix . $path, $prefix . $smallPath);
+    $smallImage = new fImage($prefix . $smallPath);
+    $smallImage->resize($size, 0);
+    if ($square) {
+        $smallImage->crop($size, $size, 'center', 'center');
+    }
+    $smallImage->saveChanges();
+    return $smallPath;
+}
+
 function kyselo_csrf($form)
 {
     return; // vypneme, nefunguje

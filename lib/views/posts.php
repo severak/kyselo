@@ -11,9 +11,9 @@
 $icons = ['', 'book', 'link', 'paragraph', 'camera', 'youtube-play', 'file', 'star', 'calendar'];
 
 if (!empty($friends)) {
-    echo '<div classs="pure-g"><div class="pure-u-1-5"><i class="fa fa-group fa-3x"></i></div><div class="pure-u-4-5">';
+    echo '<div classs="pure-g"><div class="pure-u-1-5"></div><div class="pure-u-4-5">';
     foreach ($friends as $friend) {
-        echo '<a href="/'.$friend['name'].'"><img src="'.$friend['avatar_url'].'" title="'.$friend['title'].'" width="50"></a>';
+        echo '<a href="/'.$friend['name'].'"><img src="'.kyselo_small_image($friend['avatar_url'],50, true).'" title="'.$friend['title'].'" width="50"></a>';
     }
     echo '</div><hr>';
 }
@@ -29,7 +29,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	</div>
 	<div class="pure-u-4-5 <?=$nsfwClass; ?>">
 	<div>
-		<img src="<?php echo $post['avatar_url']; ?>" style="width: 1em"> <a href="/<?php echo $post['name']; ?>"><?php echo $post['name']; ?></a>
+		<img src="<?php echo kyselo_small_image($post['avatar_url'], 50, true); ?>" style="width: 1em"> <a href="/<?php echo $post['name']; ?>"><?php echo $post['name']; ?></a>
 		<small><?php echo date('j.n.Y H:i:s', $post['datetime']); ?></small>
 		<?php if (!empty($post['group_name'])) { ?>
 		<br>in <img src="<?php echo $post['group_avatar_url']; ?>" style="width: 1em"> <a href="/<?php echo $post['group_name']; ?>"><?php echo $post['group_name']; ?></a>
@@ -39,7 +39,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	<?php 
 
 	if (!empty($post['reposted_from'])) {
-		echo '<i class="fa fa-share"></i> reposted from <img src="'.$post['reposted_from']['avatar_url'].'" style="width:1em"> <a href="/'.$post['reposted_from']['name'].'/post/'.$post['repost_of'].'">' . $post['reposted_from']['name'] . '</a><br>';
+		echo '<i class="fa fa-share"></i> reposted from <img src="'.kyselo_small_image($post['reposted_from']['avatar_url'], 50, true).'" style="width:1em"> <a href="/'.$post['reposted_from']['name'].'/post/'.$post['repost_of'].'">' . $post['reposted_from']['name'] . '</a><br>';
 	}
 
 	if ($post['type']==1) { // text
@@ -123,7 +123,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	if (!empty($post['reposted_by'])) {
 		echo '<br><i class="fa fa-share"></i> reposted by ';
 		foreach ($post['reposted_by'] as $repost) {
-			echo '<img src="'.$repost['avatar_url'].'" style="width:1em"> <a href="/'.$repost['name'].'/post/'.$repost['repost_id'].'">' . $repost['name'] . '</a> ';
+			echo '<img src="'.kyselo_small_image($repost['avatar_url'], 50, true).'" style="width:1em"> <a href="/'.$repost['name'].'/post/'.$repost['repost_id'].'">' . $repost['name'] . '</a> ';
 		}
 	}
 
@@ -139,9 +139,9 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 						<?php if (!empty($user)) { ?>
 						<li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children"><a href="#" class="pure-button"><i class="fa fa-share"></i>&#8203;<span class="kyselo-hidden">repost to</span></a>
 							<ul class="pure-menu-children kyselo-dark">
-								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$user['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=$user['avatar_url']; ?>" style="width:1em"> <?=$user['name']; ?> </a></li>
+								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$user['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=kyselo_small_image($user['avatar_url'], 50, true); ?>" style="width:1em"> <?=$user['name']; ?> </a></li>
 								<?php foreach ($user['groups'] as $group) { ?>
-								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$group['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=$group['avatar_url']; ?>" style="width:1em"> <?=$group['name']; ?> </a></li>
+								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$group['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=kyselo_small_image($group['avatar_url'], 50, true); ?>" style="width:1em"> <?=$group['name']; ?> </a></li>
 								<?php } ?>
 							</ul>
 						</li>

@@ -2,7 +2,7 @@
 <?php foreach ($groups as $group) { ?>
 <div class="pure-g">
     <div class="pure-u-1-5 kyselo-big-profile">
-        <img src="<?=$group['avatar_url']; ?>" class="pure-img">
+        <img src="<?=kyselo_small_image($group['avatar_url'],100, true); ?>" class="pure-img">
     </div>
     <div class="pure-u-3-5">
         <a href="/<?=$group['name']; ?>"><?=$group['name']; ?></a>

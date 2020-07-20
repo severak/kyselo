@@ -20,7 +20,7 @@ foreach ($messages as $message) {
 <div class="pure-g">
 	<div class="pure-u-1-5 kyselo-big-profile">
 		<strong><?=htmlspecialchars($message['name']); ?></strong>:
-		<img src="<?=htmlspecialchars($message['avatar_url']); ?>" class="pure-img">
+		<img src="<?=kyselo_small_image($message['avatar_url'], 100, true); ?>" class="pure-img">
 	</div>
 	<div class="pure-u-4-5">
 		<?= nl2br(htmlspecialchars($message['text'])); ?>

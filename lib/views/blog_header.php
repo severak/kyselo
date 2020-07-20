@@ -8,7 +8,7 @@
 <div class="pure-g">
 	<div class="pure-u-1-5">
 		<div class="kyselo-big-profile">
-			<img class="pure-img" src="<?php echo $blog['avatar_url']; ?>"/>
+			<img class="pure-img" src="<?php echo kyselo_small_image($blog['avatar_url'], 100, true); ?>"/>
 		</div>	
 	</div>
 	<div class="pure-u-4-5">
