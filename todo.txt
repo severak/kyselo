@@ -1,13 +1,12 @@
 TODO
 
+- zapomenuté heslo!!!
+- filtrování tagů
 - RSS / OGP v hlavičce
-- alt text u tlačítkových ikon
-- zapomenuté heslo
-- výpis uživatelů, sledujících a členů skupiny
 
 BUGY
 
-- mizející repost ikona
+- mizející repost ikona (dělá Adblock)
 - neukazují se skupiny, které nemají členy
 - vyřešit velikost uploadu
 
