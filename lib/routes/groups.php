@@ -76,7 +76,7 @@ Flight::route('/all/members', function (){
     /** @var rows $rows */
     $rows = Flight::rows();
 
-    $members = $rows->more('blogs', ['is_visible'=>1, 'is_group'=>0], ['name'=>'asc'], 100);
+    $members = $rows->more('blogs', ['is_visible'=>1, 'is_group'=>0], ['name'=>'asc'], 300);
 
     Flight::render('header', ['title' => 'all on kyselo' ]);
     Flight::render('blog_header', [
