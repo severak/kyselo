@@ -11,6 +11,7 @@ class timeline
     public $tags = null;
     public $type = null;
     public $since = null;
+    public $name = null;
 
     public $moreLink = null;
 
@@ -82,7 +83,7 @@ class timeline
                 $this->moreLink = '/' . $lastPost['slug_name'] . '?' . http_build_query($moreParams);
             }
             if ($this->mode=='friends') {
-                $this->moreLink = '/' . $lastPost['name'] . '/friends?' . http_build_query($moreParams);
+                $this->moreLink = '/' . $this->name . '/friends?' . http_build_query($moreParams);
             }
             if ($this->mode=='all') {
                 $this->moreLink = '/all?' . http_build_query($moreParams);

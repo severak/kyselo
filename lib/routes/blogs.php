@@ -224,6 +224,7 @@ Flight::route('/@name/friends', function($name){
 	
 	$filter = new kyselo\timeline(Flight::rows());
 	$filter->mode = 'friends';
+	$filter->name = $name;
 	$filter->blogId = $blog['id'];
 	if (!empty($_GET['since'])) {
 		$filter->since = $_GET['since'];
