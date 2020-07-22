@@ -82,7 +82,7 @@ class timeline
                 $this->moreLink = '/' . $lastPost['slug_name'] . '?' . http_build_query($moreParams);
             }
             if ($this->mode=='friends') {
-                $this->moreLink = '/' . $lastPost['slug_name'] . '/friends?' . http_build_query($moreParams);
+                $this->moreLink = '/' . $lastPost['name'] . '/friends?' . http_build_query($moreParams);
             }
             if ($this->mode=='all') {
                 $this->moreLink = '/all?' . http_build_query($moreParams);
