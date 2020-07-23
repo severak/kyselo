@@ -39,7 +39,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	<?php 
 
 	if (!empty($post['reposted_from'])) {
-		echo '<i class="fa fa-share"></i> reposted from <img src="'.kyselo_small_image($post['reposted_from']['avatar_url'], 50, true).'" style="width:1em"> <a href="/'.$post['reposted_from']['name'].'/post/'.$post['repost_of'].'">' . $post['reposted_from']['name'] . '</a><br>';
+		echo '<i class="fa fa-refresh"></i> reposted from <img src="'.kyselo_small_image($post['reposted_from']['avatar_url'], 50, true).'" style="width:1em"> <a href="/'.$post['reposted_from']['name'].'/post/'.$post['repost_of'].'">' . $post['reposted_from']['name'] . '</a><br>';
 	}
 
 	if ($post['type']==1) { // text
@@ -121,7 +121,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	echo '</div>';
 
 	if (!empty($post['reposted_by'])) {
-		echo '<br><i class="fa fa-share"></i> reposted by ';
+		echo '<br><i class="fa fa-refresh"></i> reposted by ';
 		foreach ($post['reposted_by'] as $repost) {
 			echo '<img src="'.kyselo_small_image($repost['avatar_url'], 50, true).'" style="width:1em"> <a href="/'.$repost['name'].'/post/'.$repost['repost_id'].'">' . $repost['name'] . '</a> ';
 		}
@@ -137,7 +137,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                         <li class="pure-menu-item"><a href="<?php echo $permalink; ?>" class="pure-button"><i class="fa fa-link"></i>&#8203;<span class="kyselo-hidden">permalink</span></a></li>
                         
 						<?php if (!empty($user)) { ?>
-						<li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children"><a href="#" class="pure-button"><i class="fa fa-share"></i>&#8203;<span class="kyselo-hidden">repost to</span></a>
+						<li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children"><a href="#" class="pure-button"><i class="fa fa-refresh"></i>&#8203;<span class="kyselo-hidden">repost to</span></a>
 							<ul class="pure-menu-children kyselo-dark">
 								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$user['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=kyselo_small_image($user['avatar_url'], 50, true); ?>" style="width:1em"> <?=$user['name']; ?> </a></li>
 								<?php foreach ($user['groups'] as $group) { ?>
