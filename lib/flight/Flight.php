@@ -49,6 +49,18 @@
  * HTTP Caching.
  * @method  static void etag($id, $type = 'strong') Performs ETag HTTP caching.
  * @method  static void lastModified($time) Performs last modified HTTP caching.
+ *
+ *
+ * Kyselo-specific methods:
+ *
+ * @method static string rootpath() Gets absolute path to filesystem.
+ * @method static mixed config($property=null) Gets value of $property in config.
+ * @method static mixed user($property=null) Gets logged in user, it's $property or null (if not logged in).
+ * @method static void flash($msg, $success=true) Adds flash message to session.
+ * @method static void requireLogin() Redirects to /login if not logged in.
+ * @method static sparrow db() Gets instance of database.
+ * @method static rows rows() Gets instance of rows.
+ * @method static \flight\net\Response forbidden() Gets 403 page.
  */
 class Flight {
     /**
