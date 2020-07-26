@@ -196,3 +196,7 @@ blockquote {
 	margin-bottom: 0.5em;
 	font-size: 125%;
 }
+
+.kyselo-post-body a {
+	word-break: break-all;
+}
