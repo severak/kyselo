@@ -50,6 +50,10 @@ class timeline
 			$Q = $Q->add('AND p.id=? AND p.blog_id=?', [$this->postId, $this->blogId]);
 		}
 
+        if ($this->mode=='all') {
+            $Q = $Q->add('AND p.repost_of IS NULL');
+        }
+
         if ($this->since) {
             if (!is_numeric($this->since)) $this->since = strtotime($this->since);
             $Q = $Q->add(' AND p.datetime <= ?', [$this->since]);
