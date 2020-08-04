@@ -4,6 +4,8 @@
 // - h2
 // - form
 
+// - links (url => button text)
+
 if (!empty($h2)) {
 	echo '<h2>' . $h2 . '</h2>';
 }
@@ -32,5 +34,12 @@ foreach ($F->fields as $fieldName) {
 	}
 	echo '</div>';
 }
+
+if (!empty($links)) foreach ($links as $url=>$linkText) {
+    echo '<div class="pure-controls">';
+    echo '<a href="'.$url.'" class="pure-button">'.$linkText.'</a>';
+    echo '</div>';
+}
+
 echo '</fieldset>';
 echo $F->close();
