@@ -205,6 +205,19 @@ function kyselo_csrf($form)
 	}, 'Invalid CSRF token!');
 }
 
+function kyselo_url($path='/', $args=[], $query=[])
+{
+    return
+        rtrim(Flight::config('site_url'), '/') .
+        vsprintf($path, $args) .
+        ($query ? ('?' . http_build_query($query)) : '');
+}
+
+function esc($text)
+{
+    return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+}
+
 // routes:
 
 require __DIR__ . '/lib/routes/blogs.php';

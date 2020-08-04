@@ -20,7 +20,7 @@ echo 'Please, provide some info about your instance. ' . PHP_EOL;
 echo '--- ' . PHP_EOL;
 
 $conf['site_name'] = _readline('site name');
-$conf['base_url'] = _readline('site base url');
+$conf['site_url'] = _readline('site url (including protocol)');
 $adminEmail = _readline('admin e-mail');
 $adminPw  = _readline('password');
 $conf['secret'] = _readline('secret token');
