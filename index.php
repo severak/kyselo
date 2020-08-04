@@ -174,15 +174,18 @@ function kyselo_small_image($path, $size, $square=false)
 {
     if (empty($path)) return '';
     $prefix = Flight::rootpath();
-    $smallPath = str_replace('.', '_'.($square ? 'sq' : 'w'). $size . '.', $path);
+    $smallPath = str_replace('.', '_'.($square ? 'q' : 'w'). $size . '.', $path);
     if (file_exists($prefix . $smallPath)) return $smallPath;
 
     copy($prefix . $path, $prefix . $smallPath);
     $smallImage = new fImage($prefix . $smallPath);
-    $smallImage->resize($size, 0);
+
     if ($square) {
-        //$smallImage->crop($size, $size, 'center', 'center');
+        $smallerSize = min($smallImage->getWidth(), $smallImage->getHeight());
+        $smallImage->crop($smallerSize, $smallerSize, 'center', 'center');
     }
+
+    $smallImage->resize($size, 0);
     $smallImage->saveChanges();
     return $smallPath;
 }
