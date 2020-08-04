@@ -159,7 +159,7 @@ Flight::route('/act/login', function() {
 					
 					$groupsFromDb = $rows
 						->with('memberships', 'id', 'blog_id', ['member_id'=>$blog['id'] ])
-						->more('blogs');
+						->more('blogs', [], ['name'=>'asc']);
 						
 					
 					$groups = [];
@@ -190,8 +190,85 @@ Flight::route('/act/login', function() {
 	Flight::render('header', ['title' => 'login' ]);
 	Flight::render('form', [
 		'form' => $form,
+        'links' => [
+            // kyselo_url('/act/unlock') => 'forgoten password?'
+        ]
 	]);
 	Flight::render('footer', []);
+});
+
+Flight::route('/act/unlock', function (){
+
+    if (!empty($_SESSION['user']['name'])) {
+        Flight::redirect('/' . $_SESSION['user']['name'] . '/friends');
+    }
+
+    $rows = Flight::rows();
+    $request = Flight::request();
+
+    $form = new severak\forms\form(['method'=>'POST']);
+    $form->field('username', ['label'=>'User name', 'required'=>true]);
+    $form->field('unlock', ['label'=>'reset password', 'type'=>'submit']);
+
+    if ($request->method=='POST') {
+        $form->fill($_POST);
+
+        if ($form->validate()) {
+            $blog = $rows->one('blogs', ['name' => $form->values['username']]);
+            if (!empty($blog) && !$blog['is_spam']) {
+
+                if ($blog['is_group']) $form->error('username', 'Blog is group.');
+
+                $user = $rows->one('users', $blog['user_id']);
+                $userName = $blog['name'];
+
+                if ($user) {
+                    $token = fCryptography::randomString(64);
+
+                    $rows->update('users', [
+                        'activation_token'=>$token,
+                        'token_expires'=>strtotime('now + 1 day')
+                    ], $user['id']);
+
+                    $siteName = Flight::config('site_name');
+                    $resetLink = kyselo_url('/act/unlocked',[], ['for'=>$userName, 'key'=>$token]);
+
+                    if (empty($_ENV['HOST'])) $_ENV['HOST'] = parse_url(Flight::config('site_url'), PHP_URL_HOST); // fixes some ENV bugs
+                    if ($_ENV['HOST']==='localhost') $_ENV['HOST'] = 'localhost.example.org';
+                    $email = new fEmail();
+                    $email->setFromEmail('noreply@' . $_ENV['HOST']);
+                    $email->addRecipient($user['email']);
+                    $email->setSubject(sprintf('password reset for %s', Flight::config('site_name')));
+                    $email->setBody("Hello $userName,
+                    please click the following link to reset your password:
+                    
+                    $resetLink
+                    
+                    Your friendly bots from $siteName.
+                    ", true);
+
+                    $email->send();
+
+                    Flight::flash('Reset link sent. Check your e-mail folder.');
+                    Flight::redirect('/');
+
+                }
+            } else {
+                $form->error('username', 'Blog does not exist.');
+            }
+
+        }
+    }
+
+    Flight::render('header', ['title' => 'password reset' ]);
+    Flight::render('form', [
+        //'h2'=>'password reset',
+        'form' => $form,
+        'links' => [
+            kyselo_url('/act/login') => 'back to login'
+        ]
+    ]);
+    Flight::render('footer', []);
 });
 
 
