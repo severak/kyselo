@@ -59,7 +59,7 @@
  * @method static void flash($msg, $success=true) Adds flash message to session.
  * @method static void requireLogin() Redirects to /login if not logged in.
  * @method static sparrow db() Gets instance of database.
- * @method static rows rows() Gets instance of rows.
+ * @method static \severak\database\rows rows() Gets instance of rows.
  * @method static \flight\net\Response forbidden() Gets 403 page.
  */
 class Flight {
