@@ -22,7 +22,7 @@ Flight::route('/all', function(){
 
 	Flight::render('header', ['title' => 'all on kyselo' ]);
     Flight::render('blog_header', [
-        'blog'=>['name'=>'all', 'title'=>sprintf('all on %s', Flight::config('site_name')), 'is_group'=>true, 'id'=>-1, 'about'=>'(no reposts)'],
+        'blog'=>['name'=>'all', 'title'=>sprintf('all on %s', Flight::config('site_name')), 'is_group'=>true, 'id'=>-1, 'about'=>'(but no reposts)'],
         'user'=>Flight::user(),
         'tab'=>'blog'
     ]);
