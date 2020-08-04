@@ -36,8 +36,7 @@ if (!empty($_SESSION['user'])) {
                 <ul class="pure-menu-children">
 		    <?php foreach($_SESSION['user']['groups'] as $group): ?>
                     <li class="pure-menu-item">
-						
-						<a href="/<?= $group['name']; ?>" class="pure-menu-link"><img src="<?= $group['avatar_url']; ?>" style="width: 1em">&nbsp;<?= $group['name']; ?></a>
+						<a href="/<?= $group['name']; ?>" class="pure-menu-link"><img src="<?= kyselo_small_image($group['avatar_url'],50,true); ?>" style="width: 1em">&nbsp;<?= $group['name']; ?></a>
 					</li>
                     <?php endforeach; ?>
 		    <li class="pure-menu-item"><a href="/act/groups" class="pure-menu-link"><i class="fa fa-umbrella"></i> Find &amp; create…</a></li>
