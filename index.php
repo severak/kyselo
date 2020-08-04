@@ -218,6 +218,15 @@ function esc($text)
     return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
 }
 
+function kyselo_email()
+{
+    if (empty($_ENV['HOST'])) $_ENV['HOST'] = parse_url(Flight::config('site_url'), PHP_URL_HOST); // fixes some ENV bugs
+    if ($_ENV['HOST']==='localhost') $_ENV['HOST'] = 'localhost.example.org';
+    $email = new fEmail();
+    $email->setFromEmail('noreply@' . $_ENV['HOST']);
+    return $email;
+}
+
 // routes:
 
 require __DIR__ . '/lib/routes/blogs.php';

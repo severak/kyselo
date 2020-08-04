@@ -11,7 +11,7 @@ Flight::route('/act/register', function() {
 	}
 
 	/** @var Sparrow $db */
-	$db = Flight::db();
+	$db = Flight::db(); // TODO - refactor na rows
 	$request = Flight::request();
 	
 	$form = new severak\forms\form(['method'=>'POST']);
@@ -102,6 +102,8 @@ Flight::route('/act/register', function() {
                 ])
                 ->execute();
 
+            // TODO uvítací mail
+
 
 			Flight::flash('Successfully registered. You can login now.');
 			Flight::redirect('/act/login');
@@ -191,12 +193,13 @@ Flight::route('/act/login', function() {
 	Flight::render('form', [
 		'form' => $form,
         'links' => [
-            // kyselo_url('/act/unlock') => 'forgoten password?'
+            kyselo_url('/act/unlock') => 'forgotten password?'
         ]
 	]);
 	Flight::render('footer', []);
 });
 
+// password reset step 1
 Flight::route('/act/unlock', function (){
 
     if (!empty($_SESSION['user']['name'])) {
@@ -215,9 +218,7 @@ Flight::route('/act/unlock', function (){
 
         if ($form->validate()) {
             $blog = $rows->one('blogs', ['name' => $form->values['username']]);
-            if (!empty($blog) && !$blog['is_spam']) {
-
-                if ($blog['is_group']) $form->error('username', 'Blog is group.');
+            if (!empty($blog) && !$blog['is_spam'] && !$blog['is_group']) {
 
                 $user = $rows->one('users', $blog['user_id']);
                 $userName = $blog['name'];
@@ -233,10 +234,7 @@ Flight::route('/act/unlock', function (){
                     $siteName = Flight::config('site_name');
                     $resetLink = kyselo_url('/act/unlocked',[], ['for'=>$userName, 'key'=>$token]);
 
-                    if (empty($_ENV['HOST'])) $_ENV['HOST'] = parse_url(Flight::config('site_url'), PHP_URL_HOST); // fixes some ENV bugs
-                    if ($_ENV['HOST']==='localhost') $_ENV['HOST'] = 'localhost.example.org';
-                    $email = new fEmail();
-                    $email->setFromEmail('noreply@' . $_ENV['HOST']);
+                    $email = kyselo_email();
                     $email->addRecipient($user['email']);
                     $email->setSubject(sprintf('password reset for %s', Flight::config('site_name')));
                     $email->setBody("Hello $userName,
@@ -254,9 +252,10 @@ Flight::route('/act/unlock', function (){
 
                 }
             } else {
-                $form->error('username', 'Blog does not exist.');
+                $form->error('username', 'Username does not exist.');
             }
 
+            if ($blog && $blog['is_group']) $form->error('username', 'No password resets for groups.');
         }
     }
 
@@ -267,6 +266,52 @@ Flight::route('/act/unlock', function (){
         'links' => [
             kyselo_url('/act/login') => 'back to login'
         ]
+    ]);
+    Flight::render('footer', []);
+});
+
+// password reset step 2
+Flight::route('/act/unlocked', function (){
+    if (!empty($_SESSION['user']['name'])) {
+        Flight::redirect('/' . $_SESSION['user']['name'] . '/friends');
+    }
+
+    $rows = Flight::rows();
+    $req = Flight::request();
+
+    $blog = $rows->one('blogs', ['name'=>$_GET['for'], 'is_group'=>0, 'is_visible'=>1]);
+    $user = $rows->one('users', $blog['user_id']);
+
+    if (!$blog || !$user) {
+        Flight::flash('Not able to do password reset. Contact admins.', false);
+        Flight::redirect('/');
+    }
+
+    if ($user['activation_token']!=$_GET['key'] || $user['token_expires']<strtotime('now')) {
+        Flight::flash('Reset token got expired.', false);
+        Flight::redirect('/');
+    }
+
+    $form = new severak\forms\form(['method'=>'POST']);
+    $form->field('user_id', ['type'=>'hidden']);
+    $form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
+    $form->field('password_again', ['label'=>'and again', 'type'=>'password', 'required'=>true]);
+    $form->field('reset', ['type'=>'submit']);
+
+    $form->rule('password_again', function($password, $fields) {
+        return $password==$fields['password'];
+    }, 'Must match previous password.');
+
+
+    if ($req->method=='POST' && $form->fill($_POST) && $form->validate()) {
+        $rows->update('users', ['password'=>password_hash($form->values['password'], KYSELO_PASSWORD_ALG)], $user['id']);
+        Flight::flash('Password has changed. You can login now.');
+        Flight::redirect('/act/login');
+    }
+
+    Flight::render('header', ['title' => 'password reset' ]);
+    Flight::render('form', [
+        'form' => $form,
     ]);
     Flight::render('footer', []);
 });
