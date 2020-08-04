@@ -139,9 +139,9 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 						<?php if (!empty($user)) { ?>
 						<li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children"><a href="#" class="pure-button"><i class="fa fa-refresh"></i>&#8203;<span class="kyselo-hidden">repost to</span></a>
 							<ul class="pure-menu-children kyselo-dark">
-								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$user['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=kyselo_small_image($user['avatar_url'], 50, true); ?>" style="width:1em"> <?=$user['name']; ?> </a></li>
+								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$user['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=kyselo_small_image($user['avatar_url'], 50, true); ?>" style="width:1em"> <?=$user['name']; ?>&nbsp;</a></li>
 								<?php foreach ($user['groups'] as $group) { ?>
-								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$group['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=kyselo_small_image($group['avatar_url'], 50, true); ?>" style="width:1em"> <?=$group['name']; ?> </a></li>
+								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$group['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=kyselo_small_image($group['avatar_url'], 50, true); ?>" style="width:1em"> <?=$group['name']; ?>&nbsp;</a></li>
 								<?php } ?>
 							</ul>
 						</li>
