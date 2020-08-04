@@ -173,7 +173,7 @@ Flight::route('/act/post/delete/@id', function($id){
 		if ($form->values['confirmed']) {
 			$rows->update('posts', ['is_visible'=>0], $id);
             $rows->delete('post_tags', ['post_id'=>$id]);
-            // TODO - skrýt reposty
+            $rows->delete('reposts', ['repost_id'=>$id]);
 		} else {
 			Flight::flash('Nothing was deleted.', false);
 		}
@@ -218,14 +218,9 @@ Flight::route('/act/repost', function(){
 	$newPost['datetime'] = strtotime('now');
 	$newPost['reposts_count'] = 0;
 	$newPost['comments_count'] = 0;
+	unset($newPost['tags']); // we don't wanna to copy tags to reposts
 	
 	$postId = $rows->insert('posts', $newPost);
-	
-	if (!empty($newPost['tags'])) {
-		foreach (explode(' ', $newPost['tags']) as $tag) {
-			$rows->insert('post_tags', ['blog_id'=>$newPost['blog_id'], 'post_id'=>$postId, 'tag'=>$tag]);
-		}
-	}
 	
 	$rows->insert('reposts', ['post_id'=>$originalId, 'repost_id'=>$postId, 'reposted_by'=>$newPost['blog_id'] ]);
 	$rows->execute($rows->fragment('UPDATE posts SET reposts_count=reposts_count+1 WHERE id=?', [$originalId]));
