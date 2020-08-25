@@ -2,7 +2,7 @@
 
 self-hosted Soup.io open source clone
 
-**[public beta here](https://kyselo-beta.svita.cz/)**
+**[public beta here](https://kyselo.eu/)**
 
 ## Current status
 
@@ -10,7 +10,7 @@ I am able to import backup/archived RSS feed and display it in an ugly interface
 
 Lot of features are missing or in development currently (see `todo.txt` if you understand czech).
 
-See [public beta](https://kyselo-beta.svita.cz/all) (you need invitation code).
+See [public beta](https://kyselo.eu/all) (you need invitation code).
 
 Also see examples of imported content (on older version of Kyselo):
 
@@ -48,7 +48,7 @@ Also see examples of imported content (on older version of Kyselo):
 
 ## Credits
 
-Made by [Severák](https://severak.neocities.org) of http://severak.soup.io/
+Made by [Severák](https://tilde.town/~severak/) of [http://severak.soup.io/](https://web.archive.org/web/20191225090201/http://severak.soup.io/)
 
 I used following components:
 
