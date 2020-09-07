@@ -8,12 +8,14 @@ class timeline
     public $mode = 'own'; // own, friends, all, one
     public $blogId = 0;
 	public $postId = null;
-    public $tags = null;
+    public $tag = null;
     public $type = null;
     public $since = null;
     public $name = null;
 
     public $moreLink = null;
+
+    public $currentParams = '';
 
     /** @var rows */
     protected $_rows;
@@ -36,8 +38,8 @@ class timeline
             $Q = $Q->add('INNER JOIN friendships f ON f.to_blog_id=p.blog_id AND f.from_blog_id=?', [$this->blogId]);
         }
 
-        if (!empty($this->tags)) {
-            $Q = $Q->add('INNER JOIN post_tags t ON p.id=t.post_id AND t.blog_id=p.blog_id AND t.tag=?', [$this->tags]);
+        if (!empty($this->tag)) {
+            $Q = $Q->add('INNER JOIN post_tags t ON p.id=t.post_id AND t.blog_id=p.blog_id AND t.tag=?', [$this->tag]);
         }
 
         $Q = $Q->add('WHERE p.is_visible=1');
@@ -79,8 +81,8 @@ class timeline
                 $moreParams['type'] = $this->type;
             }
 
-            if ($this->tags) {
-                $moreParams['tags'] = $this->tags;
+            if ($this->tag) {
+                $moreParams['tag'] = $this->tag;
             }
 
             if ($this->mode=='own') {

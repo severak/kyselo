@@ -4,6 +4,7 @@ class generator
 {
     public $urlPrefix = '';
     public $pathPrefix = '';
+    public $mode = 'blog';
 
     function generate($blog, $posts)
     {
@@ -16,8 +17,9 @@ class generator
         foreach ($posts as $post)
         {
             $item = $rss->channel->addChild('item');
-            $item->title = empty($post['title']) ? '(no title)' : $post['title'];
-            $item->guid = $this->urlPrefix . $blog['name'] . '/post/' . $post['id'];
+            $item->title = ($this->mode=='all' ? $post['slug_name'] . ': ' : '') . (empty($post['title']) ? '(no title)' : $post['title']);
+            $item->link = $this->urlPrefix . $post['slug_name'] . '/post/' . $post['id'];
+            $item->guid = $this->urlPrefix . $post['slug_name'] . '/post/' . $post['id'];
             $item->guid['isPermaLink'] = 'true';
 
             $desc = '';

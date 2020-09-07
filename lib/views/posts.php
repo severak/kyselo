@@ -115,7 +115,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	echo '<div class="kyselo-tags">';
 	if (!empty($post['tags'])) {
 		foreach (explode(' ', $post['tags']) as $tag) {
-			echo '<a href="/'.$post['slug_name'].'?tags='.$tag.'">#'.$tag.'</a> ';
+			echo '<a href="/'.$post['slug_name'].'?tag='.$tag.'">#'.$tag.'</a> ';
 		}
 	}
 	echo '</div>';

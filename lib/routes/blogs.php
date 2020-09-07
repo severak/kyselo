@@ -20,7 +20,7 @@ Flight::route('/all', function(){
 	$moreLink = $filter->moreLink;
 	$theEnd = !$filter->moreLink;
 
-	Flight::render('header', ['title' => 'all on kyselo' ]);
+	Flight::render('header', ['title' => 'all on kyselo', 'rss'=>'/all/rss' ]);
     Flight::render('blog_header', [
         'blog'=>['name'=>'all', 'title'=>sprintf('all on %s', Flight::config('site_name')), 'is_group'=>true, 'id'=>-1, 'about'=>'(but no reposts)'],
         'user'=>Flight::user(),
@@ -33,6 +33,31 @@ Flight::route('/all', function(){
 		'user' => Flight::user()
 	]);
 	Flight::render('footer', []);
+});
+
+// everyone RSS
+Flight::route('/all/rss', function(){
+    $db = Flight::db();
+
+    $filter = new kyselo\timeline(Flight::rows());
+    $filter->mode = 'all';
+
+    if (!empty($_GET['tag'])) {
+        $filter->tag = $_GET['tag'];
+    }
+    if (!empty($_GET['type'])) {
+        $filter->type = $_GET['type'];
+    }
+
+    $posts = $filter->posts();
+
+    $rss = new kyselo\rss\generator();
+    $rss->urlPrefix = kyselo_url('/');
+    $rss->pathPrefix = Flight::rootpath();
+    $rss->mode = 'all';
+
+    header('Content-type: text/xml');
+    echo $rss->generate(['title'=>sprintf('all on %s', Flight::config('site_name')), 'about'=>'(but no reposts)', 'name'=>'all'], $posts);
 });
 
 // post detail
@@ -53,7 +78,7 @@ Flight::route('/@name/post/@postid', function($name, $postId){
 
 	if (empty($posts)) Flight::notFound();
 	
-	Flight::render('header', ['title' => $blog["title"] ]);
+	Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss', $blog['name']) ]);
 	Flight::render('blog_header', [
 		'blog'=>$blog,
 		'user'=>Flight::user(),
@@ -64,6 +89,10 @@ Flight::route('/@name/post/@postid', function($name, $postId){
 		'blog' => $blog,
 		'user' => Flight::user()
 	]);
+    Flight::render('buttons', [
+        'blog'=>$blog,
+        'user'=>Flight::user()
+    ]);
 	Flight::render('footer', []);
 });
 
@@ -84,8 +113,8 @@ Flight::route('/@name', function($name){
 	if (!empty($_GET['since'])) {
 		$filter->since = $_GET['since'];
 	}
-	if (!empty($_GET['tags'])) {
-		$filter->tags = $_GET['tags'];
+	if (!empty($_GET['tag'])) {
+		$filter->tag = $_GET['tag'];
 	}
 	if (!empty($_GET['type'])) {
 		$filter->type = $_GET['type'];
@@ -95,7 +124,7 @@ Flight::route('/@name', function($name){
 	$moreLink = $filter->moreLink;
 	$theEnd = !$filter->moreLink;
 
-	Flight::render('header', ['title' => $blog["title"] ]);
+	Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss', $blog['name']) ]);
 	Flight::render('blog_header', [
 		'blog'=>$blog,
 		'user'=>Flight::user(),
@@ -159,56 +188,21 @@ Flight::route('/@name/rss', function($name){
 	$filter->blogId = $blog['id'];
 	$filter->mode = 'own';
 
+    if (!empty($_GET['tag'])) {
+        $filter->tag = $_GET['tag'];
+    }
+    if (!empty($_GET['type'])) {
+        $filter->type = $_GET['type'];
+    }
+
 	$posts = $filter->posts();
-	
-	// https://www.mnot.net/rss/tutorial/
-	
+
+	$rss = new kyselo\rss\generator();
+	$rss->urlPrefix = kyselo_url('/');
+	$rss->pathPrefix = Flight::rootpath();
+
 	header('Content-type: text/xml');
-	$xw = new XMLWriter();
-	$xw->openMemory();
-	$xw->startDocument("1.0");
-	$xw->startElement("rss");
-	$xw->writeAttribute("version", "2.0");
-	$xw->startElement("channel");
-	$xw->writeElement("title", $blog['title']);
-	$xw->writeElement("link", 'http://' . $_SERVER['SERVER_NAME'] . '/' . $blog['name']);
-	$xw->writeElement("description", strip_tags($blog['about']));
-	
-	foreach ($posts as $post) {
-		$xw->startElement("item");
-		$xw->writeElement("title", !empty($post['title']) ? $post['title'] : '(no title)');
-		$xw->writeElement("link", 'http://' . $_SERVER['SERVER_NAME'] . '/' . $blog['name'] . '/post/' . $post['id']);
-		
-		$desc = '';
-		if ($post['type']==1 || $post['type']==3) {
-			$desc = $post['body'];
-		} elseif (in_array($post['type'], [2, 5, 6])) {
-			// link, video, file
-			$desc = '<a href="'.$post['url'].'">'.$post['url'].'</a>';
-		} elseif ($post['type']==4) {
-			$desc = '<img src="'.$post['url'].'">';
-		}
-		
-		$xw->writeElement("description", $desc);
-		$xw->writeElement("guid", $post['guid']);
-		$xw->writeElement("pubDate", date('r', $post['datetime']));
-		
-		/*
-		if ($post['type']==4) {
-			$xw->startElement("enclosure");
-			$xw->writeAttribute("url", $post['url']);
-			$xw->writeAttribute("type", "image/jpeg");
-			$xw->endElement();
-		}
-		*/
-		
-		$xw->endElement();
-	}
-	
-	$xw->endElement();
-	$xw->endElement();
-	$xw->endDocument();
-	echo $xw->outputMemory();
+	echo $rss->generate($blog, $posts);
 });	
 
 // /@blog/friends
@@ -229,8 +223,8 @@ Flight::route('/@name/friends', function($name){
 	if (!empty($_GET['since'])) {
 		$filter->since = $_GET['since'];
 	}
-	if (!empty($_GET['tags'])) {
-		$filter->tags = $_GET['tags'];
+	if (!empty($_GET['tag'])) {
+		$filter->tag = $_GET['tag'];
 	}
 	if (!empty($_GET['type'])) {
 		$filter->type = $_GET['type'];
