@@ -111,7 +111,7 @@ Flight::route('/act/post/edit/@id', function($id){
 	$post = $rows->one('posts', $id);
 	
 	if (!$post) Flight::notFound();
-	if ($post['author_id']!=$user['blog_id']) Flight::forbidden();
+	if (!can_edit_post($post)) Flight::forbidden();
 	$blog = $rows->one('blogs', $post['blog_id']);
 	
 	$form = get_post_form($post['type']);
@@ -159,7 +159,7 @@ Flight::route('/act/post/delete/@id', function($id){
 	if (!$post) Flight::notFound();
 	
 	// todo - možnost mazání postů pro správce a zakladatele skupin
-	if ($post['author_id']!=$user['blog_id']) Flight::forbidden();
+	if (!can_edit_post($post)) Flight::forbidden();
 
 	// docasny hack
 	$post['slug_name'] = $post['name'];
@@ -309,7 +309,7 @@ function finish_post($newPost, $form, $required=true)
 
 function get_info($url)
 {
-	$cookieJar = str_replace('//', '/', Flight::rootpath().'/embed-cookies.'.uniqid());
+	$cookieJar = str_replace('//', '/', Flight::rootpath().'/tmp/embed-cookies.'.uniqid());
 	$CURL = new Embed\Http\CurlDispatcher([CURLOPT_COOKIEJAR=>$cookieJar]);
 	return Embed\Embed::create($url, null, $CURL);
 }

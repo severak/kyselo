@@ -146,7 +146,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 							</ul>
 						</li>
 						<?php } // repost ?>
-						<?php if (!empty($user) && $user['blog_id']==$post['author_id']) { ?>
+						<?php if (can_edit_post($post)) { ?>
 						<li class="pure-menu-item"><a href="/act/post/edit/<?=$post['id']; ?>" class="pure-button" title="edit"><i class="fa fa-pencil"></i>&#8203;<span class="kyselo-hidden">edit post</span></a></li>
 						<li class="pure-menu-item"><a href="/act/post/delete/<?=$post['id']; ?>" class="pure-button" title="delete"><i class="fa fa-trash"></i>&#8203;<span class="kyselo-hidden">delete post</span></a></li>
 						<?php } ?>

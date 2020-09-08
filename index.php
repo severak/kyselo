@@ -227,6 +227,14 @@ function kyselo_email()
     return $email;
 }
 
+function can_edit_post($post)
+{
+    $user = Flight::user();
+    if (!$user) return false;
+    if ($user['id']==1) return true; // admin can edit everything
+    return $post['author_id']==$user['blog_id'];
+}
+
 // routes:
 
 require __DIR__ . '/lib/routes/blogs.php';
