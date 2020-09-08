@@ -55,6 +55,7 @@ Flight::route('/all/rss', function(){
     $rss->urlPrefix = kyselo_url('/');
     $rss->pathPrefix = Flight::rootpath();
     $rss->mode = 'all';
+    $rss->tagged = $filter->tag;
 
     header('Content-type: text/xml');
     echo $rss->generate(['title'=>sprintf('all on %s', Flight::config('site_name')), 'about'=>'(but no reposts)', 'name'=>'all'], $posts);
@@ -188,6 +189,7 @@ Flight::route('/@name/rss', function($name){
 	$rss = new kyselo\rss\generator();
 	$rss->urlPrefix = kyselo_url('/');
 	$rss->pathPrefix = Flight::rootpath();
+    $rss->tagged = $filter->tag;
 
 	header('Content-type: text/xml');
 	echo $rss->generate($blog, $posts);

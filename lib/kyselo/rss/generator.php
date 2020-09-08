@@ -6,10 +6,12 @@ class generator
     public $pathPrefix = '';
     public $mode = 'blog';
 
+    public $tagged = null;
+
     function generate($blog, $posts)
     {
         $rss = new \SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><rss version="2.0"/>');
-        $rss->channel->title = $blog['title'];
+        $rss->channel->title = $blog['title'] . ($this->tagged ? sprintf(' - tagged #%s', $this->tagged) : '');
         $rss->channel->link = $this->urlPrefix . $blog['name'];
         $rss->channel->description = strip_tags($blog['about']);
 
