@@ -4,6 +4,7 @@
 // - $blog
 // - $user
 // - $tab
+// - $subtab
 ?>
 <div class="pure-g">
 	<div class="pure-u-1-5">
@@ -28,3 +29,37 @@
 	</div>
 </div>
 <hr class="kyselo-tabs-base">
+<?php if (isset($subtab)) { ?>
+    <div class="pure-g">
+        <div class="pure-u-1-5">
+            &nbsp;
+        </div>
+        <div class="pure-u-4-5 kyselo-subtabs">
+            <a href="<?=kyselo_url('/%s/tags', [$blog['name']]); ?>" class="pure-button"><i class="fa fa-tags"></i> tags</a>
+            <?php if (!empty($blog['has_headlines_view'])) { ?>
+            <a href="<?=kyselo_url('/%s/headlines', [$blog['name']]); ?>" class="pure-button"><i class="fa fa-list"></i> headlines</a>
+            <?php } // has_headlines_view ?>
+            <?php if (!empty($blog['has_playlist_view'])) { ?>
+            <a href="<?=kyselo_url('/%s/playlist', [$blog['name']]); ?>" class="pure-button"><i class="fa fa-youtube-play"></i> playlist</a>
+            <?php } // has_playlist_view ?>
+
+            <?php
+            $subtabParams = $_GET;
+            unset($subtabParams['since']);
+            $subtabQ = empty($subtabParams) ? '' : ('?' . http_build_query($subtabParams));
+            ?>
+            <a href="<?=kyselo_url('/%s/rss%s', [$blog['name'], $subtabQ]); ?>" class="pure-button"><i class="fa fa-rss"></i> RSS</a>
+        </div>
+    </div>
+<?php } //endif $subtab?>
+
+<?php if (isset($rsslink)) { ?>
+    <div class="pure-g">
+        <div class="pure-u-1-5">
+            &nbsp;
+        </div>
+        <div class="pure-u-4-5 kyselo-subtabs">
+            <a href="<?=$rsslink; ?>" class="pure-button"><i class="fa fa-rss"></i> RSS</a>
+        </div>
+    </div>
+<?php } //endif $rsslink?>

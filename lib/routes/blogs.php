@@ -12,19 +12,25 @@ Flight::route('/all', function(){
 
 	$filter = new kyselo\timeline(Flight::rows());
 	$filter->mode = 'all';
-	if (!empty($_GET['since'])) {
-		$filter->since = $_GET['since'];
-	}
+	$filter->filter($_GET);
 
 	$posts = $filter->posts();
 	$moreLink = $filter->moreLink;
 	$theEnd = !$filter->moreLink;
 
-	Flight::render('header', ['title' => 'all on kyselo', 'rss'=>'/all/rss' ]);
+	Flight::render('header', ['title' => 'all on kyselo', 'rss'=>'/all/rss'. $filter->currentParams ]);
     Flight::render('blog_header', [
-        'blog'=>['name'=>'all', 'title'=>sprintf('all on %s', Flight::config('site_name')), 'is_group'=>true, 'id'=>-1, 'about'=>'(but no reposts)'],
+        'blog'=>[
+            'name'=>'all',
+            'title'=>sprintf('all on %s', Flight::config('site_name')),
+            'is_group'=>true,
+            'id'=>-1,
+            'about'=>'(but no reposts)',
+            'avatar_url'=>'/st/img/globe.gif'
+        ],
         'user'=>Flight::user(),
-        'tab'=>'blog'
+        'tab'=>'blog',
+        'rsslink'=>kyselo_url('/all/rss', [], $_GET)
     ]);
 	Flight::render('posts', [
 		'posts'=>$posts,
@@ -41,13 +47,7 @@ Flight::route('/all/rss', function(){
 
     $filter = new kyselo\timeline(Flight::rows());
     $filter->mode = 'all';
-
-    if (!empty($_GET['tag'])) {
-        $filter->tag = $_GET['tag'];
-    }
-    if (!empty($_GET['type'])) {
-        $filter->type = $_GET['type'];
-    }
+    $filter->filter($_GET, false);
 
     $posts = $filter->posts();
 
@@ -82,7 +82,8 @@ Flight::route('/@name/post/@postid', function($name, $postId){
 	Flight::render('blog_header', [
 		'blog'=>$blog,
 		'user'=>Flight::user(),
-		'tab'=>'blog'
+		'tab'=>'blog',
+        'subtab'=>'blog'
 	]);
 	Flight::render('posts', [
 		'posts'=> $posts,
@@ -110,27 +111,19 @@ Flight::route('/@name', function($name){
 	$filter = new kyselo\timeline(Flight::rows());
 	$filter->mode = 'own';
 	$filter->blogId = $blog['id'];
-	if (!empty($_GET['since'])) {
-		$filter->since = $_GET['since'];
-	}
-	if (!empty($_GET['tag'])) {
-		$filter->tag = $_GET['tag'];
-	}
-	if (!empty($_GET['type'])) {
-		$filter->type = $_GET['type'];
-	}
+	$filter->filter($_GET);
 
 	$posts = $filter->posts();
 	$moreLink = $filter->moreLink;
 	$theEnd = !$filter->moreLink;
 
-	Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss', $blog['name']) ]);
+	Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss%s', $blog['name'], $filter->currentParams) ]);
 	Flight::render('blog_header', [
 		'blog'=>$blog,
 		'user'=>Flight::user(),
-		'tab'=>'blog'
+		'tab'=>'blog',
+        'subtab'=>'blog'
 	]);
-	echo '<div class="pure-g"><div class="pure-u-1-5">&nbsp;</div><div class="pure-u-4-5"><a href="/'.$blog['name'].'/tags" style="text-decoration: none;">###</a><br><br></div></div>';
 	Flight::render('posts', [
 		'posts'=>$posts,
 		'blog'=>$blog,
@@ -165,7 +158,8 @@ Flight::route('/@name/tags', function($name){
 	Flight::render('blog_header', [
 		'blog'=>$blog,
 		'user'=>Flight::user(),
-		'tab'=>'blog'
+		'tab'=>'blog',
+        'subtab'=>'tags'
 	]);
 	Flight::render('tags', [
 		'tags'=>$tags,
@@ -187,13 +181,7 @@ Flight::route('/@name/rss', function($name){
 	$filter = new kyselo\timeline(Flight::rows());
 	$filter->blogId = $blog['id'];
 	$filter->mode = 'own';
-
-    if (!empty($_GET['tag'])) {
-        $filter->tag = $_GET['tag'];
-    }
-    if (!empty($_GET['type'])) {
-        $filter->type = $_GET['type'];
-    }
+    $filter->filter($_GET, false);
 
 	$posts = $filter->posts();
 
@@ -220,15 +208,7 @@ Flight::route('/@name/friends', function($name){
 	$filter->mode = 'friends';
 	$filter->name = $name;
 	$filter->blogId = $blog['id'];
-	if (!empty($_GET['since'])) {
-		$filter->since = $_GET['since'];
-	}
-	if (!empty($_GET['tag'])) {
-		$filter->tag = $_GET['tag'];
-	}
-	if (!empty($_GET['type'])) {
-		$filter->type = $_GET['type'];
-	}
+	$filter->filter($_GET);
 
 	$posts = $filter->posts();
 	$moreLink = $filter->moreLink;

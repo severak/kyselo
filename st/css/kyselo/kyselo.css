@@ -200,3 +200,8 @@ blockquote {
 .kyselo-post-body a {
 	word-break: break-all;
 }
+
+.kyselo-subtabs {
+	font-size: 70%;
+	padding-bottom: 1em;
+}

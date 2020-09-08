@@ -80,7 +80,7 @@ Flight::route('/all/members', function (){
 
     Flight::render('header', ['title' => 'all on kyselo' ]);
     Flight::render('blog_header', [
-        'blog'=>['name'=>'all', 'title'=>'all on kyselo', 'is_group'=>true, 'id'=>-1, 'about'=>''],
+        'blog'=>['name'=>'all', 'title'=>sprintf('all on %s', Flight::config('site_name')), 'is_group'=>true, 'id'=>-1, 'about'=>'', 'avatar_url'=>'/st/img/globe.gif'],
         'user'=>Flight::user(),
         'tab'=>'members'
     ]);
