@@ -164,7 +164,8 @@ if (!empty($more_link)) {
 }
 
 if (!empty($the_end)) {
-	echo '<p>You have reached teh end...</p>';
+    echo '<p><img src="/st/img/undraw_a_moment_to_relax_bbpa.png" alt="THE END"></p>';
+	echo '<p>You have reached the end...</p>';
 }
 
 ?>
