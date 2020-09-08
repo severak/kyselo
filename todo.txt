@@ -3,8 +3,6 @@ TODO
 see https://gist.github.com/severak/34b7b86c894aeb352e8491df77624a79
 
 - zapomenuté heslo!!!
-- filtrování tagů
-- RSS / OGP v hlavičce
 
 BUGY
 
