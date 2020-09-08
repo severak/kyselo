@@ -25,6 +25,25 @@ class timeline
         $this->_rows = $rows;
     }
 
+    public function filter($params, $canSetSince=true)
+    {
+        if ($canSetSince && !empty($params['since'])) {
+            $this->since = $params['since'];
+        } else {
+            unset($params['since']);
+        }
+        if (!empty($_GET['tag'])) {
+            $this->tag = $params['tag'];
+        }
+        if (!empty($_GET['type'])) {
+            $this->type = $params['type'];
+        }
+
+        if (!empty($params)) {
+            $this->currentParams = '?' . http_build_query($params);
+        }
+    }
+
     public function posts()
     {
         // todo - name má být group nebo author?
