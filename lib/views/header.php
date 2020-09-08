@@ -19,14 +19,30 @@ if (!empty($_SESSION['user'])) {
 	<link rel="stylesheet" href="/st/css/pure/pure.css">
 	<link rel="stylesheet" href="/st/css/font-awesome/css/font-awesome.css">
 	<link rel="stylesheet" href="/st/css/kyselo/kyselo.css?v=2020-09-08">
-	<meta property="og:title" content="<?php $title; ?>" />
 	<script src="/st/js/zepto.min.js"></script>
 	<script src="/st/js/medium-editor.min.js"></script>
 	<link rel="stylesheet" href="/st/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">
 	<link rel="stylesheet" href="/st/css/themes/default.min.css" type="text/css" media="screen" charset="utf-8">
-    <?php if (isset($rss)) { ?>
-    <link rel="alternate" type="application/rss+xml" href="<?=kyselo_url($rss); ?>" />
-    <?php } ?>
+	<?php if (isset($rss)) { ?>
+	<link rel="alternate" type="application/rss+xml" href="<?=kyselo_url($rss); ?>" />
+	<?php } ?>
+	<?php if (!empty($ogp_post)) { ?>
+	<meta property="og:type" content="website" />
+	<?php if ($ogp_post['type']==4) { ?>
+	<meta property="og:image" content="<?=kyselo_url('') . esc($ogp_post['url']); ?>" />
+	<?php } else { ?>
+	<meta property="og:title" content="<?=($ogp_post['title'] ? $ogp_post['title'] : $ogp_post['slug_name']); ?>" />
+	<meta property="og:image" content="<?=kyselo_url(''); ?>/st/img/undraw_different_love_a3rg.png" />
+	<?php } ?>
+	<meta property="og:url" content="<?=kyselo_url('/%s/post/%d', [$ogp_post['slug_name'], $ogp_post['id']]); ?>" />
+	<?php } ?>
+	<?php if (!empty($ogp_blog)) { ?>
+	<meta property="og:type" content="website" />
+	<meta property="og:image" content="<?=kyselo_url('') . kyselo_small_image($ogp_blog['avatar_url'], 100, true); ?>" />
+	<meta property="og:title" content="<?=$ogp_blog['name']; ?>" />
+	<meta property="og:description" content="<?=strip_tags($ogp_blog['about']); ?>" />
+	<meta property="og:url" content="<?=kyselo_url('/%s', [$ogp_blog['name']]); ?>" />
+	<?php } ?>
 </head>
 <body class="<?php if (empty($_SESSION['show_nsfw'])) echo 'kyselo-hide-nsfw'; ?>">
 	<!-- hlavni menu -->

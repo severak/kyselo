@@ -79,7 +79,7 @@ Flight::route('/@name/post/@postid', function($name, $postId){
 
 	if (empty($posts)) Flight::notFound();
 	
-	Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss', $blog['name']) ]);
+	Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss', $blog['name']), 'ogp_post'=>$posts[0] ]);
 	Flight::render('blog_header', [
 		'blog'=>$blog,
 		'user'=>Flight::user(),
@@ -118,7 +118,7 @@ Flight::route('/@name', function($name){
 	$moreLink = $filter->moreLink;
 	$theEnd = !$filter->moreLink;
 
-	Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss%s', $blog['name'], $filter->currentParams) ]);
+	Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss%s', $blog['name'], $filter->currentParams), 'ogp_blog'=>$blog ]);
 	Flight::render('blog_header', [
 		'blog'=>$blog,
 		'user'=>Flight::user(),
