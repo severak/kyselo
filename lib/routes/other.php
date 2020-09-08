@@ -156,6 +156,70 @@ Flight::route('/act/toggle_nsfw', function(){
 	$_SESSION['show_nsfw'] = empty($_SESSION['show_nsfw']) ? 1 : 0;
 	Flight::json(['show_nsfw'=>$_SESSION['show_nsfw']]);
 });
-	
+
+Flight::route('/act/stats', function() {
+    $user = Flight::user();
+    if (!($user && $user['id']==1)) Flight::forbidden();
+
+    $rows = Flight::rows();
+    Flight::render('header', ['title' => 'system stats' ]);
+
+    $firstPost = $rows->one('posts', ['is_visible'=>1], ['datetime'=>'asc']);
+    $now = new DateTime('now');
+    $firstDate = new DateTime('@'.$firstPost['datetime']);
+    $age  = $now->diff($firstDate);
+
+    $noUsers = $rows->execute($rows->query('select count(*) from blogs where is_visible=1 and is_group=0;'))->fetch(PDO::FETCH_COLUMN);
+    $noGroups = $rows->execute($rows->query('select count(*) from blogs where is_visible=1 and is_group=1;'))->fetch(PDO::FETCH_COLUMN);
+
+    $topUsers = $rows->execute($rows->query('SELECT name, posts_count 
+    FROM blogs b
+    INNER JOIN (SELECT blog_id, COUNT(*) AS posts_count FROM posts GROUP BY blog_id) AS m ON m.blog_id=b.id
+    WHERE b.is_group=0 AND b.is_visible
+    ORDER BY posts_count DESC;'))->fetchAll(PDO::FETCH_ASSOC);
+
+    $topGroups = $rows->execute($rows->query('SELECT name, posts_count 
+    FROM blogs b
+    INNER JOIN (SELECT blog_id, COUNT(*) AS posts_count FROM posts GROUP BY blog_id) AS m ON m.blog_id=b.id
+    WHERE b.is_group=1 AND b.is_visible
+    ORDER BY posts_count DESC;'))->fetchAll(PDO::FETCH_ASSOC);
+
+    $avgPosts = $rows->execute($rows->query('
+    select avg(cnt)
+from (
+select date(datetime,"unixepoch"), count(*) as cnt 
+from posts 
+where is_visible=1
+group by date(datetime,"unixepoch")
+)
+    '))->fetch(PDO::FETCH_COLUMN);
+
+    $avgPostsOriginals = $rows->execute($rows->query('
+    select avg(cnt)
+from (
+select date(datetime,"unixepoch"), count(*) as cnt 
+from posts 
+where is_visible=1 and repost_of is null
+group by date(datetime,"unixepoch")
+)
+    '))->fetch(PDO::FETCH_COLUMN);
+
+    echo '<ul>';
+    echo sprintf('<li>we are alive for %s</li>', $age->format('%a days (%y years %m months)'));
+    echo sprintf('<li>we have %d users</li>', $noUsers);
+    echo sprintf('<li>and %d groups</li>', $noGroups);
+    if ($topUsers[0]) {
+        echo sprintf('<li>most active user is <a href="/%s">@%s</a> with %d posts</li>', $topUsers[0]['name'], $topUsers[0]['name'], $topUsers[0]['posts_count']);
+    }
+    if ($topGroups[0]) {
+        echo sprintf('<li>most active group is <a href="/%s">@%s</a> with %d posts</li>', $topGroups[0]['name'], $topGroups[0]['name'], $topGroups[0]['posts_count']);
+    }
+    echo sprintf('<li>there are about %d post per day</li>', $avgPosts);
+    echo sprintf('<li>of these %d are originals (no reposts)</li>', $avgPostsOriginals);
+
+    echo '</ul>';
+
+    Flight::render('footer', []);
+});
 	
 
