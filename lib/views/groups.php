@@ -18,3 +18,8 @@
 </div>
 <hr>
 <?php } ?>
+
+<?php if (empty($groups)) { ?>
+    <div class="pure-u-1-2"><img src="/st/img/undraw_not_found_60pq.png" alt="">
+        <p>There are no groups yet.</p>
+<?php } // empty($groups ?>

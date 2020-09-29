@@ -3,7 +3,6 @@
 use severak\database\rows;
 
 Flight::route('/act/groups', function(){
-	Flight::requireLogin();
 	$request = Flight::request();
 	$rows = Flight::rows();
     $user = Flight::user();
@@ -32,6 +31,8 @@ Flight::route('/act/groups', function(){
 	}, 'Name already in use. Choose another.');
 
     if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
+        Flight::requireLogin();
+
 		$update = $form->values;
         unset($update['upload'], $update['save'], $update['csrf_token']);
         
@@ -68,7 +69,9 @@ Flight::route('/act/groups', function(){
 
     Flight::render('header', ['title' => 'groups' ]);
     Flight::render('groups', ['groups' => $existing ]);
-    Flight::render('form', ['form' => $form, 'h2'=>'Create group' ]);
+    if ($user) {
+        Flight::render('form', ['form' => $form, 'h2' => 'Create group']);
+    }
     Flight::render('footer', []);
 });
 

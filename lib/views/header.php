@@ -78,6 +78,7 @@ if (!empty($_SESSION['user'])) {
             </li>
 	<?php else: ?>
 		<li class="pure-menu-item"><a href="/all" class="pure-menu-link"><i class="fa fa-globe"></i> all blogs</a></li>
+		<li class="pure-menu-item"><a href="/act/groups" class="pure-menu-link"><i class="fa fa-umbrella"></i> groups</a></li>
 		<li class="pure-menu-item"><a href="/act/login" class="pure-menu-link"><i class="fa fa-key"></i>  login</a></li>
 		<li class="pure-menu-item"><a href="/act/register" class="pure-menu-link"><i class="fa fa-sign-in"></i>  register</a></li>
 	<?php endif; ?>
