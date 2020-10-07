@@ -36,11 +36,11 @@
         </div>
         <div class="pure-u-4-5 kyselo-subtabs">
             <a href="<?=kyselo_url('/%s/tags', [$blog['name']]); ?>" class="pure-button"><i class="fa fa-tags"></i> tags</a>
-            <?php if (!empty($blog['has_headlines_view'])) { ?>
-            <a href="<?=kyselo_url('/%s/headlines', [$blog['name']]); ?>" class="pure-button"><i class="fa fa-list"></i> headlines</a>
+            <?php if (!empty($blog['has_journal'])) { ?>
+            <a href="<?=kyselo_url('/%s/journal', [$blog['name']]); ?>" class="pure-button"><i class="fa fa-list"></i> journal</a>
             <?php } // has_headlines_view ?>
-            <?php if (!empty($blog['has_playlist_view'])) { ?>
-            <a href="<?=kyselo_url('/%s/playlist', [$blog['name']]); ?>" class="pure-button"><i class="fa fa-youtube-play"></i> playlist</a>
+            <?php if (!empty($blog['has_videos'])) { ?>
+            <a href="<?=kyselo_url('/%s/videos', [$blog['name']]); ?>" class="pure-button"><i class="fa fa-youtube-play"></i> playlist</a>
             <?php } // has_playlist_view ?>
 
             <?php

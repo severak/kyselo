@@ -1,4 +1,4 @@
--- Kyselo/Resoup DB schema
+-- Kyselo DB schema
 
 -- public part
 
@@ -9,6 +9,8 @@ CREATE TABLE blogs (
 	about TEXT,
 	avatar_url TEXT,
 	since TEXT,
+    has_videos INT DEFAULT 0,
+    has_journal INT DEFAULT 0,
 	is_group INT DEFAULT 0,
 	user_id INT NOT NULL,
 	is_visible INT DEFAULT 1,

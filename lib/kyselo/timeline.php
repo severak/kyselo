@@ -12,6 +12,7 @@ class timeline
     public $type = null;
     public $since = null;
     public $name = null;
+    public $limit = 30;
 
     public $moreLink = null;
 
@@ -85,7 +86,7 @@ class timeline
             $Q = $Q->add(' AND p.type = ?', [$type2code[$this->type]]);
         }
 
-        $Q = $Q->add('ORDER BY p.datetime DESC LIMIT 31');
+        $Q = $Q->add('ORDER BY p.datetime DESC LIMIT ?', [$this->limit+1]);
 
         //echo $Q->interpolate(); die;
 

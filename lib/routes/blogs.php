@@ -241,3 +241,81 @@ Flight::route('/@name/friends', function($name){
 	Flight::render('footer', []);
 });
 
+Flight::route('/@name/videos', function($name){
+    $db = Flight::db();
+    $rows = Flight::rows();
+
+    $blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
+
+    if (empty($blog)) {
+        Flight::notFound();
+    }
+    if (!$blog['has_videos']) {
+        Flight::forbidden();
+    }
+
+    $filter = new kyselo\timeline(Flight::rows());
+    $filter->mode = 'own';
+    $filter->blogId = $blog['id'];
+    $filter->filter($_GET);
+    $filter->type = 'video';
+    $filter->limit = 72;
+
+    $posts = $filter->posts();
+
+    Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss%s', $blog['name'], $filter->currentParams), 'ogp_blog'=>$blog ]);
+    Flight::render('blog_header', [
+        'blog'=>$blog,
+        'user'=>Flight::user(),
+        'tab'=>'blog',
+        'subtab'=>'blog'
+    ]);
+    Flight::render('videos', [
+        'posts'=>$posts
+    ]);
+    Flight::render('buttons', [
+        'blog'=>$blog,
+        'user'=>Flight::user()
+    ]);
+    Flight::render('footer', []);
+});
+
+Flight::route('/@name/journal', function($name){
+    $db = Flight::db();
+    $rows = Flight::rows();
+
+    $blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
+
+    if (empty($blog)) {
+        Flight::notFound();
+    }
+    if (!$blog['has_journal']) {
+        Flight::forbidden();
+    }
+
+    $filter = new kyselo\timeline(Flight::rows());
+    $filter->mode = 'own';
+    $filter->blogId = $blog['id'];
+    $filter->filter($_GET);
+    $filter->type = 'text';
+    $filter->limit = 72;
+
+    $posts = $filter->posts();
+
+    Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss%s', $blog['name'], $filter->currentParams), 'ogp_blog'=>$blog ]);
+    Flight::render('blog_header', [
+        'blog'=>$blog,
+        'user'=>Flight::user(),
+        'tab'=>'blog',
+        'subtab'=>'blog'
+    ]);
+    Flight::render('journal', [
+        'posts'=>$posts
+    ]);
+    Flight::render('buttons', [
+        'blog'=>$blog,
+        'user'=>Flight::user()
+    ]);
+    Flight::render('footer', []);
+});
+

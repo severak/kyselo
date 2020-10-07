@@ -113,6 +113,8 @@ Flight::route('/act/settings/@name', function($name){
 	$form->field('about', ['label'=>'Blog description', 'class'=>'kyselo-editor', 'type'=>'textarea', 'rows'=>6, 'required'=>true]);
 	$form->field('is_nsfw', ['label'=>'is NSFW blog', 'type'=>'checkbox']);
 	$form->field('upload', ['label'=>'Change logo', 'type'=>'file']);
+    $form->field('has_journal', ['label'=>'journal view enabled', 'type'=>'checkbox']);
+    $form->field('has_videos', ['label'=>'videos playlist enabled', 'type'=>'checkbox']);
 	kyselo_csrf($form);
 	$form->field('save', ['label'=>'Save', 'type'=>'submit']);
 	
