@@ -6,40 +6,49 @@
 
 // - links (url => button text)
 
-if (!empty($h2)) {
-	echo '<h2>' . $h2 . '</h2>';
-}
+
 
 $F = new severak\forms\html($form);
-echo $F->open(['class'=>'pure-form pure-form-aligned']);
-echo '<fieldset>';
+echo $F->open(['class'=>'mt-2']);
+
+if (!empty($h2)) {
+	echo '<h2 class="subtitle">' . $h2 . '</h2>';
+}
+
 foreach ($F->fields as $fieldName) {
+	echo '<div class="field">';
+
+	echo $F->label($fieldName, ['class'=>'label']);
 	
-	if (in_array($form->fields[$fieldName]['type'], ['checkbox', 'submit'])) {
-		echo '<div class="pure-controls">';
-	} else {
-		echo '<div class="pure-control-group">';
 	
-	}
+	echo '<div class="control">';
 	
-	echo $F->label($fieldName);
+	$attr = ['class'=>'input'];
+	if ($form->fields[$fieldName]['type']=='textarea') $attr['class'] = 'textarea'; // TODO - ošetřit medium editor
+	if ($form->fields[$fieldName]['type']=='checkbox') $attr['class'] = 'checkbox';
+	if ($form->fields[$fieldName]['type']=='select') $attr['class'] = 'select';
+	if ($form->fields[$fieldName]['type']=='submit') $attr['class'] = 'button is-primary';
 	
-	$attr = [];
-	if ($form->fields[$fieldName]['type']=='submit') $attr['class'] = 'pure-button pure-button-primary';
-	if ($form->fields[$fieldName]['type']=='checkbox') $attr['class'] = 'pure-checkbox';
+	
+	if ($attr['class']=='select') { echo '<div class="select">'; }
 	
 	echo $F->field($fieldName, $attr);
+	
+	if ($attr['class']=='select') { echo '</div>'; }
+	
 	if (!empty($form->errors[$fieldName])) {
-		echo ' <span class="pure-form-message-inline kyselo-form-error">' . htmlspecialchars($form->errors[$fieldName]) . '</span>';
+		echo ' <span class="help is-danger">' . htmlspecialchars($form->errors[$fieldName]) . '</span>';
 	}
+	echo '</div>';
 	echo '</div>';
 }
 
 if (!empty($links)) foreach ($links as $url=>$linkText) {
-    echo '<div class="pure-controls">';
-    echo '<a href="'.$url.'" class="pure-button">'.$linkText.'</a>';
+	echo '<div class="field">';
+	echo '<div class="control">';
+    echo '<a href="'.$url.'" class="button">'.$linkText.'</a>';
+    echo '</div>';
     echo '</div>';
 }
 
-echo '</fieldset>';
 echo $F->close();

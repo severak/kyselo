@@ -51,7 +51,7 @@ class html
 			return ''; // these input types has no label
 		}
 		
-		return '<label for="'.$field['id'].'">' . $field['label'] . '</label>';
+		return '<label for="'.$field['id'].'" '.$this->_attr($attr).'>' . $field['label'] . '</label>';
 	}
 	
 	function field($fieldName, $attr=[])

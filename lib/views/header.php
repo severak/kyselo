@@ -11,14 +11,14 @@ if (!empty($_SESSION['user'])) {
 }
 ?>
 <!doctype HTML>
-<html>
+<html class="has-navbar-fixed-top">
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title><?php echo $title; ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="/st/css/pure/pure.css">
+	<link rel="stylesheet" href="/st/css/bulma/bulma.css">
 	<link rel="stylesheet" href="/st/css/font-awesome/css/font-awesome.css">
-	<link rel="stylesheet" href="/st/css/kyselo/kyselo.css?v=2020-09-08">
+	<link rel="stylesheet" href="/st/css/kyselo/kyselo.css">
 	<script src="/st/js/zepto.min.js"></script>
 	<script src="/st/js/medium-editor.min.js"></script>
 	<link rel="stylesheet" href="/st/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">
@@ -45,56 +45,105 @@ if (!empty($_SESSION['user'])) {
 	<?php } ?>
 </head>
 <body class="<?php if (empty($_SESSION['show_nsfw'])) echo 'kyselo-hide-nsfw'; ?>">
-	<!-- hlavni menu -->
-	<div class="pure-menu pure-menu-horizontal pure-menu-fixed kyselo-dark">
-        <ul class="pure-menu-list">
-	<?php if (!empty($_SESSION['user'])): ?>
-            <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>" class="pure-menu-link"><i class="fa fa-home"></i> My blog</a></li>
-            <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
-                <a href="/act/groups" class="pure-menu-link"><i class="fa fa-umbrella"></i> Groups</a>
-                <ul class="pure-menu-children">
-		    <?php foreach($_SESSION['user']['groups'] as $group): ?>
-                    <li class="pure-menu-item">
-						<a href="/<?= $group['name']; ?>" class="pure-menu-link"><img src="<?= kyselo_small_image($group['avatar_url'],50,true); ?>" style="width: 1em">&nbsp;<?= $group['name']; ?></a>
-					</li>
-                    <?php endforeach; ?>
-		    <li class="pure-menu-item"><a href="/act/groups" class="pure-menu-link"><i class="fa fa-umbrella"></i> Find &amp; create…</a></li>
-                </ul>
-            </li>
-            <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
-                <a href="/all" class="pure-menu-link"><i class="fa fa-users"></i> People</a>
-                <ul class="pure-menu-children">
-                    <li class="pure-menu-item"><a href="/<?= $_SESSION['user']['name']; ?>/friends" class="pure-menu-link"><i class="fa fa-users"></i>  My friends</a></li>
-                    <li class="pure-menu-item"><a href="/all" class="pure-menu-link"><i class="fa fa-globe"></i>  Everyone</a></li>
-                </ul>
-            </li>
-            <li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children">
-                <a href="#" class="pure-menu-link"><i class="fa fa-coffee"></i></a>
-                <ul class="pure-menu-children">
-                    <li class="pure-menu-item"><a href="/act/messages/inbox" class="pure-menu-link"><i class="fa fa-envelope"></i> inbox</a></li>
-                    <li class="pure-menu-item"><a href="/act/messages/outbox" class="pure-menu-link"><i class="fa fa-paper-plane"></i> outbox</a></li>
-                    <li class="pure-menu-item"><a href="/act/logout" class="pure-menu-link"><i class="fa fa-sign-out"></i> logout</a></li>
-                </ul>
-            </li>
-	<?php else: ?>
-		<li class="pure-menu-item"><a href="/all" class="pure-menu-link"><i class="fa fa-globe"></i> all blogs</a></li>
-		<li class="pure-menu-item"><a href="/act/groups" class="pure-menu-link"><i class="fa fa-umbrella"></i> groups</a></li>
-		<li class="pure-menu-item"><a href="/act/login" class="pure-menu-link"><i class="fa fa-key"></i>  login</a></li>
-		<li class="pure-menu-item"><a href="/act/register" class="pure-menu-link"><i class="fa fa-sign-in"></i>  register</a></li>
-	<?php endif; ?>
-		<li class="pure-menu-item"><a href="#" class="pure-menu-link" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW</a></li>
-        <?php if ($msgCount>0) { ?>
-            <li class="pure-menu-item"><a href="/act/messages/inbox" class="pure-menu-link"><i class="fa fa-envelope"></i> <?=$msgCount; ?> new messages</a></li>
-        <?php } ?>
-        <li class="pure-menu-item"><a href="/" class="pure-menu-link"><i class="fa fa-question"></i>  about Kyselo</a></li>
-        </ul>
-		
-    </div>
-    <!-- /hlavni menu -->
-    <div class="kyselo-content">
+<!-- hlavni menu -->
+	
+<?php
+$loggedIn = !empty($_SESSION['user']);
+$userName = isset($_SESSION['user']['name']) ? $_SESSION['user']['name'] : null;
+$userAvatar = isset($_SESSION['user']['avatar_url']) ? $_SESSION['user']['avatar_url'] : null;
+$groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
+?>
+
+	
+<nav class="navbar is-fixed-top is-dark" role="navigation" aria-label="main navigation">
+<div class="container">
+  <div class="navbar-brand">
+	<a class="navbar-item has-text-primary" href="/all"><i class="fa fa-smile-o"></i>&nbsp;Kyselo.eu</a>
+
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainMenu">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div id="mainMenu" class="navbar-menu">
+    <div class="navbar-start">
+	
+	<?php if ($loggedIn) { ?>
+	
+	<div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">people&nbsp;<i class="fa fa-users"></i></a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="/<?=$userName;?>/friends"><i class="fa fa-users"></i>&nbsp;my friends</a>
+          <a class="navbar-item" href="/all"><i class="fa fa-globe"></i>&nbsp;everyone</a>
+		</div>
+      </div>
+	  
+	 <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">groups&nbsp;<i class="fa fa-umbrella"></i></a>
+        <div class="navbar-dropdown">
+		<?php foreach ($groups as $group) { ?>
+          <a class="navbar-item" href="/<?=$group['name'];?>"><img src="<?= kyselo_small_image($group['avatar_url'],50,true); ?>" style="width: 1em">&nbsp;<?= $group['name']; ?></a>
+          <?php } ?>
+		 <?php if (count($groups)) { ?>
+		<hr class="navbar-divider">
+		<?php } // count($groups) ?>
+		<a class="navbar-item" href="/act/groups"><i class="fa fa-umbrella"></i>&nbsp;find&amp;create</a>
+		</div>
+      </div> 
+  
+	<a class="navbar-item" href="#" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW&nbsp;<i class="fa fa-eye"></i></a>
+	<a class="navbar-item" href="/">about&nbsp;<i class="fa fa-question"></i></a>
+	
+	
+	<?php } else { ?>
+      <a class="navbar-item" href="/all">people&nbsp;<i class="fa fa-users"></i></a>
+      <a class="navbar-item" href="/act/groups">groups&nbsp;<i class="fa fa-umbrella"></i></a>
+      <a class="navbar-item" href="#" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW&nbsp;<i class="fa fa-eye"></i></a>
+      <a class="navbar-item" href="/">about&nbsp;<i class="fa fa-question"></i></a>
+    <?php } // $loggedIn ?>
+	
+	</div>
+
+    <div class="navbar-end">
+	<?php if ($loggedIn) { ?>
+	<?php if ($msgCount>0) { ?>
+	<a class="navbar-item has-text-warning" href="/act/messages/inbox"><i class="fa fa-envelope"></i>&nbsp;<?=$msgCount; ?> new messages</a>
+	<?php } ?>
+	
+	<div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link"><img src="<?= kyselo_small_image($userAvatar,50,true); ?>" style="width: 1em">&nbsp;<?=$userName; ?></a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="/<?=$userName;?>"><i class="fa fa-home"></i>&nbsp;my blog</a>
+          <a class="navbar-item" href="/<?=$userName;?>/friends"><i class="fa fa-users"></i>&nbsp;my friends</a>
+          <hr class="navbar-divider">
+          <a class="navbar-item" href="/act/messages/inbox"><i class="fa fa-envelope"></i>&nbsp;inbox</a>
+          <a class="navbar-item" href="/act/messages/outbox"><i class="fa fa-paper-plane"></i>&nbsp;outbox</a>
+		<hr class="navbar-divider">
+          <a class="navbar-item" href="/act/logout"><i class="fa fa-sign-out"></i>&nbsp;logout</a>
+        </div>
+      </div>
+	</div>
+  </div>
+  <?php } else { ?>
+	<div class="navbar-item">
+        <div class="buttons">
+		<a class="button is-warning" href="/act/register"><i class="fa fa-sign-in"></i>&nbsp;<strong>register</strong></a>
+          <a class="button is-success" href="/act/login"><i class="fa fa-key"></i>&nbsp;login</a>
+        </div>
+      </div>
+	
+  <?php } // $loggedIn ?>
+
+  </div>
+</nav>
+<!-- /hlavni menu -->
+    
+<div class="container">
 <?php if (!empty($_SESSION['flash'])) {
 	while ($message = array_shift($_SESSION['flash'])) {
-		echo '<div class="kyselo-message kyselo-message-'.$message['class'].'">'.htmlspecialchars($message['msg']).'</div>';
+		echo '<div class="message is-'.$message['class'].'"><div class="message-body">'.htmlspecialchars($message['msg']).'</div></div>';
 	}
 }	
 	
