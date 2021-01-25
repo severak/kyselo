@@ -9,6 +9,11 @@ if (!empty($_SESSION['user'])) {
         GROUP BY id_from
         )', $_SESSION['user']['blog_id']))->fetchColumn(); 
 }
+
+$loggedIn = !empty($_SESSION['user']);
+$userName = isset($_SESSION['user']['name']) ? $_SESSION['user']['name'] : null;
+$userAvatar = isset($_SESSION['user']['avatar_url']) ? $_SESSION['user']['avatar_url'] : null;
+$groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 ?>
 <!doctype HTML>
 <html class="has-navbar-fixed-top">
@@ -46,19 +51,10 @@ if (!empty($_SESSION['user'])) {
 </head>
 <body class="<?php if (empty($_SESSION['show_nsfw'])) echo 'kyselo-hide-nsfw'; ?>">
 <!-- hlavni menu -->
-	
-<?php
-$loggedIn = !empty($_SESSION['user']);
-$userName = isset($_SESSION['user']['name']) ? $_SESSION['user']['name'] : null;
-$userAvatar = isset($_SESSION['user']['avatar_url']) ? $_SESSION['user']['avatar_url'] : null;
-$groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
-?>
-
-	
 <nav class="navbar is-fixed-top is-dark" role="navigation" aria-label="main navigation">
 <div class="container">
   <div class="navbar-brand">
-	<a class="navbar-item has-text-primary" href="/all"><i class="fa fa-smile-o"></i>&nbsp;Kyselo.eu</a>
+	<a class="navbar-item has-text-primary" href="/all"><i class="fa fa-smile-o"></i>&nbsp;<?=Flight::config('site_name'); ?></a>
 
     <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainMenu">
       <span aria-hidden="true"></span>
@@ -93,14 +89,14 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 		</div>
       </div> 
   
-	<a class="navbar-item" href="#" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW&nbsp;<i class="fa fa-eye"></i></a>
+	<a class="navbar-item" href="#" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW&nbsp;<i class="fa fa-eye<?php if (empty($_SESSION['show_nsfw'])) echo '-slash'; ?>"></i></a>
 	<a class="navbar-item" href="/">about&nbsp;<i class="fa fa-question"></i></a>
 	
 	
 	<?php } else { ?>
       <a class="navbar-item" href="/all">people&nbsp;<i class="fa fa-users"></i></a>
       <a class="navbar-item" href="/act/groups">groups&nbsp;<i class="fa fa-umbrella"></i></a>
-      <a class="navbar-item" href="#" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW&nbsp;<i class="fa fa-eye"></i></a>
+      <a class="navbar-item" href="#" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW&nbsp;<i class="fa fa-eye<?php if (empty($_SESSION['show_nsfw'])) echo '-slash'; ?>"></i></a>
       <a class="navbar-item" href="/">about&nbsp;<i class="fa fa-question"></i></a>
     <?php } // $loggedIn ?>
 	
@@ -108,9 +104,6 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 
     <div class="navbar-end">
 	<?php if ($loggedIn) { ?>
-	<?php if ($msgCount>0) { ?>
-	<a class="navbar-item has-text-warning" href="/act/messages/inbox"><i class="fa fa-envelope"></i>&nbsp;<?=$msgCount; ?> new messages</a>
-	<?php } ?>
 	
 	<div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link"><img src="<?= kyselo_small_image($userAvatar,50,true); ?>" style="width: 1em">&nbsp;<?=$userName; ?></a>
@@ -140,7 +133,10 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 </nav>
 <!-- /hlavni menu -->
     
-<div class="container">
+<div class="container p-2">
+<?php if ($msgCount>0) { ?>
+	<div class="message is-info"><div class="message-body"><i class="fa fa-envelope"></i>&nbsp;you have <a href="/act/messages/inbox"><?=$msgCount; ?> new messages</a></div></div>
+	<?php } ?>
 <?php if (!empty($_SESSION['flash'])) {
 	while ($message = array_shift($_SESSION['flash'])) {
 		echo '<div class="message is-'.$message['class'].'"><div class="message-body">'.htmlspecialchars($message['msg']).'</div></div>';

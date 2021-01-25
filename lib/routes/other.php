@@ -133,7 +133,7 @@ Flight::route('/act/settings/@name', function($name){
 		}
 	}
 	
-	Flight::render('header', ['title' => $blog["title"] ]);
+	Flight::render('header', ['title' => $blog["title"] . ' - settings' ]);
 	Flight::render('blog_header', [
 		'blog'=>$blog,
 		'user'=>Flight::user(),

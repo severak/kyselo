@@ -28,11 +28,7 @@
 	bottom: 40px;
 }
 
-.kyselo-float .pure-button {
-	margin-right: 0.3em;
-	background-color: #444;
-	color: #ccc;
-}
+
 
 .kyselo-float .kyselo-switch:hover, .kyselo-float .kyselo-switch.on {
 	color: green;
@@ -45,6 +41,23 @@
 .kyselo-float #post_types {
 	display: none;
 	margin-left: 3em;
+}
+
+@media (max-width: 768px) {
+	.kyselo-float {
+		position: fixed;
+		left: 5px;
+		bottom: 5px;
+		background-color: #f5f5f5;
+	}
+	
+	.kyselo-float #post_types {
+		margin-left: 5px;
+	}
+	
+	.kyselo-float .button.is-medium {
+		font-size: 1rem;
+	}
 }
 
 /* main menu */
@@ -178,8 +191,10 @@ blockquote {
 	color: green;
 }
 
-.kyselo-play-video:hover {
-	color: red;
+@media (max-width: 768px) {
+	.kyselo-play-video {
+		max-width: 100%;
+	}
 }
 
 .kyselo-message-text {
@@ -205,3 +220,31 @@ blockquote {
 	font-size: 70%;
 	padding-bottom: 1em;
 }
+
+.kyselo-tabs-padding ul {
+	padding-left: 152px;
+}
+
+@media (max-width: 768px) {
+	.kyselo-tabs-padding ul {
+		padding-left: 0;
+	}
+}
+
+/* fixes */
+.buttons .dropdown {
+	margin-right: 0.5rem;
+}
+
+.media-content {
+	overflow: visible;
+}
+
+@media (max-width: 768px) {
+	.image.is-64x64-mobile {
+		height: 64px;
+	width: 64px;
+	}
+}
+
+

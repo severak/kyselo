@@ -82,7 +82,7 @@ Flight::route('/act/messages/with/@name', function($name){
 			'is_read'=>0
 		]);
 		
-		Flight::redirect('/act/messages/with/'.$with['name']);
+		Flight::redirect('/act/messages/outbox');
 	}
 	
 	Flight::render('header', ['title' => 'messages with ' .  $with['name']]);

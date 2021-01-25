@@ -23,17 +23,23 @@ $showFullVideo = count($posts)==1;
 foreach ($posts as $post) {
 $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';	
 ?>
-<div class="pure-g">
-	<div class="pure-u-1-5">
-		<i class="fa fa-<?php echo $icons[$post['type']]; ?> fa-3x"></i>
-	</div>
-	<div class="pure-u-4-5 <?=$nsfwClass; ?>">
-	<div>
-		<img src="<?php echo kyselo_small_image($post['avatar_url'], 50, true); ?>" style="width: 1em"> <a href="/<?php echo $post['name']; ?>"><?php echo $post['name']; ?></a>
-		<small><?php echo date('j.n.Y H:i:s', $post['datetime']); ?></small>
+<div class="media">
+	<div class="media-left">
+		<a href="/<?=$post['name']; ?>">
+			<img src=<?php echo kyselo_small_image($post['avatar_url'], 50, true); ?> class="image is-64x64">
+			<?=$post['name']; ?>
+		</a>
 		<?php if (!empty($post['group_name'])) { ?>
-		<br>in <img src="<?php echo kyselo_small_image($post['group_avatar_url'],50, true); ?>" style="width: 1em"> <a href="/<?php echo $post['group_name']; ?>"><?php echo $post['group_name']; ?></a>
+			&nbsp;in <a href="/<?=$post['group_name']; ?>">
+			<img src=<?php echo kyselo_small_image($post['group_avatar_url'], 50, true); ?> class="image is-64x64">
+			<?=$post['group_name']; ?>
+		</a>
 		<?php } ?>
+		
+	</div>
+	<div class="media-content content <?=$nsfwClass; ?>">
+	<div>
+		<small><i class="fa fa-<?php echo $icons[$post['type']]; ?>"></i> <?php echo date('j.n.Y H:i:s', $post['datetime']); ?></small>
 	</div><br>
     <div class="kyselo-post-body">
 	<?php 
@@ -58,7 +64,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 			echo '<p>from <a href="' . $post['source'] . '">' . $post['source'] . '</a></p>';
 		}
 	} else if ($post['type']==4) { // image
-		echo '<img class="pure-img" src="' . $post['url'] . '"/>';
+		echo '<img class="image" src="' . $post['url'] . '"/>';
 		if (!empty($post['body'])) {
 			echo '<p>' . $post['body'] . '</p>';
 		}
@@ -71,7 +77,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 			if ($showFullVideo) {
 				echo $post['preview_html'];
 			} else {
-				echo '<a href="' . $post['source'] . '" class="kyselo-play-video pure-button button-large"><i class="fa fa-youtube-play"></i><span class="kyselo-hidden"> play video</span></a>';
+				echo '<a href="' . $post['source'] . '" class="kyselo-play-video button is-link is-outlined"><i class="fa fa-youtube-play"></i><span class="kyselo-hidden"> play video</span></a>';
 			}
 			echo '</div>';
 		}
@@ -104,7 +110,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 			echo '<p>' . $post['body'] . '</p>';
 		}
 		if (!empty($post['url'])) {
-			echo '<img src="' . $post['url'] . '" class="pure-img">';
+			echo '<img src="' . $post['url'] . '" class="image">';
 		}
 		echo '<p>from: ' . $post['start_date'] . '</p>';
 		echo '<p>to: ' . $post['end_date'] . '</p>';
@@ -131,29 +137,38 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	?>
 
 
-		<div style="height: 2.1em">
-                <div class="pure-menu pure-menu-horizontal">
-                    <ul class="pure-menu-list pull-right">
-                        <li class="pure-menu-item"><a href="<?php echo $permalink; ?>" class="pure-button" title="permalink"><i class="fa fa-link"></i>&#8203;<span class="kyselo-hidden">permalink</span></a></li>
+		      <div class="buttons p-2">
+                        <a href="<?php echo $permalink; ?>" class="button" title="permalink"><i class="fa fa-link"></i>&#8203;<span class="kyselo-hidden">permalink</span></a>
                         
 						<?php if (!empty($user)) { ?>
-						<li class="pure-menu-item pure-menu-allow-hover pure-menu-has-children"><a href="#" class="pure-button" title="repost"><i class="fa fa-refresh"></i>&#8203;<span class="kyselo-hidden">repost to</span></a>
-							<ul class="pure-menu-children kyselo-dark">
-								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$user['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=kyselo_small_image($user['avatar_url'], 50, true); ?>" style="width:1em"> <?=$user['name']; ?>&nbsp;</a></li>
-								<?php foreach ($user['groups'] as $group) { ?>
-								<li class="pure-menu-item"><a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$group['id']; ?>" class="pure-menu-link kyselo-repost"><img src="<?=kyselo_small_image($group['avatar_url'], 50, true); ?>" style="width:1em"> <?=$group['name']; ?>&nbsp;</a></li>
-								<?php } ?>
-							</ul>
-						</li>
+						
+						<div class="dropdown is-hoverable is-overlay">
+							<div class="dropdown-trigger">
+								<button class="button" aria-haspopup="true" aria-controls="dropdown-menu-p<?=$post['id']; ?>">
+								<span><i class="fa fa-refresh"></i>&#8203;<span class="kyselo-hidden">repost to</span>&nbsp;▼</span>
+								</button>
+							</div>
+							<div class="dropdown-menu" id="dropdown-menu-p<?=$post['id']; ?>" role="menu">
+								<div class="dropdown-content">
+									<a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$user['id']; ?>" class="dropdown-item kyselo-repost">
+										<img src="<?=kyselo_small_image($user['avatar_url'], 50, true); ?>" style="width:1em"> <?=$user['name']; ?>&nbsp;
+									</a>
+									<?php foreach ($user['groups'] as $group) { ?>
+									<a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$group['id']; ?>" class="dropdown-item kyselo-repost">
+										<img src="<?=kyselo_small_image($group['avatar_url'], 50, true); ?>" style="width:1em"> <?=$group['name']; ?>&nbsp;
+									</a>
+									<?php } // foreach ?>
+								</div>
+							</div>
+						</div>
+						
 						<?php } // repost ?>
 						<?php if (can_edit_post($post)) { ?>
-						<li class="pure-menu-item"><a href="/act/post/edit/<?=$post['id']; ?>" class="pure-button" title="edit"><i class="fa fa-pencil"></i>&#8203;<span class="kyselo-hidden">edit post</span></a></li>
-						<li class="pure-menu-item"><a href="/act/post/delete/<?=$post['id']; ?>" class="pure-button" title="delete"><i class="fa fa-trash"></i>&#8203;<span class="kyselo-hidden">delete post</span></a></li>
+						<a href="/act/post/edit/<?=$post['id']; ?>" class="button" title="edit"><i class="fa fa-pencil"></i>&#8203;<span class="kyselo-hidden">edit post</span></a>
+						<a href="/act/post/delete/<?=$post['id']; ?>" class="button" title="delete"><i class="fa fa-trash"></i>&#8203;<span class="kyselo-hidden">delete post</span></a>
 						<?php } ?>
-                    </ul>
                 </div>
 		</div>
-	</div>
 </div>
 <hr>
 <?php
@@ -164,8 +179,9 @@ if (!empty($more_link)) {
 }
 
 if (!empty($the_end)) {
-    echo '<p><img src="/st/img/undraw_a_moment_to_relax_bbpa.png" alt="THE END"></p>';
-	echo '<p>You have reached the end...</p>';
+    echo '<p>You have reached the end...</p>';
+	echo '<p><img src="/st/img/undraw_a_moment_to_relax_bbpa.png" alt="THE END"></p>';
+	
 }
 
 ?>

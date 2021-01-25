@@ -18,15 +18,15 @@ Flight::route('/all', function(){
 	$moreLink = $filter->moreLink;
 	$theEnd = !$filter->moreLink;
 
-	Flight::render('header', ['title' => 'all on kyselo', 'rss'=>'/all/rss'. $filter->currentParams ]);
+	Flight::render('header', ['title' => sprintf('all from %s', Flight::config('site_name')), 'rss'=>'/all/rss'. $filter->currentParams ]);
     Flight::render('blog_header', [
         'blog'=>[
             'name'=>'all',
-            'title'=>sprintf('all on %s', Flight::config('site_name')),
+            'title'=>sprintf('all from %s', Flight::config('site_name')),
             'is_group'=>true,
             'id'=>-1,
             'about'=>'(but no reposts)',
-            'avatar_url'=>'/st/img/globe.gif'
+            'avatar_url'=>'/st/img/undraw_friendship_mni7.png'
         ],
         'user'=>Flight::user(),
         'tab'=>'blog',
@@ -38,6 +38,10 @@ Flight::route('/all', function(){
 		'the_end'=>$theEnd,
 		'user' => Flight::user()
 	]);
+	Flight::render('buttons', [
+        'blog'=>['name'=>'all', 'is_group'=>false],
+        'user'=>Flight::user()
+    ]);
 	Flight::render('footer', []);
 });
 
@@ -224,7 +228,7 @@ Flight::route('/@name/friends', function($name){
     }
 
 
-	Flight::render('header', ['title' => $blog["title"] ]);
+	Flight::render('header', ['title' => $blog["title"] . ' - friends' ]);
 	Flight::render('blog_header', [
 		'blog'=>$blog,
 		'user'=>Flight::user(),
@@ -263,7 +267,7 @@ Flight::route('/@name/videos', function($name){
 
     $posts = $filter->posts();
 
-    Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss%s', $blog['name'], $filter->currentParams), 'ogp_blog'=>$blog ]);
+    Flight::render('header', ['title' => $blog["title"] . ' - videos', 'rss'=>sprintf('/%s/rss%s', $blog['name'], $filter->currentParams), 'ogp_blog'=>$blog ]);
     Flight::render('blog_header', [
         'blog'=>$blog,
         'user'=>Flight::user(),
@@ -302,7 +306,7 @@ Flight::route('/@name/journal', function($name){
 
     $posts = $filter->posts();
 
-    Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss%s', $blog['name'], $filter->currentParams), 'ogp_blog'=>$blog ]);
+    Flight::render('header', ['title' => $blog["title"] . ' - journal', 'rss'=>sprintf('/%s/rss%s', $blog['name'], $filter->currentParams), 'ogp_blog'=>$blog ]);
     Flight::render('blog_header', [
         'blog'=>$blog,
         'user'=>Flight::user(),

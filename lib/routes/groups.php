@@ -81,9 +81,9 @@ Flight::route('/all/members', function (){
 
     $members = $rows->more('blogs', ['is_visible'=>1, 'is_group'=>0], ['name'=>'asc'], 300);
 
-    Flight::render('header', ['title' => 'all on kyselo' ]);
+    Flight::render('header', ['title' => sprintf('all from %s', Flight::config('site_name'))]);
     Flight::render('blog_header', [
-        'blog'=>['name'=>'all', 'title'=>sprintf('all on %s', Flight::config('site_name')), 'is_group'=>true, 'id'=>-1, 'about'=>'', 'avatar_url'=>'/st/img/globe.gif'],
+        'blog'=>['name'=>'all', 'title'=>sprintf('all from %s', Flight::config('site_name')), 'is_group'=>true, 'id'=>-1, 'about'=>'(member list)', 'avatar_url'=>'/st/img/undraw_friendship_mni7.png'],
         'user'=>Flight::user(),
         'tab'=>'members'
     ]);

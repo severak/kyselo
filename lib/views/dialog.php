@@ -6,23 +6,25 @@
 
 if (empty($messages)) {
 ?>
-<div class="pure-g">
-	<div class="pure-u-1-5"></div>
-	<div class="pure-u-4-5">
+<div class="media">
+	<div class="media-left"></div>
+	<div class="media-content">
 		<em>awkward silence here...</em>
 	</div>
 </div>
 <hr/>	
 <?php
 } else { 
-foreach ($messages as $message) {
+foreach ($messages as $idx=>$message) {
 ?>
-<div class="pure-g">
-	<div class="pure-u-1-5 kyselo-big-profile">
+<div class="media" <?php if ($idx==count($messages)-1) echo ' id="last"'; ?> >
+	<div class="media-left kyselo-big-profile">
+		<a href="/<?=$message['name']; ?>">
 		<strong><?=htmlspecialchars($message['name']); ?></strong>:
-		<img src="<?=kyselo_small_image($message['avatar_url'], 100, true); ?>" class="pure-img">
+		<img src="<?=kyselo_small_image($message['avatar_url'], 100, true); ?>" class="image is-128x128 is-64x64-mobile">
+		</a>
 	</div>
-	<div class="pure-u-4-5">
+	<div class="media-content">
 		<?= nl2br(htmlspecialchars($message['text'])); ?>
 		<br/><br/><small><?=date('Y-m-d H:i:s', $message['datetime']); ?></small>
 	</div>
@@ -30,4 +32,3 @@ foreach ($messages as $message) {
 <hr/>
 <?php } // endforeach
 } // endif
-

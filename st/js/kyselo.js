@@ -36,8 +36,10 @@ Zepto(function(){
 			'success': function(data){
 				if (data.show_nsfw) {
 					$(document.body).removeClass('kyselo-hide-nsfw');
+					$('#kyselo_nsfw_switch i').attr('class', 'fa fa-eye');
 				} else {
 					$(document.body).addClass('kyselo-hide-nsfw');
+					$('#kyselo_nsfw_switch i').attr('class', 'fa fa-eye-slash');
 				}
 			}
 		})
@@ -72,6 +74,10 @@ Zepto(function(){
 			$(".navbar-burger").toggleClass("is-active");
 			$(".navbar-menu").toggleClass("is-active");
 
+		});
+		
+		$('.dropdown-trigger').on('click', function(evt){
+			$(evt.target).parents('.dropdown').toggleClass("is-active");
 		});
 });
 

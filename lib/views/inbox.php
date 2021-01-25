@@ -7,9 +7,9 @@ if (empty($outbox)) $outbox=false;
 
 if (empty($messages)) {
 ?>
-<div class="pure-g">
-	<div class="pure-u-1-5"></div>
-	<div class="pure-u-4-5">
+<div class="media">
+	<div class="media-left"></div>
+	<div class="media-content">
 		<em>awkward silence here...</em>
 	</div>
 </div>
@@ -18,13 +18,13 @@ if (empty($messages)) {
 } else { 
 foreach ($messages as $message) {
 ?>
-<div class="pure-g">
-    <div class="pure-u-1-5 ">
+<div class="media">
+    <div class="media-left ">
 		<strong><?=htmlspecialchars($message['name']); ?></strong>
-		<div class="kyselo-big-profile"><img src="<?=htmlspecialchars($message['avatar_url']); ?>" class="pure-img"></div>
+		<div class="kyselo-big-profile"><img src="<?=htmlspecialchars($message['avatar_url']); ?>" class="image is-128x128"></div>
 	</div>
-    <div class="pure-u-4-5">
-		<a href="/act/messages/with/<?=$message['name'];?>" class="kyselo-message-text <?=($message['is_read'] ? 'old' : 'new'); ?>">
+    <div class="media-content">
+		<a href="/act/messages/with/<?=$message['name'];?>#last" class="kyselo-message-text <?=($message['is_read'] ? 'old' : 'new'); ?>">
         <?php if ($outbox) { ?>Me: <?php } ?>
         <?= nl2br(htmlspecialchars($message['text'])); ?>
         </a>
