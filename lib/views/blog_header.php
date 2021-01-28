@@ -9,11 +9,11 @@
 <div class="media">
 	<div class="media-left">
 		<div class="kyselo-big-profile">
-			<a href="<?=$blog['name']; ?>"><img class="image is-128x128" src="<?php echo kyselo_small_image($blog['avatar_url'], 100, true); ?>"/></a>
+			<a href="/<?=$blog['name']; ?>"><img class="image is-128x128" src="<?php echo kyselo_small_image($blog['avatar_url'], 100, true); ?>"/></a>
 		</div>	
 	</div>
 	<div class="media-center">
-		<a href="<?=$blog['name']; ?>"><h1 class="title"><?php echo $blog['title']; ?></h1></a>
+		<a href="/<?=$blog['name']; ?>"><h1 class="title"><?php echo $blog['title']; ?></h1></a>
 		<div class="content"><?php echo $blog['about']; ?></div>
     </div>
 </div>

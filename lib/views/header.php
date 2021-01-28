@@ -69,7 +69,7 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 	<?php if ($loggedIn) { ?>
 	
 	<div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">people&nbsp;<i class="fa fa-users"></i></a>
+        <a class="navbar-link" href="/all">people&nbsp;<i class="fa fa-users"></i></a>
         <div class="navbar-dropdown">
           <a class="navbar-item" href="/<?=$userName;?>/friends"><i class="fa fa-users"></i>&nbsp;my friends</a>
           <a class="navbar-item" href="/all"><i class="fa fa-globe"></i>&nbsp;everyone</a>
@@ -77,7 +77,7 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
       </div>
 	  
 	 <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">groups&nbsp;<i class="fa fa-umbrella"></i></a>
+        <a class="navbar-link" href="/act/groups">groups&nbsp;<i class="fa fa-umbrella"></i></a>
         <div class="navbar-dropdown">
 		<?php foreach ($groups as $group) { ?>
           <a class="navbar-item" href="/<?=$group['name'];?>"><img src="<?= kyselo_small_image($group['avatar_url'],50,true); ?>" style="width: 1em">&nbsp;<?= $group['name']; ?></a>
@@ -96,7 +96,7 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 	<?php } else { ?>
       <a class="navbar-item" href="/all">people&nbsp;<i class="fa fa-users"></i></a>
       <a class="navbar-item" href="/act/groups">groups&nbsp;<i class="fa fa-umbrella"></i></a>
-      <a class="navbar-item" href="#" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW&nbsp;<i class="fa fa-eye<?php if (empty($_SESSION['show_nsfw'])) echo '-slash'; ?>"></i></a>
+      <a class="navbar-item" href="#" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span>&nbsp;NSFW&nbsp;<i class="fa fa-eye<?php if (empty($_SESSION['show_nsfw'])) echo '-slash'; ?>"></i></a>
       <a class="navbar-item" href="/">about&nbsp;<i class="fa fa-question"></i></a>
     <?php } // $loggedIn ?>
 	

@@ -72,7 +72,7 @@ Flight::route('/act/register', function() {
 				'name' => $form->values['username'],
 				'title' => $form->values['username'],
 				'about' => 'I am new here',
-				'avatar_url'=> '/st/johnny-automatic-horse-head-50px.png', // todo - zkusit tahat fotku z Gravataru
+				'avatar_url'=> '/st/img/undraw_unicorn.png', // todo - zkusit tahat fotku z Gravataru
 				'user_id' => $userId,
 				'since' => date('Y-m-d H:i:s')
 			])->execute();
@@ -139,8 +139,6 @@ Flight::route('/act/login', function() {
 	$form = new severak\forms\form(['method'=>'POST']);
 	$form->field('username', ['label'=>'User name', 'required'=>true]);
 	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
-	$form->field('persistent', ['label'=>'Keep me logged in', 'type'=>'checkbox']);
-	kyselo_csrf($form);
 	$form->field('login', ['label'=>'Login', 'type'=>'submit']);
 	
 	if (!empty($_GET['as'])) {
@@ -155,9 +153,6 @@ Flight::route('/act/login', function() {
 			if (!empty($blog)) {
 				$user = $rows->one('users', $blog['user_id']);
 				if (password_verify($_POST['password'], $user['password'])) {
-					if ($form->values['persistent']) {
-						fSession::enablePersistence();
-					}
 					
 					$groupsFromDb = $rows
 						->with('memberships', 'id', 'blog_id', ['member_id'=>$blog['id'] ])
@@ -325,7 +320,7 @@ Flight::route('/act/logout', function() {
 	}
 	
 	$_SESSION['user'] = false;
-	fSession::destroy();
+	session_destroy();
 	Flight::redirect('/');
 });
 

@@ -14,7 +14,6 @@ foreach ($members as $member) { ?>
             <h2 class="subtitle"><?= $member['title']; ?></h2>
             </a>
             <div class="content"><?= $member['about']; ?></div>
-            </a>
         </div>
         <div class="media-left">
         </div>

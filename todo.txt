@@ -1,6 +1,7 @@
 TODO
 
-see https://gist.github.com/severak/34b7b86c894aeb352e8491df77624a79 - WIP
+- nezobrazovat NSFW obrázky v RSS
+- vyměnit logo a výchozí obrázek skupin
 
 - CSSko pro mobily - všude bulma, všude title, oživit zase wysiwyg
 - jména do seznam přátel 
@@ -12,7 +13,6 @@ see https://gist.github.com/severak/34b7b86c894aeb352e8491df77624a79 - WIP
 
 BUGY
 
-- mizející repost ikona (dělá Adblock)
 - neukazují se skupiny, které nemají členy
 - vyřešit velikost uploadu
 

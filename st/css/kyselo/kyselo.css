@@ -144,7 +144,7 @@ hr.kyselo-tabs-base {
 
 /* NSFW switch */
 #kyselo_nsfw_switch .show {
-	color: yellow;
+	color: darkgreen;
 }
 
 #kyselo_nsfw_switch .hide {
@@ -152,7 +152,7 @@ hr.kyselo-tabs-base {
 }
 
 .kyselo-hide-nsfw #kyselo_nsfw_switch .hide {
-	color: yellow;
+	color: red;
 }
 
 .kyselo-hide-nsfw #kyselo_nsfw_switch .show {
@@ -247,4 +247,23 @@ blockquote {
 	}
 }
 
+.kyselo-the-end {
+	max-width: 100%;
+	max-height: 50vh;
+}
+
+.kyselo-friendlist {
+	max-height: 240px;
+	overflow: auto;
+}
+
+.kyselo-friend-box {
+	display: inline-block;
+	width: 64px;
+	margin-left: 5px;
+}
+
+.kyselo-friend-box span, .kyselo-friend-box img {
+	display: inline-block;
+}
 

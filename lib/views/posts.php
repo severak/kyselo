@@ -11,9 +11,9 @@
 $icons = ['', 'book', 'link', 'paragraph', 'camera', 'youtube-play', 'file', 'star', 'calendar'];
 
 if (!empty($friends)) {
-    echo '<div classs="pure-g"><div class="pure-u-1-5"></div><div class="pure-u-4-5">';
+    echo '<div class="kyselo-friendlist">';
     foreach ($friends as $friend) {
-        echo '<a href="/'.$friend['name'].'"><img src="'.kyselo_small_image($friend['avatar_url'],50, true).'" title="'.$friend['title'].'" width="50"></a>';
+        echo '<a href="/'.$friend['name'].'" class="kyselo-friend-box"><img src="'.kyselo_small_image($friend['avatar_url'],50, true).'" title="'.$friend['title'].'"><span>'.$friend['name'].'</span></a>';
     }
     echo '</div><hr>';
 }
@@ -180,7 +180,7 @@ if (!empty($more_link)) {
 
 if (!empty($the_end)) {
     echo '<p>You have reached the end...</p>';
-	echo '<p><img src="/st/img/undraw_a_moment_to_relax_bbpa.png" alt="THE END"></p>';
+	echo '<p><img src="/st/img/undraw_a_moment_to_relax_bbpa.png" alt="THE END" class="kyselo-the-end"></p>';
 	
 }
 

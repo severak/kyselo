@@ -10,7 +10,7 @@ Flight::route('/act/groups', function(){
     $existing = $rows->execute($rows->fragment('SELECT *
     FROM blogs b
     INNER JOIN (SELECT blog_id, COUNT(*) AS member_count FROM memberships GROUP BY blog_id) AS m ON m.blog_id=b.id
-    WHERE b.is_group=1 AND b.is_visible
+    WHERE b.is_group=1 AND b.is_visible=1
     ORDER BY b.name ASC'))->fetchAll(PDO::FETCH_ASSOC);
 
     $form = new severak\forms\form(['method'=>'post']);
