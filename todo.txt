@@ -2,7 +2,6 @@ TODO
 
 see https://gist.github.com/severak/34b7b86c894aeb352e8491df77624a79 - WIP
 
-- FB skupina (+ baitování na další fce)
 - CSSko pro mobily - všude bulma, všude title, oživit zase wysiwyg
 - jména do seznam přátel 
 - text 
@@ -25,6 +24,12 @@ PLÁN
 - lepší share
 - vlastní vzhled blogů
 - optimalizace pro velký provoz
+- scrapování lofora a souperu (možná i mastodonu)
+- postování URL vespod
+- notifikace
+- komentáře
+- mentions
+- nahrávání mp4 / mp3
 
 VIZE
 
@@ -34,6 +39,39 @@ VIZE
 - nonprofit družstvo
 - RSSkový klient
 - porn
+- reactions obrázky
+
+- turbolinks?
+- security log
+- change log
+- updatovat text repostů?
+
+* * *
+
+STATS:
+
+select count(*) from blogs where is_group=0;
+
+SELECT name, posts_count, count(*)
+    FROM blogs b
+    INNER JOIN (SELECT blog_id, COUNT(*) AS posts_count FROM posts GROUP BY blog_id) AS m ON m.blog_id=b.id
+    WHERE b.is_group=0 AND b.is_visible
+    ORDER BY posts_count DESC;
+
+select date(datetime,"unixepoch"), count(*)
+from posts
+group by date(datetime,"unixepoch")
+
+-- poslední aktivita uživatelů:
+select name, strftime('%Y-%m-%d %H:%M:%S', datetime(dt, 'unixepoch')) as last_seen
+from (
+select b.name as name, max(datetime) as dt
+from blogs b
+inner join posts p on p.author_id=b.id
+where b.is_group=0
+group by name
+) as derived
+order by dt desc
 
 ---
 
