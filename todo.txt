@@ -2,6 +2,7 @@ TODO
 
 - nezobrazovat NSFW obrázky v RSS
 - vyměnit logo a výchozí obrázek skupin
+- kešování!!!
 
 - CSSko pro mobily - všude bulma, všude title, oživit zase wysiwyg
 - jména do seznam přátel 
