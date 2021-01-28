@@ -3,6 +3,7 @@ TODO
 - nezobrazovat NSFW obrázky v RSS
 - vyměnit logo a výchozí obrázek skupin
 - kešování!!!
+- thumbnaily přepsat velikosti na 128 a 64
 
 - CSSko pro mobily - všude bulma, všude title, oživit zase wysiwyg
 - jména do seznam přátel 
