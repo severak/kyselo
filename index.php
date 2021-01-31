@@ -31,6 +31,7 @@ flight\core\Loader::addDirectory("lib/flourish");
 // start session
 session_name('kyselo');
 session_set_cookie_params(14 * 24 * 60 * 60); // 14 days
+session_start();
 
 // global helpers:
 Flight::map('rootpath', function() {
