@@ -60,6 +60,9 @@ class html
 		if (empty($form->fields[$fieldName])) throw new usageException('Label ' . $fieldName . ' not defined.');
 	
 		$field = $attr + $form->fields[$fieldName];
+		if (isset($form->fields[$fieldName]['class']) && isset($attr['class'])) {
+		    $field['class'] = $form->fields[$fieldName]['class'] . ' ' . $attr['class']; // class attribute is merged
+        }
 		$fieldValue = '';
 		if ($field['type']!='checkbox' && isset($field['value'])) $fieldValue = $field['value'];
 		if (isset($form->values[$fieldName])) $fieldValue = $form->values[$fieldName];
