@@ -1,4 +1,14 @@
+# please adapt this file to fit needs of your server
+
 RewriteEngine On
+# redirect HTTP -> HTTPS
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
+
+ErrorDocument 403 /lib/views/403.htm
+ErrorDocument 404 /lib/views/404.htm
+ErrorDocument 500 /lib/views/500.htm
