@@ -1,11 +1,6 @@
 TODO
 
 - nezobrazovat NSFW obrázky v RSS
-- vyměnit logo a výchozí obrázek skupin
-- vyčistit /st od náhledů
-- kešování!!!
-
-- CSSko pro mobily - všude bulma, všude title
 
 - import stashe
 - nový typ obsahu zvuk / mp4
@@ -29,13 +24,9 @@ PLÁN
 - friends/followers lists
 - bonzovací tlačítko
 - lepší share
-- vlastní vzhled blogů
 - optimalizace pro velký provoz
 - scrapování lofora a souperu (možná i mastodonu)
 - postování URL vespod
-- notifikace
-- komentáře
-- mentions
 - nahrávání mp4 / mp3
 
 VIZE
