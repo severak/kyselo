@@ -1,29 +1,48 @@
 <!doctype HTML>
-<html>
+<html class="has-navbar-fixed-top">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>404 - page not found</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/st/css/pure/pure.css">
+    <link rel="stylesheet" href="/st/css/bulma/bulma.css">
     <link rel="stylesheet" href="/st/css/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="/st/css/kyselo/kyselo.css?v=2020-07-17">
+    <link rel="stylesheet" href="/st/css/kyselo/kyselo.css">
+    <script src="/st/js/zepto.min.js"></script>
 <body>
-<div class="pure-menu pure-menu-horizontal pure-menu-fixed kyselo-dark">
-    <ul class="pure-menu-list">
-        <li class="pure-menu-item"><a href="/all" class="pure-menu-link"><i class="fa fa-globe"></i> all blogs</a></li>
-        <li class="pure-menu-item"><a href="/" class="pure-menu-link"><i class="fa fa-question"></i>  about Kyselo</a></li>
-    </ul>
-</div>
-<div class="kyselo-content">
-<div class="pure-g">
-    <div class="pure-u-1-2"><img src="/st/img/undraw_not_found_60pq.png" alt=""> </div>
-    <div class="pure-u-1-2">
-        <p>Congratulations, you broke the Internet!</p>
-        <h1>page not found</h1>
-        <p>Page you are looking for is missing. It was deleted or you clicked the outdated link.</p>
-        <p>Please go back to the <a href="/">homepage</a>.</p>
+<nav class="navbar is-fixed-top is-dark" role="navigation" aria-label="main navigation">
+<div class="container">
+    <div class="navbar-brand">
+        <a class="navbar-item has-text-primary" href="/all"><i class="fa fa-smile-o"></i>&nbsp;Kyselo</a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="mainMenu">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div id="mainMenu" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="/all">people&nbsp;<i class="fa fa-users"></i></a>
+            <a class="navbar-item" href="/act/groups">groups&nbsp;<i class="fa fa-umbrella"></i></a>
+            <a class="navbar-item" href="/">about&nbsp;<i class="fa fa-question"></i></a>
+        </div>
     </div>
 </div>
+</nav>
+
+<div class="container p-2">
+<div class="columns">
+    <div class="column"><img src="/st/img/undraw_not_found_60pq.png" alt=""> </div>
+    <div class="column">
+        <p>Congratulations, you broke the Internet!</p>
+        <h1 class="title">page not found</h1>
+        <p>Page you are looking for is missing. It was deleted or you clicked the outdated link.</p>
+        <p>Please <a href="javascript:history.back()"> go back</a> or <a href="/">to the homepage</a>.</p>
+    </div>
 </div>
+<footer class="footer">
+    <p>Kyselo  - <a href="https://bitbucket.org/severak/kyselo">opensource software</a> by <a href="http://tilde.town/~severak/">Severák</a>.</p>
+</footer>
+</div>
+<script src="/st/js/kyselo.js"></script>
 </body>
 </html>
