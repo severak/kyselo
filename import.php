@@ -32,7 +32,7 @@ if (!$blog) {
 		'name' => $argv[2],
 		'title' => $argv[2] . '\'s soup',
 		'about' => '(imported from backup)',
-		'avatar_url'=> '/st/johnny-automatic-horse-head-50px.png',
+		'avatar_url'=> '/st/img/undraw_unicorn.png',
 		'user_id' => 0
 	]);
 

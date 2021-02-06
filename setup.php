@@ -59,7 +59,7 @@ $blogId = $db->insert('blogs', [
 	'name' => 'admin',
 	'title' => 'admin\'s soup',
 	'about' => '(owner of this site)',
-	'avatar_url'=> '/st/johnny-automatic-horse-head-50px.png',
+	'avatar_url'=> '/st/img/undraw_unicorn.png',
 	'user_id' => $userId,
 	'since' => date('Y-m-d H:i:s')
 ]);

@@ -37,7 +37,7 @@ Flight::route('/act/groups', function(){
         unset($update['upload'], $update['save'], $update['csrf_token']);
         
         $newPhoto = kyselo_upload_image($form, 'upload');
-        $update['avatar_url'] = '/st/umbrella.png';
+        $update['avatar_url'] = '/st/img/undraw_Appreciation_re_p6rl.png';
         if ($newPhoto) $update['avatar_url'] = $newPhoto;
         
         $update['since'] = date('Y-m-d H:i:s');
@@ -83,7 +83,7 @@ Flight::route('/all/members', function (){
 
     Flight::render('header', ['title' => sprintf('all from %s', Flight::config('site_name'))]);
     Flight::render('blog_header', [
-        'blog'=>['name'=>'all', 'title'=>sprintf('all from %s', Flight::config('site_name')), 'is_group'=>true, 'id'=>-1, 'about'=>'(member list)', 'avatar_url'=>'/st/img/undraw_friendship_mni7.png'],
+        'blog'=>['name'=>'all', 'title'=>sprintf('all from %s', Flight::config('site_name')), 'is_group'=>true, 'id'=>-1, 'about'=>'(member list)', 'avatar_url'=>'/st/img/undraw_different_love_a3rg.png'],
         'user'=>Flight::user(),
         'tab'=>'members'
     ]);

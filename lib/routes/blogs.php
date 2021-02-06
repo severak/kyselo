@@ -26,7 +26,7 @@ Flight::route('/all', function(){
             'is_group'=>true,
             'id'=>-1,
             'about'=>'(but no reposts)',
-            'avatar_url'=>'/st/img/undraw_friendship_mni7.png'
+            'avatar_url'=>'/st/img/undraw_different_love_a3rg.png'
         ],
         'user'=>Flight::user(),
         'tab'=>'blog',
