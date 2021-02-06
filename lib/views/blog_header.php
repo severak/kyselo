@@ -47,10 +47,12 @@
             ?>
             <a href="<?=kyselo_url('/%s/rss%s', [$blog['name'], $subtabQ]); ?>" class="button"><i class="fa fa-rss"></i>&nbsp;RSS</a>
 </div>
+<hr>
 <?php } //endif $subtab?>
 
 <?php if (isset($rsslink)) { ?>
     <div class="buttons">
             <a href="<?=$rsslink; ?>" class="button"><i class="fa fa-rss"></i> RSS</a>
     </div>
+    <hr>
 <?php } //endif $rsslink?>
