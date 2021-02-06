@@ -3,6 +3,10 @@
 // - tags
 // - blog
 
+if (empty($tags)) {
+    echo '<img src="/st/img/undraw_a_moment_to_relax_bbpa.png" alt="" class="kyselo-the-end"><p>There are no tags yet...</p>';
+}
+
 $maxNum = reset($tags);
 
 foreach ($tags as $tag=>$num) {
