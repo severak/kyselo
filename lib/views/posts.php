@@ -133,11 +133,12 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	}
 	echo '</div>';
 
+	$repostedTo = [];
 	if (!empty($post['reposted_by'])) {
 		echo '<br><i class="fa fa-refresh"></i> reposted by ';
 		foreach ($post['reposted_by'] as $repost) {
-		    // TODO - bylo-li repostnuto, nenabízet znova
-			echo '<img src="'.kyselo_small_image($repost['avatar_url'], 32, true).'" style="width:1em"> <a href="/'.$repost['name'].'/post/'.$repost['repost_id'].'">' . $repost['name'] . '</a> ';
+		    $repostedTo[$repost['name']] = true;
+		    echo '<img src="'.kyselo_small_image($repost['avatar_url'], 32, true).'" style="width:1em"> <a href="/'.$repost['name'].'/post/'.$repost['repost_id'].'">' . $repost['name'] . '</a> ';
 		}
 	}
 
@@ -159,11 +160,13 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 							<div class="dropdown-menu" id="dropdown-menu-p<?=$post['id']; ?>" role="menu">
 								<div class="dropdown-content">
 									<a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$user['id']; ?>" class="dropdown-item kyselo-repost">
-										<img src="<?=kyselo_small_image($user['avatar_url'], 32, true); ?>" style="width:1em"> <?=$user['name']; ?>&nbsp;
+										<img src="<?=kyselo_small_image($user['avatar_url'], 32, true); ?>" style="width:1em"> <?=$user['name']; ?>
+                                        <?php if ($repostedTo[$user['name']]) echo '<i class="fa fa-check" title="already reposted"></i>'; ?>
 									</a>
 									<?php foreach ($user['groups'] as $group) { ?>
 									<a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$group['id']; ?>" class="dropdown-item kyselo-repost">
 										<img src="<?=kyselo_small_image($group['avatar_url'], 32, true); ?>" style="width:1em"> <?=$group['name']; ?>&nbsp;
+                                        <?php if ($repostedTo[$group['name']]) echo '<i class="fa fa-check" title="already reposted"></i>'; ?>
 									</a>
 									<?php } // foreach ?>
 								</div>
