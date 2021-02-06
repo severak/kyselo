@@ -43,7 +43,7 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 	<?php } ?>
 	<?php if (!empty($ogp_blog)) { ?>
 	<meta property="og:type" content="website" />
-	<meta property="og:image" content="<?=kyselo_url('') . kyselo_small_image($ogp_blog['avatar_url'], 100, true); ?>" />
+	<meta property="og:image" content="<?=kyselo_url('') . kyselo_small_image($ogp_blog['avatar_url'], 128, true); ?>" />
 	<meta property="og:title" content="<?=$ogp_blog['name']; ?>" />
 	<meta property="og:description" content="<?=strip_tags($ogp_blog['about']); ?>" />
 	<meta property="og:url" content="<?=kyselo_url('/%s', [$ogp_blog['name']]); ?>" />
@@ -80,7 +80,7 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
         <a class="navbar-link" href="/act/groups">groups&nbsp;<i class="fa fa-umbrella"></i></a>
         <div class="navbar-dropdown">
 		<?php foreach ($groups as $group) { ?>
-          <a class="navbar-item" href="/<?=$group['name'];?>"><img src="<?= kyselo_small_image($group['avatar_url'],50,true); ?>" style="width: 1em">&nbsp;<?= $group['name']; ?></a>
+          <a class="navbar-item" href="/<?=$group['name'];?>"><img src="<?= kyselo_small_image($group['avatar_url'],32,true); ?>" style="width: 1em">&nbsp;<?= $group['name']; ?></a>
           <?php } ?>
 		 <?php if (count($groups)) { ?>
 		<hr class="navbar-divider">
@@ -106,7 +106,7 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 	<?php if ($loggedIn) { ?>
 	
 	<div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link"><img src="<?= kyselo_small_image($userAvatar,50,true); ?>" style="width: 1em">&nbsp;<?=$userName; ?></a>
+        <a class="navbar-link"><img src="<?= kyselo_small_image($userAvatar,32,true); ?>" style="width: 1em">&nbsp;<?=$userName; ?></a>
         <div class="navbar-dropdown">
           <a class="navbar-item" href="/<?=$userName;?>"><i class="fa fa-home"></i>&nbsp;my blog</a>
           <a class="navbar-item" href="/<?=$userName;?>/friends"><i class="fa fa-users"></i>&nbsp;my friends</a>

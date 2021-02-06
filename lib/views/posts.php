@@ -13,7 +13,7 @@ $icons = ['', 'book', 'link', 'paragraph', 'camera', 'youtube-play', 'file', 'st
 if (!empty($friends)) {
     echo '<div class="kyselo-friendlist">';
     foreach ($friends as $friend) {
-        echo '<a href="/'.$friend['name'].'" class="kyselo-friend-box"><img src="'.kyselo_small_image($friend['avatar_url'],50, true).'" title="'.$friend['title'].'"><span>'.$friend['name'].'</span></a>';
+        echo '<a href="/'.$friend['name'].'" class="kyselo-friend-box"><img src="'.kyselo_small_image($friend['avatar_url'],64, true).'" title="'.$friend['title'].'"><span>'.$friend['name'].'</span></a>';
     }
     echo '</div><hr>';
 }
@@ -26,12 +26,12 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 <div class="media">
 	<div class="media-left">
 		<a href="/<?=$post['name']; ?>">
-			<img src=<?php echo kyselo_small_image($post['avatar_url'], 50, true); ?> class="image is-64x64">
+			<img src=<?php echo kyselo_small_image($post['avatar_url'], 64, true); ?> class="image is-64x64">
 			<?=$post['name']; ?>
 		</a>
 		<?php if (!empty($post['group_name'])) { ?>
 			&nbsp;in <a href="/<?=$post['group_name']; ?>">
-			<img src=<?php echo kyselo_small_image($post['group_avatar_url'], 50, true); ?> class="image is-64x64">
+			<img src=<?php echo kyselo_small_image($post['group_avatar_url'], 64, true); ?> class="image is-64x64">
 			<?=$post['group_name']; ?>
 		</a>
 		<?php } ?>
@@ -129,7 +129,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	if (!empty($post['reposted_by'])) {
 		echo '<br><i class="fa fa-refresh"></i> reposted by ';
 		foreach ($post['reposted_by'] as $repost) {
-			echo '<img src="'.kyselo_small_image($repost['avatar_url'], 50, true).'" style="width:1em"> <a href="/'.$repost['name'].'/post/'.$repost['repost_id'].'">' . $repost['name'] . '</a> ';
+			echo '<img src="'.kyselo_small_image($repost['avatar_url'], 32, true).'" style="width:1em"> <a href="/'.$repost['name'].'/post/'.$repost['repost_id'].'">' . $repost['name'] . '</a> ';
 		}
 	}
 
@@ -151,11 +151,11 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 							<div class="dropdown-menu" id="dropdown-menu-p<?=$post['id']; ?>" role="menu">
 								<div class="dropdown-content">
 									<a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$user['id']; ?>" class="dropdown-item kyselo-repost">
-										<img src="<?=kyselo_small_image($user['avatar_url'], 50, true); ?>" style="width:1em"> <?=$user['name']; ?>&nbsp;
+										<img src="<?=kyselo_small_image($user['avatar_url'], 32, true); ?>" style="width:1em"> <?=$user['name']; ?>&nbsp;
 									</a>
 									<?php foreach ($user['groups'] as $group) { ?>
 									<a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$group['id']; ?>" class="dropdown-item kyselo-repost">
-										<img src="<?=kyselo_small_image($group['avatar_url'], 50, true); ?>" style="width:1em"> <?=$group['name']; ?>&nbsp;
+										<img src="<?=kyselo_small_image($group['avatar_url'], 32, true); ?>" style="width:1em"> <?=$group['name']; ?>&nbsp;
 									</a>
 									<?php } // foreach ?>
 								</div>

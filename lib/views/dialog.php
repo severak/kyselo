@@ -21,7 +21,7 @@ foreach ($messages as $idx=>$message) {
 	<div class="media-left kyselo-big-profile">
 		<a href="/<?=$message['name']; ?>">
 		<strong><?=htmlspecialchars($message['name']); ?></strong>:
-		<img src="<?=kyselo_small_image($message['avatar_url'], 100, true); ?>" class="image is-128x128 is-64x64-mobile">
+		<img src="<?=kyselo_small_image($message['avatar_url'], 128, true); ?>" class="image is-128x128 is-64x64-mobile">
 		</a>
 	</div>
 	<div class="media-content">
