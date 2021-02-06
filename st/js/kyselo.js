@@ -51,12 +51,18 @@ Zepto(function(){
 	
 	$('.kyselo-repost').on('click', function(ev){
 		var target = $(ev.target);
+		if (target.is('img')) {
+			target = target.parent('a');
+		}
 		if (!target.attr('disabled')) {
 			target.attr('disabled', 'disabled');
 			$.ajax({
 				'url':target.attr('href'),
 				'success': function(data){
 					target.addClass('kyselo-hidden');
+				},
+				'error': function () {
+					alert('Repost failed!');
 				}
 			});
 		}
