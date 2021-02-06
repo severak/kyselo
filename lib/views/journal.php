@@ -1,5 +1,6 @@
 <?php
 $date = $prevDate = '';
+echo '<div class="content">';
 echo '<ul>';
 foreach ($posts as $post) {
     if (empty($post['title'])) continue;
@@ -12,3 +13,4 @@ foreach ($posts as $post) {
     $prevDate = $date;
 }
 echo '</ul>';
+echo '</div>';
