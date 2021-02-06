@@ -2,13 +2,14 @@ TODO
 
 - nezobrazovat NSFW obrázky v RSS
 - vyměnit logo a výchozí obrázek skupin
+- vyčistit /st od náhledů
 - kešování!!!
-- thumbnaily přepsat velikosti na 128 a 64
 
-- CSSko pro mobily - všude bulma, všude title, oživit zase wysiwyg
-- jména do seznam přátel 
-- text 
-- kešování
+- CSSko pro mobily - všude bulma, všude title
+
+- import stashe
+- nový typ obsahu zvuk / mp4
+- vlastní CSS
 - komentáře
 - notifikace
 - mentions
@@ -20,6 +21,7 @@ BUGY
 
 - neukazují se skupiny, které nemají členy
 - vyřešit velikost uploadu
+- repost kliknutí na obrázek nerepostne
 
 PLÁN
 

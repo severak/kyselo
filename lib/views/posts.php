@@ -39,14 +39,21 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	</div>
 	<div class="media-content content <?=$nsfwClass; ?>">
 	<div>
-		<small><i class="fa fa-<?php echo $icons[$post['type']]; ?>"></i> <?php echo date('j.n.Y H:i:s', $post['datetime']); ?></small>
+		<small><i class="fa fa-<?php echo $icons[$post['type']]; ?>"></i> <?php
+            $datum = new fTimestamp($post['datetime']);
+            echo '<span title="' . $datum->getFuzzyDifference() . '">';
+            echo $datum->format('j.n.Y H:i:s');
+            echo '</span>';
+        ?>
+        <?php
+        if (!empty($post['reposted_from'])) {
+            echo '<i class="fa fa-refresh"></i> reposted from <img src="'.kyselo_small_image($post['reposted_from']['avatar_url'], 50, true).'" style="width:1em"> <a href="/'.$post['reposted_from']['name'].'/post/'.$post['repost_of'].'">' . $post['reposted_from']['name'] . '</a><br>';
+        }
+        ?>
+        </small>
 	</div><br>
     <div class="kyselo-post-body">
 	<?php 
-
-	if (!empty($post['reposted_from'])) {
-		echo '<i class="fa fa-refresh"></i> reposted from <img src="'.kyselo_small_image($post['reposted_from']['avatar_url'], 50, true).'" style="width:1em"> <a href="/'.$post['reposted_from']['name'].'/post/'.$post['repost_of'].'">' . $post['reposted_from']['name'] . '</a><br>';
-	}
 
 	if ($post['type']==1) { // text
 		if (!empty($post['title'])) {
@@ -129,6 +136,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	if (!empty($post['reposted_by'])) {
 		echo '<br><i class="fa fa-refresh"></i> reposted by ';
 		foreach ($post['reposted_by'] as $repost) {
+		    // TODO - bylo-li repostnuto, nenabízet znova
 			echo '<img src="'.kyselo_small_image($repost['avatar_url'], 32, true).'" style="width:1em"> <a href="/'.$repost['name'].'/post/'.$repost['repost_id'].'">' . $repost['name'] . '</a> ';
 		}
 	}
