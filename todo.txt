@@ -12,6 +12,9 @@ TODO
 - komentáře
 - notifikace
 - mentions
+- při registraci stáhnout gravatar ale udělat jeho mirror
+- export části DB
+- napsat Privacy policy a implementovat mazání profilů
 
 BUGY
 
