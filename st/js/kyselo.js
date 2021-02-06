@@ -7,7 +7,7 @@ Zepto(function(){
 	});
 	
 	// medium editor
-	if ($('textarea.kyselo-editor').lenght) {
+	if ($('textarea.kyselo-editor').length) {
 		new MediumEditor("textarea.kyselo-editor", {
 			buttonLabels:"fontawesome",
 			placeholder:{text:"text..."},
