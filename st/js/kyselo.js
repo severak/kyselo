@@ -7,26 +7,29 @@ Zepto(function(){
 	});
 	
 	// medium editor
-	new MediumEditor("textarea.kyselo-editor", {
-		buttonLabels:"fontawesome", 
-		placeholder:{text:"text..."}, 
-		paste:{forcePlainText:false}, 
-		autoLink: true, 
-		toolbar: {
-			buttons: ["bold", "italic", "anchor", "quote", "pre", "unorderedlist","orderedlist"]
-		}
-	});
-	
-	// 
-	$('textarea.kyselo-editor').on('invalid', function(ev){
-		var target = $(ev.target);
-		var meDiv = $('#'+target.attr('medium-editor-textarea-id'));
-		meDiv.addClass('invalid');
-		if (!meDiv.data('error-span')) {
-			meDiv.after('<span class="pure-form-message-inline kyselo-form-error">'+ev.target.validationMessage+'</span>');
-			meDiv.data('error-span', 'ok');
-		}	
-	});
+	if ($('textarea.kyselo-editor').lenght) {
+		new MediumEditor("textarea.kyselo-editor", {
+			buttonLabels:"fontawesome",
+			placeholder:{text:"text..."},
+			paste:{forcePlainText:false},
+			autoLink: true,
+			toolbar: {
+				buttons: ["bold", "italic", "anchor", "quote", "pre", "unorderedlist","orderedlist"]
+			}
+		});
+
+		//
+		$('textarea.kyselo-editor').on('invalid', function(ev){
+			var target = $(ev.target);
+			var meDiv = $('#'+target.attr('medium-editor-textarea-id'));
+			meDiv.addClass('invalid');
+			if (!meDiv.data('error-span')) {
+				meDiv.after('<span class="pure-form-message-inline kyselo-form-error">'+ev.target.validationMessage+'</span>');
+				meDiv.data('error-span', 'ok');
+			}
+		});
+	}
+
 	
 	// NSFW switch
 	$('#kyselo_nsfw_switch').on('click', function(){
