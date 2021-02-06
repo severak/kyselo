@@ -32,12 +32,12 @@
 </div>
 <?php if (isset($subtab)) { ?>
         <div class="buttons">
-            <a href="<?=kyselo_url('/%s/tags', [$blog['name']]); ?>" class="button"><i class="fa fa-tags"></i> tags</a>
+            <a href="<?=kyselo_url('/%s/tags', [$blog['name']]); ?>" class="button"><i class="fa fa-tags"></i>&nbsp;tags</a>
             <?php if (!empty($blog['has_journal'])) { ?>
-            <a href="<?=kyselo_url('/%s/journal', [$blog['name']]); ?>" class="button"><i class="fa fa-list"></i> journal</a>
+            <a href="<?=kyselo_url('/%s/journal', [$blog['name']]); ?>" class="button"><i class="fa fa-list"></i>&nbsp;journal</a>
             <?php } // has_headlines_view ?>
             <?php if (!empty($blog['has_videos'])) { ?>
-            <a href="<?=kyselo_url('/%s/videos', [$blog['name']]); ?>" class="button"><i class="fa fa-youtube-play"></i> playlist</a>
+            <a href="<?=kyselo_url('/%s/videos', [$blog['name']]); ?>" class="button"><i class="fa fa-youtube-play"></i>&nbsp;playlist</a>
             <?php } // has_playlist_view ?>
 
             <?php
@@ -45,7 +45,7 @@
             unset($subtabParams['since']);
             $subtabQ = empty($subtabParams) ? '' : ('?' . http_build_query($subtabParams));
             ?>
-            <a href="<?=kyselo_url('/%s/rss%s', [$blog['name'], $subtabQ]); ?>" class="button"><i class="fa fa-rss"></i> RSS</a>
+            <a href="<?=kyselo_url('/%s/rss%s', [$blog['name'], $subtabQ]); ?>" class="button"><i class="fa fa-rss"></i>&nbsp;RSS</a>
 </div>
 <?php } //endif $subtab?>
 
