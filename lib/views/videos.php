@@ -8,6 +8,10 @@ foreach ($posts as $post) {
         $videos[] = $post;
     }
 }
+
+if (empty($posts)) {
+    echo '<img src="/st/img/undraw_a_moment_to_relax_bbpa.png" alt="" class="kyselo-the-end"><p>There are no videos yet...</p>';
+} else {
 ?>
 <p>now playing:<br><strong id="songName">?</strong><br>recommended by <a id="djName" href="#">?</a></p>
 <div id="player"></div>
@@ -63,3 +67,4 @@ foreach ($posts as $post) {
         //}
     }
 </script>
+<?php } // endif
