@@ -1,14 +1,23 @@
 TODO
 
+- sepsat blogpost se seznamem budoucích featur
 - vlastní CSS (např. 600px široký kontejner)
 - nahrávací tlačítko i na /friends
 - optimalizovat velikosti obrázků - max 80vh? (optimalizovat nudle)
+- odkaz na TOS v patě
+- ujasnit friends (featuring/this user follows these people)
+- učesat jejich CSSko (slejvají se názvy)
+- vypisy členů/skupin různě - abecedně, dle popularity, dle poslední aktivity
+- /all s repostama
 
 - nezobrazovat NSFW obrázky v RSS
 
 - import stashe
 - nový typ obsahu zvuk / mp4
-- vlastní CSS
+- playlisty na zvuk (soundcloud / podcast)
+- mrtvá schránka
+- bezpečnostní log (registrace, přihlášení, zakládání skupin, změna nastavení...)
+- ukládat poslední aktivitu uživatele, když se nepřihlásí 14 dní, půjde kopie DM/komentářů do mailu)
 - komentáře
 - notifikace
 - mentions
@@ -24,14 +33,13 @@ BUGY
 
 PLÁN
 
+- friends of a friends
 - reposty z loforo
 - friends/followers lists
 - bonzovací tlačítko
 - lepší share
 - optimalizace pro velký provoz
 - scrapování lofora a souperu (možná i mastodonu)
-- postování URL vespod
-- nahrávání mp4 / mp3
 
 VIZE
 
