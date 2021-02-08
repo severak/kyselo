@@ -1,5 +1,9 @@
 TODO
 
+- vlastní CSS (např. 600px široký kontejner)
+- nahrávací tlačítko i na /friends
+- optimalizovat velikosti obrázků - max 80vh? (optimalizovat nudle)
+
 - nezobrazovat NSFW obrázky v RSS
 
 - import stashe
