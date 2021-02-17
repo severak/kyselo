@@ -1,5 +1,10 @@
 TODO
 
+- lepší youtube přehrávač (obrázek uživatele, seznam songů, možnost repostu právě hrajícího)
+- vypisovat url ve výpisech uživatelů
+- odkazy na tagy, typy postů atd...
+- prověřit, zda NSFW blogy automaticky postují NSFW
+
 - sepsat blogpost se seznamem budoucích featur
 - vlastní CSS (např. 600px široký kontejner)
 - nahrávací tlačítko i na /friends
