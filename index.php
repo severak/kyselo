@@ -209,7 +209,7 @@ function kyselo_url($path='/', $args=[], $query=[])
 {
     return
         rtrim(Flight::config('site_url'), '/') .
-        vsprintf($path, $args) .
+        ($args ? vsprintf($path, $args) : $path).
         ($query ? ('?' . http_build_query($query)) : '');
 }
 
