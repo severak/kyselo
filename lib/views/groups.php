@@ -3,6 +3,7 @@
 <div class="media">
     <div class="media-left">
         <a href="/<?=$group['name']; ?>">
+        <?=$group['name']; ?>
         <img src="<?=kyselo_small_image($group['avatar_url'],128, true); ?>" class="image is-128x128">
         </a>
     </div>

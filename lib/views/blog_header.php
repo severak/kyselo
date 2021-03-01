@@ -12,7 +12,7 @@
 			<a href="/<?=$blog['name']; ?>"><img class="image is-128x128" src="<?php echo kyselo_small_image($blog['avatar_url'], 128, true); ?>"/></a>
 		</div>	
 	</div>
-	<div class="media-center">
+	<div class="media-center kyselo-about">
 		<a href="/<?=$blog['name']; ?>"><h1 class="title"><?php echo $blog['title']; ?></h1></a>
 		<div class="content"><?php echo $blog['about']; ?></div>
     </div>
@@ -56,3 +56,7 @@
     </div>
     <hr>
 <?php } //endif $rsslink?>
+
+<style>
+<?php echo (isset($blog['custom_css']) ? $blog['custom_css'] : ''); ?>
+</style>

@@ -115,8 +115,9 @@ Flight::route('/act/settings/@name', function($name){
 	$form->field('upload', ['label'=>'Change logo', 'type'=>'file']);
     $form->field('has_journal', ['label'=>'journal view enabled', 'type'=>'checkbox']);
     $form->field('has_videos', ['label'=>'videos playlist enabled', 'type'=>'checkbox']);
+    $form->field('custom_css', ['label'=>'custom CSS', 'type'=>'textarea', 'rows'=>5, 'placeholder'=>'/* write custom CSS here */', 'id'=>'custom_css']);
 	kyselo_csrf($form);
-	$form->field('save', ['label'=>'Save', 'type'=>'submit']);
+	$form->field('save', ['label'=>'Save blog settings', 'type'=>'submit']);
 	
 	$form->fill($blog);
 	
@@ -141,6 +142,7 @@ Flight::route('/act/settings/@name', function($name){
 	]);
 	Flight::render('form', ['form'=>$form]);
 	Flight::render('bookmarklet', ['blog'=>$blog]);
+	Flight::render('custom_css_help');
 	Flight::render('footer', []);
 });
 

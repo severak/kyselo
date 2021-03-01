@@ -7,6 +7,7 @@ foreach ($members as $member) { ?>
         <div class="media-left kyselo-big-profile">
             <a href="/<?=$member['name']; ?>">
             <img src="<?=kyselo_small_image($member['avatar_url'], 128, true); ?>" class="image is-128x128">
+            <?= $member['name']; ?>
             </a>
         </div>
         <div class="media-content">
@@ -14,6 +15,7 @@ foreach ($members as $member) { ?>
             <h2 class="subtitle"><?= $member['title']; ?></h2>
             </a>
             <div class="content"><?= $member['about']; ?></div>
+            <i class="fa fa-calendar"></i>&nbsp;joined <?=date('j.n.Y', strtotime($member['since'])); ?>
         </div>
         <div class="media-left">
         </div>

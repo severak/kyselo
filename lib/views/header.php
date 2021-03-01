@@ -133,7 +133,7 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 </nav>
 <!-- /hlavni menu -->
     
-<div class="container p-2">
+<div class="container p-2 kyselo-container">
 <?php if ($msgCount>0) { ?>
 	<div class="message is-info"><div class="message-body"><i class="fa fa-envelope"></i>&nbsp;you have <a href="/act/messages/inbox"><?=$msgCount; ?> new messages</a></div></div>
 	<?php } ?>
