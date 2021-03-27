@@ -18,8 +18,8 @@
     <li><code>.is-nsfw</code> - NSFW posts</li>
 </ul>
 
-<p>These are guaranteed to work even after future desing changes.</p>
-<p>Keep in mind that there is already some mobile-friendly CSS.</p>
+<p>These are guaranteed to work even after future design changes.</p>
+<p>Keep in mind that there is already some CSS, especially for user interface and responsivity, so try not to broke these.</p>
 
 <p>Use images you uploaded to Kyselo before as backgrounds.</p>
 
@@ -107,9 +107,9 @@ $('#generate_css').on('click', function (event) {
         css += ' font-family: ' + $('#font').val() + ';\n';
     }
    css += '}\n';
-   css += '.kyselo-container { background-color: ' + $('#content_background_color').val() + '; }\n';
+   css += '.kyselo-container, .kyselo-footer { background-color: ' + $('#content_background_color').val() + '; }\n';
    css += '.kyselo-container h1, .kyselo-container h2, .kyselo-container label, .kyselo-container hr { color: ' + $('#headers_color').val() + '; }\n';
-   css += '.kyselo-container a { color: ' + $('#links_color').val() + '; }\n';
+   css += '.kyselo-container a:not(.button) { color: ' + $('#links_color').val() + '; }\n';
 
 
     $('#custom_css').val(css);
