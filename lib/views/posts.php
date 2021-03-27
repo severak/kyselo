@@ -166,7 +166,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 									<?php foreach ($user['groups'] as $group) { ?>
 									<a href="/act/repost?post_id=<?= $post['id']; ?>&blog_id=<?=$group['id']; ?>" class="dropdown-item kyselo-repost">
 										<img src="<?=kyselo_small_image($group['avatar_url'], 32, true); ?>" style="width:1em"> <?=$group['name']; ?>&nbsp;
-                                        <?php if ($repostedTo[$group['name']]) echo '<i class="fa fa-check" title="already reposted"></i>'; ?>
+                                        <?php if (isset($repostedTo[$group['name']])) echo '<i class="fa fa-check" title="already reposted"></i>'; ?>
 									</a>
 									<?php } // foreach ?>
 								</div>
