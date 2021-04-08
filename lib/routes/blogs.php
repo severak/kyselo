@@ -323,3 +323,19 @@ Flight::route('/@name/journal', function($name){
     Flight::render('footer', []);
 });
 
+Flight::route('/@name/custom.css', function($name){
+    $rows = Flight::rows();
+
+    $blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
+
+    if (empty($blog)) {
+        Flight::notFound();
+    }
+
+    header('Content-type: text/css');
+    if (empty($blog['custom_css'])) {
+        echo '/* ' . $blog['name'] . ' has no custom.css */';
+    }
+    echo $blog['custom_css'];
+});
+

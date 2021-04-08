@@ -8,6 +8,7 @@ CREATE TABLE blogs (
 	title TEXT,
 	about TEXT,
 	avatar_url TEXT,
+	custom_css TEXT DEFAULT '',
 	since TEXT,
     has_videos INT DEFAULT 0,
     has_journal INT DEFAULT 0,
