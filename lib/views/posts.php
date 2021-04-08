@@ -71,7 +71,16 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 			echo '<p>from <a href="' . $post['source'] . '">' . $post['source'] . '</a></p>';
 		}
 	} else if ($post['type']==4) { // image
-		echo '<img class="image kyselo-image" src="' . $post['url'] . '"/>';
+        $imgClass = 'kyselo-image';
+	    $size = @getimagesize(Flight::rootpath() . $post['url']);
+        if (!empty($size[0]) && (($size[0]*3) < $size[1])) {
+            $imgClass = 'kyselo-image-long';
+        }
+        if (!empty($size[0]) && ($size[0]==$size[1])) {
+            $imgClass = 'kyselo-image-square';
+        }
+
+		echo '<img class="image '.$imgClass.'" src="' . $post['url'] . '"/>';
 		if (!empty($post['body'])) {
 			echo '<p>' . $post['body'] . '</p>';
 		}

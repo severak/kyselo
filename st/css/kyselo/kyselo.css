@@ -267,3 +267,10 @@ blockquote {
 	display: inline-block;
 }
 
+.kyselo-image {
+	max-height: 80vh;
+}
+
+.kyselo-image-square {
+	max-height: 80vh;
+}

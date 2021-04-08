@@ -13,7 +13,7 @@
     <li><code>.kyselo-container</code> - main column of content (use <code>!important</code> if you want to set <code>max-width</code>)</li>
     <li><code>.kyselo-about</code> - about text of your blog</li>
     <li><code>.kyselo-post</code> - each individual post</li>
-    <li><code>.kyselo-image</code> - images in your posts</li>
+    <li><code>.kyselo-image</code> - images in your posts (<code>.kyselo-image-square</code> for square images in your post and <code>.kyselo-image-long</code> long images)</li>
     <li><code>.kyselo-footer</code> - page footer</li>
     <li><code>.is-nsfw</code> - NSFW posts</li>
     <li><code>.kyselo-container a:not(.button)</code> - if you want style links (otherwise you will break UI)</li>
