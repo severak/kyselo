@@ -16,6 +16,7 @@
     <li><code>.kyselo-image</code> - images in your posts</li>
     <li><code>.kyselo-footer</code> - page footer</li>
     <li><code>.is-nsfw</code> - NSFW posts</li>
+    <li><code>.kyselo-container a:not(.button)</code> - if you want style links (otherwise you will break UI)</li>
 </ul>
 
 <p>These are guaranteed to work even after future design changes.</p>
@@ -26,7 +27,7 @@
 <p>Those who cannot code their own CSS can use:</p>
 </div>
 
-<h2 class="subtitle">CSS generator 3000</h2>
+<h2 class="subtitle"><img src="/st/img/css_generator_3000.gif" alt="CSS GENERATOR 3000"></h2>
 <form>
     <div class="field">
         <label class="label">Page background URL</label>
