@@ -309,6 +309,18 @@ function finish_post($newPost, $form, $required=true)
 
 function get_info($url)
 {
+    // TODO - better to update Embed lib or use something different
+    if (strpos($url, 'youtube.com')!==false || strpos($url, 'youtu.be')!==false) {
+        $json = file_get_contents('https://www.youtube.com/oembed?url='.urlencode($url).'&format=json');
+        $data = json_decode($json, true);
+        return (object) [
+            'type'=>'video',
+            'title'=>$data['title'],
+            'code'=>$data['html'],
+            'url'=>$url
+        ];
+    }
+
 	$cookieJar = str_replace('//', '/', Flight::rootpath().'/tmp/embed-cookies.'.uniqid());
 	$CURL = new Embed\Http\CurlDispatcher([CURLOPT_COOKIEJAR=>$cookieJar]);
 	return Embed\Embed::create($url, null, $CURL);
