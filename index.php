@@ -235,6 +235,15 @@ function can_edit_post($post)
     return $post['author_id']==$user['blog_id'];
 }
 
+function detect_xss($html)
+{
+    $html = strtolower($html);
+    if (strpos($html, '</style')!==false) return true;
+    if (strpos($html,'<script')!==false) return true;
+    // if (strpos($html,'javascript:')!==false) return true;
+    return false; // probably not XSS
+}
+
 // routes:
 
 require __DIR__ . '/lib/routes/blogs.php';

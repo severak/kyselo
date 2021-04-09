@@ -266,6 +266,8 @@ function get_post_form($postType, $canPostAs=null)
 		$form->field('blog_id', ['type'=>'select', 'label'=>'Post to', 'options'=>$canPostAs]);
 	kyselo_csrf($form);
 	$form->field('post', ['type'=>'submit', 'label'=>'Post it!']);
+
+    $form->rule('body', function ($html) {return !detect_xss($html);}, 'Please don\'t hack us!');
 	
 	return $form;
 }

@@ -120,7 +120,10 @@ Flight::route('/act/settings/@name', function($name){
 	$form->field('save', ['label'=>'Save blog settings', 'type'=>'submit']);
 	
 	$form->fill($blog);
-	
+
+	$form->rule('about', function ($html) {return !detect_xss($html);}, 'Please don\'t hack us!');
+	$form->rule('custom_css', function ($html) {return !detect_xss($html);}, 'Please don\'t hack us!');
+
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		$update = $form->values;
 		unset($update['upload'], $update['save'], $update['csrf_token']);
