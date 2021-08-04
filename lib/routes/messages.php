@@ -19,7 +19,7 @@ Flight::route('/act/messages/inbox', function(){
 	Flight::render('header', ['title' => 'inbox']);
 	Flight::render('inbox', ['messages'=>$messages]);
 	Flight::render('footer', []);
-});	
+});
 
 // outbox
 Flight::route('/act/messages/outbox', function(){
@@ -49,31 +49,31 @@ Flight::route('/act/messages/with/@name', function($name){
 	/** @var severak\database\rows $rows */
 	$rows = Flight::rows();
 	$request = Flight::request();
-	
+
 	$with = $rows->one('blogs', ['name'=>$name]);
 	if (!$with) {
 		Flight::notFound();
 	}
 	$myId = $user['blog_id'];
 	$withId = $with['id'];
-	
+
 	// todo: this does not make much sense:
 	$limit = max(30, $rows->count('messages', ['is_read'=>0, 'id_from'=>$withId]));
-	
+
 	$messages = $rows
 		->with('blogs', 'id_from')
 		->more('messages', $rows->fragment('(id_from=? AND id_to=?) OR (id_from=? AND id_to=?)', [$myId, $withId, $withId, $myId]), ['datetime'=>'DESC']);
 	$messages = array_reverse($messages);
-	
+
 	$rows->update('messages', ['is_read'=>1], ['id_from'=>$withId, 'id_to'=>$myId]);
-	
+
 	$form = new severak\forms\form(['method'=>'post']);
 	$form->field('text', ['type'=>'textarea', 'label'=>'Your message', 'required'=>true, 'cols'=>30, 'rows'=>5]);
 	$form->field('send', ['type'=>'submit']);
-	
+
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		// todo: upload fotek
-		
+
 		$rows->insert('messages', [
 			'id_from'=>$myId,
 			'id_to'=>$withId,
@@ -81,12 +81,56 @@ Flight::route('/act/messages/with/@name', function($name){
 			'datetime'=>strtotime('now'),
 			'is_read'=>0
 		]);
-		
+
 		Flight::redirect('/act/messages/outbox');
 	}
-	
+
 	Flight::render('header', ['title' => 'messages with ' .  $with['name']]);
 	Flight::render('dialog', ['with'=>$with, 'messages'=>$messages]);
 	Flight::render('form', ['form'=>$form]);
 	Flight::render('footer', []);
+});
+
+// messages with someone
+Flight::route('/act/comment', function() {
+    Flight::requireLogin();
+    $user = Flight::user();
+    /** @var severak\database\rows $rows */
+    $rows = Flight::rows();
+    $request = Flight::request();
+
+    if ($request->method=='GET') {
+        Flight::forbidden();
+    }
+
+    $postId = $_POST['post_id'];
+    $text = $_POST['text'];
+    $post = $rows->one('posts', ['id'=>$postId, 'is_visible'=>1]);
+    if (empty($newPost)) {
+        Flight::notFound();
+    }
+
+    $id = $rows->insert('comments', [
+        'post_id' => $postId,
+        'author_id' => $user['blog_id'],
+        'datetime' => strtotime('now'),
+        'text' => $text,
+        'is_visible' => 1
+    ]);
+
+    $rows->execute($rows->fragment('UPDATE posts SET comments_count=comments_count+1 WHERE id=?', [$postId]));
+
+    $comment = [
+        'id'=>$id,
+        'post_id'=>$postId,
+        'name' =>$user['name'],
+        'avatar_url' =>$user['avatar_url'],
+        'datetime'=>strtotime('now'),
+        'text'=>$text
+    ];
+
+    // TODO - notifikace autorovi postu
+    // TODO - notifikace zmíněným uživatelům
+
+    Flight::render('comment', ['comment'=>$comment]);
 });

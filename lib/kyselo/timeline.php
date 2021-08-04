@@ -63,11 +63,11 @@ class timeline
         }
 
         $Q = $Q->add('WHERE p.is_visible=1');
-        
+
         if ($this->mode=='own') {
             $Q = $Q->add('AND p.blog_id=?', [$this->blogId]);
         }
-		
+
 		if ($this->mode=='one') {
 			$Q = $Q->add('AND p.id=? AND p.blog_id=?', [$this->postId, $this->blogId]);
 		}
@@ -91,7 +91,7 @@ class timeline
         //echo $Q->interpolate(); die;
 
         $posts = $rows->execute($Q)->fetchAll(PDO::FETCH_ASSOC);
-		
+
 		if (count($posts)==31) {
             $lastPost = array_pop($posts);
 
@@ -129,6 +129,14 @@ class timeline
                     ->with('blogs', 'reposted_by')
                     ->more('reposts', ['post_id'=>$post['id']]);
             }
+
+            $posts[$ord]['comments'] = [];
+            if ($post['comments_count']>0) {
+                $posts[$ord]['comments'] = $rows
+                    ->with('blogs', 'author_id')
+                    ->more('comments', ['post_id'=>$post['id']], ['datetime'=>'asc'], 999);
+            }
+
         }
 
         return $posts;

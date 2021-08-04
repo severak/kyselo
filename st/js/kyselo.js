@@ -5,7 +5,7 @@ Zepto(function(){
 		videoElem.load('/act/iframe/'+videoElem.data('id'));
 		return false;
 	});
-	
+
 	// medium editor
 	if ($('textarea.kyselo-editor').length) {
 		new MediumEditor("textarea.kyselo-editor", {
@@ -30,7 +30,7 @@ Zepto(function(){
 		});
 	}
 
-	
+
 	// NSFW switch
 	$('#kyselo_nsfw_switch').on('click', function(){
 		$.ajax({
@@ -48,7 +48,7 @@ Zepto(function(){
 		})
 		return false;
 	});
-	
+
 	$('.kyselo-repost').on('click', function(ev){
 		var target = $(ev.target);
 		if (target.is('img')) {
@@ -73,9 +73,38 @@ Zepto(function(){
 		$('#post_types').show();
 		return false;
 	});
-	
-	
-	
+
+
+	$('.comment-post-button').on('click', function (ev) {
+		var target = $(ev.target);
+		var form = target.parents('.comment-post-form');
+		var textarea = form.find('textarea');
+		if (textarea.val()) {
+			form.addClass('kyselo-hidden');
+			$.ajax({
+				'url': '/act/comment',
+				'type': 'POST',
+				'data': {
+					text: textarea.val(),
+					post_id: form.attr('data-post-id')
+				},
+				'success': function(data){
+					form.empty();
+					form.html(data);
+					form.removeClass('kyselo-hidden');
+				},
+				'error': function () {
+					form.removeClass('kyselo-hidden');
+					textarea.addClass('is-danger');
+				}
+			});
+		} else {
+			textarea.addClass('is-danger');
+		}
+		return false;
+	});
+
+
 	// Check for click events on the navbar burger icon
 		$(".navbar-burger").click(function() {
 
@@ -84,7 +113,7 @@ Zepto(function(){
 			$(".navbar-menu").toggleClass("is-active");
 
 		});
-		
+
 		$('.dropdown-trigger').on('click', function(evt){
 			$(evt.target).parents('.dropdown').toggleClass("is-active");
 		});

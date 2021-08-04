@@ -98,7 +98,12 @@ CREATE TABLE users (
 	token_expires TEXT
 );
 
--- todo: notification
+CREATE TABLE notifications (
+	id INTEGER PRIMARY KEY,
+	id_to INT NOT NULL,
+	text TEXT,
+	is_new INT DEFAULT 1
+);
 
 CREATE TABLE messages (
 	id INTEGER PRIMARY KEY,

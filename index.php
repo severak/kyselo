@@ -109,7 +109,7 @@ function kyselo_upload_image($form, $name)
 	);
 	$uploader->setMaxSize('2MB');
 	$uploader->setOptional();
-		
+
 	$uploaderError = $uploader->validate($name, true);
 	if ($uploaderError) {
 		$form->error($name, $uploaderError);
@@ -194,7 +194,7 @@ function kyselo_csrf($form)
 {
     return; // vypneme, nefunguje
 	$form->field('csrf_token', ['type'=>'hidden', 'value'=>fRequest::generateCSRFToken()]);
-	
+
 	$form->rule('csrf_token', function($token) use ($form) {
 		try {
 			fRequest::validateCSRFToken($token);
@@ -211,6 +211,31 @@ function kyselo_url($path='/', $args=[], $query=[])
         rtrim(Flight::config('site_url'), '/') .
         ($args ? vsprintf($path, $args) : $path).
         ($query ? ('?' . http_build_query($query)) : '');
+}
+
+function make_links_clickable($text)
+{
+    return preg_replace('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', '<a href="$1">$1</a>', $text);
+}
+
+function make_usernames_clickable($text)
+{
+    return preg_replace('~@([a-z][a-z0-9]{2,})~', '<a href="$1">@$1</a>', $text);
+}
+
+function find_usernames($text)
+{
+    $matches = [];
+    preg_match_all('~@([a-z][a-z0-9]{2,})~', $text, $matches);
+    return $matches[1];
+}
+
+function kyselo_markup($text)
+{
+    $html = esc($text);
+    $html = make_links_clickable($html);
+    $html = make_usernames_clickable($html);
+    return nl2br($html);
 }
 
 function esc($text)
