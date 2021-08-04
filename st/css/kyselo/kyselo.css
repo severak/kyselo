@@ -50,11 +50,11 @@
 		bottom: 5px;
 		background-color: #f5f5f5;
 	}
-	
+
 	.kyselo-float #post_types {
 		margin-left: 5px;
 	}
-	
+
 	.kyselo-float .button.is-medium {
 		font-size: 1rem;
 	}
@@ -88,7 +88,7 @@
 	display: none;
 }
 
-.pure-form-aligned .medium-editor-element { 
+.pure-form-aligned .medium-editor-element {
 	margin-left: 11em;
 	padding: 0.3em;
 	border: 1px dotted #ccc;
@@ -273,4 +273,19 @@ blockquote {
 
 .kyselo-image-square {
 	max-height: 80vh;
+}
+
+.kyselo-friend-box {
+	overflow: hidden;
+}
+
+.kyselo-friend-box:hover {
+	overflow: visible;
+}
+
+.kyselo-friend-box:hover span {
+	background-color: #363636;
+	color: #fff;
+	position: relative;
+	z-index: 1000;
 }
