@@ -4,14 +4,9 @@ TODO
 - vypisovat url ve výpisech uživatelů
 - odkazy na tagy, typy postů atd...
 - prověřit, zda NSFW blogy automaticky postují NSFW
-
 - sepsat blogpost se seznamem budoucích featur
-- vlastní CSS (např. 600px široký kontejner)
 - nahrávací tlačítko i na /friends
-- optimalizovat velikosti obrázků - max 80vh? (optimalizovat nudle)
-- odkaz na TOS v patě
 - ujasnit friends (featuring/this user follows these people)
-- učesat jejich CSSko (slejvají se názvy)
 - vypisy členů/skupin různě - abecedně, dle popularity, dle poslední aktivity
 - /all s repostama
 
@@ -62,6 +57,13 @@ VIZE
 - security log
 - change log
 - updatovat text repostů?
+
+HOTOVO
+
+- vlastní CSS (např. 600px široký kontejner)
+- optimalizovat velikosti obrázků - max 80vh? (optimalizovat nudle)
+- odkaz na TOS v patě
+- učesat jejich CSSko (slejvají se názvy) (seznam přátel)
 
 * * *
 
