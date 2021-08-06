@@ -19,9 +19,10 @@ if (!empty($friends)) {
 }
 
 $showFullVideo = count($posts)==1;
+$commentsCollapsed = count($posts)>1;
 
 foreach ($posts as $post) {
-$nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';	
+$nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 ?>
 <div class="media kyselo-post">
 	<div class="media-left">
@@ -35,7 +36,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 			<?=$post['group_name']; ?>
 		</a>
 		<?php } ?>
-		
+
 	</div>
 	<div class="media-content content <?=$nsfwClass; ?>">
 	<div>
@@ -53,14 +54,14 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
         </small>
 	</div><br>
     <div class="kyselo-post-body">
-	<?php 
+	<?php
 
 	if ($post['type']==1) { // text
 		if (!empty($post['title'])) {
 			echo '<h2>' . $post['title'] . '</h2>';
-		} 
+		}
 		echo $post['body'];
-	} else if ($post['type']==2) { // link	
+	} else if ($post['type']==2) { // link
 		echo '<a href="' . $post['source'] . '">' . $post['title'] . '</a>';
 		if (!empty($post['body'])) {
 			echo '<p>' . $post['body'] . '</p>';
@@ -157,9 +158,9 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 
 		      <div class="buttons p-2">
                         <a href="<?php echo $permalink; ?>" class="button" title="permalink"><i class="fa fa-link"></i>&#8203;<span class="kyselo-hidden">permalink</span></a>
-                        
+
 						<?php if (!empty($user)) { ?>
-						
+
 						<div class="dropdown is-hoverable is-overlay">
 							<div class="dropdown-trigger">
 								<button class="button" aria-haspopup="true" aria-controls="dropdown-menu-p<?=$post['id']; ?>">
@@ -181,13 +182,58 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 								</div>
 							</div>
 						</div>
-						
+
 						<?php } // repost ?>
 						<?php if (can_edit_post($post)) { ?>
 						<a href="/act/post/edit/<?=$post['id']; ?>" class="button" title="edit"><i class="fa fa-pencil"></i>&#8203;<span class="kyselo-hidden">edit post</span></a>
 						<a href="/act/post/delete/<?=$post['id']; ?>" class="button" title="delete"><i class="fa fa-trash"></i>&#8203;<span class="kyselo-hidden">delete post</span></a>
 						<?php } ?>
                 </div>
+
+                <?php if ($commentsCollapsed && ($post['comments_count'] || !empty($user))) { ?>
+                <details>
+                    <summary><i class="fa fa-comments"></i> <?=$post['comments_count']; ?> comments</summary>
+                <?php } // $commentsCollapsed ?>
+
+                    <?php foreach ($post['comments'] as $comment) { ?>
+                        <div class="media kyselo-comment" id="comment<?=$comment['id']; ?>">
+                        <div class="media-left">
+                            <a href="/<?=$comment['name']; ?>">
+                                <img src=<?php echo kyselo_small_image($comment['avatar_url'], 64, true); ?> class="image is-64x64">
+                                <?=$comment['name']; ?>
+                            </a>
+                        </div>
+                        <div class="media-content">
+                            <small><i class="fa fa-comment"></i> <?php
+                                $datum = new fTimestamp($comment['datetime']);
+                                echo '<span title="' . $datum->getFuzzyDifference() . '">';
+                                echo $datum->format('j.n.Y H:i:s');
+                                echo '</span>';
+                                ?></small><br>
+                            <?=kyselo_markup($comment['text']); ?>
+                        </div>
+                    </div>
+                    <?php } // comments ?>
+
+                    <?php if (!empty($user)) { ?>
+                    <div class="comment-post-form" data-post-id="<?=$post['id'];?>">
+                        <hr>
+                        <form class="mt-2 mb-2">
+                            <div class="field">
+                                <div class="control">
+                                    <textarea placeholder="text of your comment..." rows="2" class="textarea"></textarea>
+                                </div>
+                                <div>
+                                    <button class="button is-info is-fullwidth comment-post-button">Post comment</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <?php } // $user ?>
+
+                <?php if ($commentsCollapsed) { ?>
+                </details>
+                <?php } ?>
 		</div>
 </div>
 <?php
