@@ -289,3 +289,8 @@ blockquote {
 	position: relative;
 	z-index: 1000;
 }
+
+/* comment by anchor */
+:target {
+	font-weight: bold;
+}

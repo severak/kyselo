@@ -102,7 +102,8 @@ CREATE TABLE notifications (
 	id INTEGER PRIMARY KEY,
 	id_to INT NOT NULL,
 	text TEXT,
-	is_new INT DEFAULT 1
+	datetime INT NOT NULL,
+	is_read INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE messages (

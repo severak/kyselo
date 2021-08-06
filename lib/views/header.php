@@ -1,5 +1,6 @@
 <?php
 $msgCount = 0;
+$notificationsCount = 0;
 if (!empty($_SESSION['user'])) {
     $rows = Flight::rows();
     $msgCount = $rows->execute($rows->query('SELECT COUNT(cnt) FROM (
@@ -7,7 +8,10 @@ if (!empty($_SESSION['user'])) {
         FROM messages 
         WHERE id_to=? AND is_read=0
         GROUP BY id_from
-        )', $_SESSION['user']['blog_id']))->fetchColumn(); 
+        )', $_SESSION['user']['blog_id']))->fetchColumn();
+    $notificationsCount = $rows->execute($rows->query('SELECT COUNT(*) AS cnt
+        FROM notifications 
+        WHERE id_to=? AND is_read=0', $_SESSION['user']['blog_id']))->fetchColumn();
 }
 
 $loggedIn = !empty($_SESSION['user']);
@@ -65,9 +69,9 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 
   <div id="mainMenu" class="navbar-menu">
     <div class="navbar-start">
-	
+
 	<?php if ($loggedIn) { ?>
-	
+
 	<div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link" href="/all">people&nbsp;<i class="fa fa-users"></i></a>
         <div class="navbar-dropdown">
@@ -75,7 +79,7 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
           <a class="navbar-item" href="/all"><i class="fa fa-globe"></i>&nbsp;everyone</a>
 		</div>
       </div>
-	  
+
 	 <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link" href="/act/groups">groups&nbsp;<i class="fa fa-umbrella"></i></a>
         <div class="navbar-dropdown">
@@ -87,24 +91,24 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 		<?php } // count($groups) ?>
 		<a class="navbar-item" href="/act/groups"><i class="fa fa-umbrella"></i>&nbsp;find&amp;create</a>
 		</div>
-      </div> 
-  
+      </div>
+
 	<a class="navbar-item" href="#" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW&nbsp;<i class="fa fa-eye<?php if (empty($_SESSION['show_nsfw'])) echo '-slash'; ?>"></i></a>
 	<a class="navbar-item" href="/">about&nbsp;<i class="fa fa-question"></i></a>
-	
-	
+
+
 	<?php } else { ?>
       <a class="navbar-item" href="/all">people&nbsp;<i class="fa fa-users"></i></a>
       <a class="navbar-item" href="/act/groups">groups&nbsp;<i class="fa fa-umbrella"></i></a>
       <a class="navbar-item" href="#" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span>&nbsp;NSFW&nbsp;<i class="fa fa-eye<?php if (empty($_SESSION['show_nsfw'])) echo '-slash'; ?>"></i></a>
       <a class="navbar-item" href="/">about&nbsp;<i class="fa fa-question"></i></a>
     <?php } // $loggedIn ?>
-	
+
 	</div>
 
     <div class="navbar-end">
 	<?php if ($loggedIn) { ?>
-	
+
 	<div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link"><img src="<?= kyselo_small_image($userAvatar,32,true); ?>" style="width: 1em">&nbsp;<?=$userName; ?></a>
         <div class="navbar-dropdown">
@@ -113,6 +117,7 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
           <hr class="navbar-divider">
           <a class="navbar-item" href="/act/messages/inbox"><i class="fa fa-envelope"></i>&nbsp;inbox</a>
           <a class="navbar-item" href="/act/messages/outbox"><i class="fa fa-paper-plane"></i>&nbsp;outbox</a>
+          <a class="navbar-item" href="/act/notifications"><i class="fa fa-bell"></i>&nbsp;notifications</a>
 		<hr class="navbar-divider">
           <a class="navbar-item" href="/act/logout"><i class="fa fa-sign-out"></i>&nbsp;logout</a>
         </div>
@@ -126,20 +131,23 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
           <a class="button is-success" href="/act/login"><i class="fa fa-key"></i>&nbsp;login</a>
         </div>
       </div>
-	
+
   <?php } // $loggedIn ?>
 
   </div>
 </nav>
 <!-- /hlavni menu -->
-    
+
 <div class="container p-2 kyselo-container">
-<?php if ($msgCount>0) { ?>
+<?php if ($msgCount>0 && !isset($noMessages)) { ?>
 	<div class="message is-info"><div class="message-body"><i class="fa fa-envelope"></i>&nbsp;you have <a href="/act/messages/inbox"><?=$msgCount; ?> new messages</a></div></div>
 	<?php } ?>
-<?php if (!empty($_SESSION['flash'])) {
+
+<?php if ($notificationsCount>0  && !isset($noMessages)) { ?>
+    <div class="message is-info"><div class="message-body"><i class="fa fa-bell"></i>&nbsp;you have <a href="/act/notifications"><?=$notificationsCount; ?> new notifications</a></div></div>
+<?php } ?>
+<?php if (!empty($_SESSION['flash']) && !isset($noMessages)) {
 	while ($message = array_shift($_SESSION['flash'])) {
 		echo '<div class="message is-'.$message['class'].'"><div class="message-body">'.htmlspecialchars($message['msg']).'</div></div>';
 	}
-}	
-	
+}

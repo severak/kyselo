@@ -220,13 +220,13 @@ function make_links_clickable($text)
 
 function make_usernames_clickable($text)
 {
-    return preg_replace('~@([a-z][a-z0-9]{2,})~', '<a href="$1">@$1</a>', $text);
+    return preg_replace('~@([a-z][a-z0-9]{2,})([ ])~', '<a href="$1">@$1</a>$2', $text. ' ');
 }
 
 function find_usernames($text)
 {
     $matches = [];
-    preg_match_all('~@([a-z][a-z0-9]{2,})~', $text, $matches);
+    preg_match_all('~@([a-z][a-z0-9]{2,})([ ])~', $text. ' ', $matches);
     return $matches[1];
 }
 
@@ -276,6 +276,7 @@ require __DIR__ . '/lib/routes/authorization.php';
 require __DIR__ . '/lib/routes/posting.php';
 require __DIR__ . '/lib/routes/other.php';
 require __DIR__ . '/lib/routes/messages.php';
+require __DIR__ . '/lib/routes/comments.php';
 require __DIR__ . '/lib/routes/groups.php';
 require __DIR__ . '/lib/routes/interop.php';
 require __DIR__ . '/lib/routes/test.php';
