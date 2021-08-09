@@ -1,4 +1,5 @@
 <?php
+use \severak\database\rows;
 // post a comment
 Flight::route('/act/comment', function() {
     Flight::requireLogin();
@@ -110,8 +111,6 @@ Flight::route('/act/comment/edit/@id', function($id){
     Flight::render('footer', []);
 });
 
-
-// TODO - zde
 // /act/post/delete/@id
 Flight::route('/act/comment/delete/@id', function($id){
     Flight::requireLogin();
@@ -120,43 +119,34 @@ Flight::route('/act/comment/delete/@id', function($id){
     $user = Flight::user();
     $request = Flight::request();
 
-    $post = $rows
-        ->with('blogs', 'blog_id')
-        ->one('posts', $id);
+    if ($request->method!='POST') Flight::forbidden();
 
-    $blog = $rows->one('blogs', $post['blog_id']);
+    $comment = $rows->one('comments', $id);
 
-    if (!$post) Flight::notFound();
+    if (!$comment) Flight::notFound();
+    if (!can_delete_comment($comment)) Flight::forbidden();
 
-    // todo - možnost mazání postů pro správce a zakladatele skupin
-    if (!can_edit_post($post)) Flight::forbidden();
+    // TODO - zde mažeme
+    $rows->update('comments', ['is_visible'=>0], $id);
 
-    // docasny hack
-    $post['slug_name'] = $post['name'];
-
-    $form = new severak\forms\form(['method'=>'post']);
-    $form->field('confirmed', ['type'=>'checkbox', 'label'=>'I want to delete this post permanently.']);
-    kyselo_csrf($form);
-    $form->field('delete', ['type'=>'submit']);
-
-    if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
-        if ($form->values['confirmed']) {
-            $rows->update('posts', ['is_visible'=>0], $id);
-            $rows->delete('post_tags', ['post_id'=>$id]);
-            $rows->delete('reposts', ['repost_id'=>$id]);
-        } else {
-            Flight::flash('Nothing was deleted.', false);
-        }
-        Flight::redirect('/'.$blog['name']);
-    }
-
-    Flight::render('header', ['title' => 'delete post' ]);
-    Flight::render('posts', ['posts'=>[$post], 'user'=>$user, 'blog'=>false ]);
-    Flight::render('form', [
-        'form' => $form
-    ]);
-    Flight::render('footer', []);
+    echo 'OK';
 });
+
+function can_edit_comment($comment)
+{
+    $user = Flight::user();
+    if (!$user) return false;
+    if ($user['id']==1) return true; // admin can edit everything
+    return $comment['author_id']==$user['blog_id'];
+}
+
+function can_delete_comment($comment)
+{
+    $user = Flight::user();
+    if (!$user) return false;
+    if ($user['id']==1) return true; // admin can edit everything
+    return $comment['author_id']==$user['blog_id'];
+}
 
 // notifications
 Flight::route('/act/notifications', function(){

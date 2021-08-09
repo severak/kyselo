@@ -117,6 +117,25 @@ Zepto(function(){
 		$('.dropdown-trigger').on('click', function(evt){
 			$(evt.target).parents('.dropdown').toggleClass("is-active");
 		});
+
+	$('[data-delete-comment]').on('click', function (evt) {
+		var idComment = $(evt.target).attr('data-delete-comment') ? $(evt.target).attr('data-delete-comment') : $(evt.target).parents('.button').attr('data-delete-comment');
+		console.log('smazeme ' + idComment);
+
+		$.ajax({
+			'url': '/act/comment/delete/'+idComment,
+			'type': 'POST',
+			'data': {
+				command: 'delete'
+			},
+			'success': function(data){
+				$('#comment' + idComment).addClass('kyselo-hidden');
+			},
+			'error': function () {
+				// TODO - vztekající se tlačítko?
+			}
+		});
+	});
 });
 
 
