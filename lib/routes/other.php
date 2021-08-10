@@ -4,15 +4,15 @@ Flight::route('/act/follow', function(){
 	Flight::requireLogin();
 	$db = Flight::db();
 	$user = Flight::user();
-	
+
 	$blog = $db->from('blogs')->where('name', $_GET['who'])->where('is_visible', 1)->select()->one();
 
 	if (empty($blog) || empty($_GET['who'])) {
 		Flight::notFound();
 	}
-	
+
 	$friendshipExists = $db->from('friendships')->where('from_blog_id', $user['blog_id'])->where('to_blog_id', $blog['id'])->count() > 0;
-	
+
 	if ($friendshipExists) {
 		// unfollow
 		$db->from('friendships')
@@ -20,17 +20,17 @@ Flight::route('/act/follow', function(){
 			->where('to_blog_id', $blog['id'])
 			->delete()
 			->execute();
-			
+
 		$db->from('friendships')
 			->where('from_blog_id', $blog['id'])
 			->where('to_blog_id', $user['blog_id'])
 			->update(['is_bilateral'=>0])
 			->execute();
-			
+
 	} else {
 		// follow
 		$isBilateral = $db->from('friendships')->where('from_blog_id', $blog['id'])->where('to_blog_id', $user['blog_id'])->count();
-	
+
 		$db->from('friendships')
 			->insert([
 				'from_blog_id'=>$user['blog_id'],
@@ -39,16 +39,26 @@ Flight::route('/act/follow', function(){
 				'is_bilateral'=>$isBilateral
 			])
 			->execute();
-			
+
 		if ($isBilateral) {
 			$db->from('friendships')
 			->where('from_blog_id', $blog['id'])
 			->where('to_blog_id', $user['blog_id'])
 			->update(['is_bilateral'=>1])
 			->execute();
-		}	
+		}
+
+		$rows = Flight::rows();
+		// notification
+        if (!$blog['is_group']) {
+            $rows->insert('notifications', [
+                'id_to' => $blog['id'],
+                'text' => sprintf('<i class="fa fa-heart"></i> <a href="/%s">%s</a> followed you' . ($isBilateral ? ' back' : ''), $user['name'], $user['name']),
+                'datetime'=> strtotime('now')
+            ]);
+        }
 	}
-	
+
 	Flight::redirect('/'.$blog['name']);
 });
 
@@ -57,23 +67,34 @@ Flight::route('/act/member', function(){
 	Flight::requireLogin();
 	$db = Flight::db();
 	$user = Flight::user();
-	
+
 	$blog = $db->from('blogs')->where('name', $_GET['who'])->where('is_visible', 1)->select()->one();
 
 	if (!$blog['is_group']) {
 		Flight::forbidden();
 	}
-	
+
 	if (empty($blog) || empty($_GET['who'])) {
 		Flight::notFound();
 	}
-	
+
 	$membershipExists = $db->from('memberships')->where('member_id', $user['blog_id'])->where('blog_id', $blog['id'])->count() > 0;
-	
+
 	if ($membershipExists) {
 		unset($_SESSION['user']['groups'][$blog['id']]);
 		$db->from('memberships')->where('member_id', $user['blog_id'])->where('blog_id', $blog['id'])->delete()->execute();
 	} else {
+        $rows = Flight::rows();
+        // notificate members of the group about new member
+        $members = $rows->more('memberships', ['blog_id'=>$blog['id']], [], 99);
+        foreach ($members as $member) {
+            $rows->insert('notifications', [
+                'id_to' => $member['member_id'],
+                'text' => sprintf('<i class="fa fa-umbrella"></i> <a href="/%s">%s</a> joined your group <a href="/%s">%s</a>', $user['name'], $user['name'], $blog['name'], $blog['name']),
+                'datetime'=> strtotime('now')
+            ]);
+        }
+
 		$db->from('memberships')->insert([
 			'member_id'=>$user['blog_id'],
 			'blog_id'=>$blog['id'],
@@ -81,8 +102,8 @@ Flight::route('/act/member', function(){
 		])->execute();
 
 		$_SESSION['user']['groups'][$blog['id']] = [
-            'id'=>$blog['id'], 
-            'name'=>$blog['name'], 
+            'id'=>$blog['id'],
+            'name'=>$blog['name'],
             'title'=>$blog['title'],
             'avatar_url'=>$blog['avatar_url']
         ];
@@ -97,17 +118,17 @@ Flight::route('/act/settings/@name', function($name){
 	$request = Flight::request();
 	$db = Flight::db();
 	$user = Flight::user();
-	
+
 	$blog = $db->from('blogs')->where('name', $name)->where('is_visible', 1)->select()->one();
-	
+
 	if (empty($blog)) {
 		Flight::notFound();
 	}
-	
+
 	if ($user['blog_id']!=$blog['id'] && !isset($user['groups'][$blog['id']])) {
 		Flight::forbidden();
 	}
-	
+
 	$form = new severak\forms\form(['method'=>'post']);
 	$form->field('title', ['label'=>'Blog title', 'required'=>true]);
 	$form->field('about', ['label'=>'Blog description', 'class'=>'kyselo-editor', 'type'=>'textarea', 'rows'=>6, 'required'=>true]);
@@ -118,7 +139,7 @@ Flight::route('/act/settings/@name', function($name){
     $form->field('custom_css', ['label'=>'custom CSS', 'type'=>'textarea', 'rows'=>5, 'placeholder'=>'/* write custom CSS here */', 'id'=>'custom_css']);
 	kyselo_csrf($form);
 	$form->field('save', ['label'=>'Save blog settings', 'type'=>'submit']);
-	
+
 	$form->fill($blog);
 
 	$form->rule('about', function ($html) {return !detect_xss($html);}, 'Please don\'t hack us!');
@@ -127,16 +148,16 @@ Flight::route('/act/settings/@name', function($name){
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		$update = $form->values;
 		unset($update['upload'], $update['save'], $update['csrf_token']);
-		
+
 		$newPhoto = kyselo_upload_image($form, 'upload');
 		if ($newPhoto) $update['avatar_url'] = $newPhoto;
-		
+
 		if ($form->isValid) {
 			$db->from('blogs')->where('id', $blog['id'])->update($update)->execute();
 			Flight::redirect('/'.$blog['name']);
 		}
 	}
-	
+
 	Flight::render('header', ['title' => $blog["title"] . ' - settings' ]);
 	Flight::render('blog_header', [
 		'blog'=>$blog,
@@ -152,7 +173,7 @@ Flight::route('/act/settings/@name', function($name){
 Flight::route('/act/iframe/@id', function($id) {
 	$rows = Flight::rows();
 	$post = $rows->one('posts', ['id'=>$id, 'is_visible'=>true]);
-	
+
 	if (!$post) {
 		Flight::notFound();
 	}
@@ -228,5 +249,5 @@ group by date(datetime,"unixepoch")
 
     Flight::render('footer', []);
 });
-	
+
 
