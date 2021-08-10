@@ -79,10 +79,11 @@ Flight::route('/@name/post/@postid', function($name, $postId){
 	$filter->mode = 'one';
 	$filter->blogId = $blog['id'];
 	$filter->postId = $postId;
+	$filter->withComments = true;
 	$posts = $filter->posts();
 
 	if (empty($posts)) Flight::notFound();
-	
+
 	Flight::render('header', ['title' => $blog["title"], 'rss'=>sprintf('/%s/rss', $blog['name']), 'ogp_post'=>$posts[0] ]);
 	Flight::render('blog_header', [
 		'blog'=>$blog,
@@ -106,9 +107,9 @@ Flight::route('/@name/post/@postid', function($name, $postId){
 Flight::route('/@name', function($name){
 	$db = Flight::db();
 	$rows = Flight::rows();
-	
+
 	$blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
-	
+
 	if (empty($blog)) {
 		Flight::notFound();
 	}
@@ -117,6 +118,7 @@ Flight::route('/@name', function($name){
 	$filter->mode = 'own';
 	$filter->blogId = $blog['id'];
 	$filter->filter($_GET);
+	$filter->withComments = true;
 
 	$posts = $filter->posts();
 	$moreLink = $filter->moreLink;
@@ -146,13 +148,13 @@ Flight::route('/@name', function($name){
 // /@blog/tags
 Flight::route('/@name/tags', function($name){
 	$rows = Flight::rows();
-	
+
 	$blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
-	
+
 	if (empty($blog)) {
 		Flight::notFound();
 	}
-	
+
 	$tags = $rows->execute($rows->fragment('select tag, count(*) as cnt
 	from post_tags
 	where blog_id=?
@@ -176,13 +178,13 @@ Flight::route('/@name/tags', function($name){
 // /@blog/rss
 Flight::route('/@name/rss', function($name){
 	$rows = Flight::rows();
-	
+
 	$blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
-	
+
 	if (empty($blog)) {
 		Flight::notFound();
 	}
-	
+
 	$filter = new kyselo\timeline(Flight::rows());
 	$filter->blogId = $blog['id'];
 	$filter->mode = 'own';
@@ -197,24 +199,25 @@ Flight::route('/@name/rss', function($name){
 
 	header('Content-type: text/xml');
 	echo $rss->generate($blog, $posts);
-});	
+});
 
 // /@blog/friends
 Flight::route('/@name/friends', function($name){
 	$db = Flight::db();
 	$rows = Flight::rows();
-	
+
 	$blog = $db->from('blogs')->where('name', $name)->where('is_visible', 1)->select()->one();
-	
+
 	if (empty($blog)) {
 		Flight::notFound();
 	}
-	
+
 	$filter = new kyselo\timeline(Flight::rows());
 	$filter->mode = 'friends';
 	$filter->name = $name;
 	$filter->blogId = $blog['id'];
 	$filter->filter($_GET);
+	$filter->withComments = true;
 
 	$posts = $filter->posts();
 	$moreLink = $filter->moreLink;
@@ -303,6 +306,7 @@ Flight::route('/@name/journal', function($name){
     $filter->filter($_GET);
     $filter->type = 'text';
     $filter->limit = 72;
+    $filter->withComments = true;
 
     $posts = $filter->posts();
 

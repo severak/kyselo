@@ -14,6 +14,8 @@ class timeline
     public $name = null;
     public $limit = 30;
 
+    public $withComments = false;
+
     public $moreLink = null;
 
     public $currentParams = '';
@@ -131,7 +133,7 @@ class timeline
             }
 
             $posts[$ord]['comments'] = [];
-            if ($post['comments_count']>0) {
+            if ($this->withComments && $post['comments_count']>0) {
                 $posts[$ord]['comments'] = $rows
                     ->with('blogs', 'author_id')
                     ->more('comments', ['post_id'=>$post['id'], 'is_visible'=>'1'], ['datetime'=>'asc'], 999);
