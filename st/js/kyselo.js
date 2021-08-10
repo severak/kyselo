@@ -127,6 +127,40 @@ Zepto(function(){
 		}
 	});
 
+	// editing comment - step 1
+	$('[data-edit-comment]').on('click', function (evt) {
+		var idComment = $(evt.target).attr('data-edit-comment') ? $(evt.target).attr('data-edit-comment') : $(evt.target).parents('.button').attr('data-edit-comment');
+
+		$.ajax({
+			'url': '/act/comment/edit/' + idComment,
+			'type': 'GET',
+			'success': function(data){
+				$('#comment' + idComment).html(data).removeClass('media');
+			},
+			'error': function () {
+				alert('Error while editing this comment.');
+			}
+		});
+	});
+
+	// editing comment - step 2
+	window.commentEdit = function(idComment) {
+		var textarea = $('#comment' + idComment + ' textarea');
+		$.ajax({
+			'url': '/act/comment/edit/' + idComment,
+			'type': 'POST',
+			'data':{
+				text: textarea.val()
+			},
+			'success': function(data){
+				$('#comment' + idComment).html(data).addClass('media');
+			},
+			'error': function () {
+				alert('Error while editing this comment.');
+			}
+		});
+		return false;
+	}
 
 	// navbar for phones
 	$(".navbar-burger").click(function() {

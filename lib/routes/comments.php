@@ -65,50 +65,35 @@ Flight::route('/act/comment', function() {
     Flight::render('comment', ['comment'=>$comment]);
 });
 
-// TODO - zde
-// /act/post/edit/@id
+// /act/comment/edit/@id
 Flight::route('/act/comment/edit/@id', function($id){
     Flight::requireLogin();
     $rows = Flight::rows();
     $user = Flight::user();
     $request = Flight::request();
 
-    $post = $rows->one('posts', $id);
+    $comment = $rows->one('comments', $id);
+    $post = $rows->one('posts', $comment['id']);
 
-    if (!$post) Flight::notFound();
-    if (!can_edit_post($post)) Flight::forbidden();
-    $blog = $rows->one('blogs', $post['blog_id']);
+    if (!$comment || !$post) Flight::notFound();
+    if (!can_edit_comment($comment)) Flight::forbidden();
 
-    $form = get_post_form($post['type']);
-    if ($post['type']==4 && !empty($post['url']) && !empty($post['source'])) {
-        $post['from'] = $post['source'];
-        $post['source'] = '';
+    $form = new severak\forms\form(['method'=>'post', 'action'=>'/act/comment/edit/'.$id, 'class'=>'comment-edit']);
+    $form->field('id', ['type'=>'hidden']);
+    $form->field('text', ['type'=>'textarea', 'placeholder'=>'new comment text...', 'label'=>'Original comment text', 'class'=>'is-fullwidth']);
+    $form->field('sbt', ['type'=>'submit', 'label'=>'Change comment', 'class'=>'is-info is-fullwidth', 'onclick'=>'return commentEdit('.$id.')']);
+
+    $form->fill($comment);
+
+    if ($request->method=='POST') {
+        if (empty($_POST['text'])) Flight::forbidden();
+        $rows->update('comments', ['text'=>$_POST['text']], $id);
+
+        $editedComment = $rows->with('blogs', 'author_id')->one('comments', $id);
+        Flight::render('comment', ['comment'=>$editedComment]);
+    } else {
+        Flight::render('form', ['form'=>$form]);
     }
-    $form->fill($post);
-
-    if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
-        $newPost = $form->values;
-        unset($newPost['post'], $newPost['upload'], $newPost['csrf_token']);
-
-        $newPost = finish_post($newPost, $form, false);
-
-        if ($form->isValid) {
-            $rows->update('posts', $newPost, $id);
-            $rows->delete('post_tags', ['post_id'=>$id]);
-            if (!empty($newPost['tags'])) {
-                foreach (explode(' ', $newPost['tags']) as $tag) {
-                    $rows->insert('post_tags', ['blog_id'=>$post['blog_id'], 'post_id'=>$id, 'tag'=>$tag]);
-                }
-            }
-            Flight::redirect('/'.$blog['name'].'/post/'.$id);
-        }
-    }
-
-    Flight::render('header', ['title' => 'new post' ]);
-    Flight::render('form', [
-        'form' => $form,
-    ]);
-    Flight::render('footer', []);
 });
 
 // /act/comment/delete
@@ -128,7 +113,7 @@ Flight::route('/act/comment/delete', function(){
     if (!can_delete_comment($comment, $post)) Flight::forbidden();
 
     $rows->update('comments', ['is_visible'=>0], $id);
-    $rows->execute($rows->fragment('UPDATE posts SET comments_count=comments_count+1 WHERE id=?', [$comment['post_id']]));
+    $rows->execute($rows->fragment('UPDATE posts SET comments_count=comments_count-1 WHERE id=?', [$comment['post_id']]));
     echo 'OK';
 });
 
@@ -152,7 +137,7 @@ function can_delete_comment($comment, $post)
         $canPostAs[$gId] = $group['name'];
     }
 
-    return $comment['author_id']==$user['blog_id'] || in_array($post['blog_id'], $canPostAs);
+    return $comment['author_id']==$user['blog_id'] || isset($canPostAs[$post['blog_id']]);
 }
 
 // notifications
