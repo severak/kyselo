@@ -73,7 +73,7 @@ Flight::route('/act/comment/edit/@id', function($id){
     $request = Flight::request();
 
     $comment = $rows->one('comments', $id);
-    $post = $rows->one('posts', $comment['id']);
+    $post = $rows->one('posts', $comment['post_id']);
 
     if (!$comment || !$post) Flight::notFound();
     if (!can_edit_comment($comment)) Flight::forbidden();

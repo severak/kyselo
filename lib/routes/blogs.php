@@ -13,6 +13,7 @@ Flight::route('/all', function(){
 	$filter = new kyselo\timeline(Flight::rows());
 	$filter->mode = 'all';
 	$filter->filter($_GET);
+	$filter->withComments = true;
 
 	$posts = $filter->posts();
 	$moreLink = $filter->moreLink;
