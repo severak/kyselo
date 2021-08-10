@@ -111,24 +111,24 @@ Flight::route('/act/comment/edit/@id', function($id){
     Flight::render('footer', []);
 });
 
-// /act/post/delete/@id
-Flight::route('/act/comment/delete/@id', function($id){
+// /act/comment/delete
+Flight::route('/act/comment/delete', function(){
     Flight::requireLogin();
     /** @var rows $rows */
     $rows = Flight::rows();
     $user = Flight::user();
     $request = Flight::request();
-
     if ($request->method!='POST') Flight::forbidden();
+    $id = $_POST['id'];
 
     $comment = $rows->one('comments', $id);
+    $post = $rows->one('posts', $comment['id']);
 
-    if (!$comment) Flight::notFound();
-    if (!can_delete_comment($comment)) Flight::forbidden();
+    if (!$comment || !$post) Flight::notFound();
+    if (!can_delete_comment($comment, $post)) Flight::forbidden();
 
-    // TODO - zde mažeme
     $rows->update('comments', ['is_visible'=>0], $id);
-
+    $rows->execute($rows->fragment('UPDATE posts SET comments_count=comments_count+1 WHERE id=?', [$comment['post_id']]));
     echo 'OK';
 });
 
@@ -140,12 +140,19 @@ function can_edit_comment($comment)
     return $comment['author_id']==$user['blog_id'];
 }
 
-function can_delete_comment($comment)
+function can_delete_comment($comment, $post)
 {
     $user = Flight::user();
     if (!$user) return false;
     if ($user['id']==1) return true; // admin can edit everything
-    return $comment['author_id']==$user['blog_id'];
+
+    $canPostAs = [];
+    $canPostAs[$user['blog_id']] = $user['name'];
+    foreach ($_SESSION['user']['groups'] as $gId=>$group) {
+        $canPostAs[$gId] = $group['name'];
+    }
+
+    return $comment['author_id']==$user['blog_id'] || in_array($post['blog_id'], $canPostAs);
 }
 
 // notifications

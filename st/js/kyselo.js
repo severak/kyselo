@@ -49,6 +49,7 @@ Zepto(function(){
 		return false;
 	});
 
+	// reposting
 	$('.kyselo-repost').on('click', function(ev){
 		var target = $(ev.target);
 		if (target.is('img')) {
@@ -69,12 +70,13 @@ Zepto(function(){
 		return false;
 	});
 
+	// showing new post buttons
 	$('#new_post').on('click', function(){
 		$('#post_types').show();
 		return false;
 	});
 
-
+	// making new comment
 	$('.comment-post-button').on('click', function (ev) {
 		var target = $(ev.target);
 		var form = target.parents('.comment-post-form');
@@ -104,37 +106,38 @@ Zepto(function(){
 		return false;
 	});
 
-
-	// Check for click events on the navbar burger icon
-		$(".navbar-burger").click(function() {
-
-			// Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-			$(".navbar-burger").toggleClass("is-active");
-			$(".navbar-menu").toggleClass("is-active");
-
-		});
-
-		$('.dropdown-trigger').on('click', function(evt){
-			$(evt.target).parents('.dropdown').toggleClass("is-active");
-		});
-
+	// deleting comment
 	$('[data-delete-comment]').on('click', function (evt) {
-		var idComment = $(evt.target).attr('data-delete-comment') ? $(evt.target).attr('data-delete-comment') : $(evt.target).parents('.button').attr('data-delete-comment');
-		console.log('smazeme ' + idComment);
+		if (confirm('Are you really want to delete this comment?')) {
+			var idComment = $(evt.target).attr('data-delete-comment') ? $(evt.target).attr('data-delete-comment') : $(evt.target).parents('.button').attr('data-delete-comment');
 
-		$.ajax({
-			'url': '/act/comment/delete/'+idComment,
-			'type': 'POST',
-			'data': {
-				command: 'delete'
-			},
-			'success': function(data){
-				$('#comment' + idComment).addClass('kyselo-hidden');
-			},
-			'error': function () {
-				// TODO - vztekající se tlačítko?
-			}
-		});
+			$.ajax({
+				'url': '/act/comment/delete',
+				'type': 'POST',
+				'data': {
+					id: idComment
+				},
+				'success': function(data){
+					$('#comment' + idComment).hide();
+				},
+				'error': function () {
+					alert('Error while deleting this comment.');
+				}
+			});
+		}
+	});
+
+
+	// navbar for phones
+	$(".navbar-burger").click(function() {
+		$(".navbar-burger").toggleClass("is-active");
+		$(".navbar-menu").toggleClass("is-active");
+
+	});
+
+	// dropdowns for phones
+	$('.dropdown-trigger').on('click', function(evt){
+		$(evt.target).parents('.dropdown').toggleClass("is-active");
 	});
 });
 

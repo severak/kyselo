@@ -134,7 +134,7 @@ class timeline
             if ($post['comments_count']>0) {
                 $posts[$ord]['comments'] = $rows
                     ->with('blogs', 'author_id')
-                    ->more('comments', ['post_id'=>$post['id']], ['datetime'=>'asc'], 999);
+                    ->more('comments', ['post_id'=>$post['id'], 'is_visible'=>'1'], ['datetime'=>'asc'], 999);
             }
 
         }

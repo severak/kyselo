@@ -216,7 +216,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                             <?php if (can_edit_comment($comment)) { ?>
                                 <button class="button is-small"><i class="fa fa-pencil"></i></button>
                             <?php } ?>
-                            <?php if (can_delete_comment($comment)) { ?>
+                            <?php if (can_delete_comment($comment, $post)) { ?>
                                 <button class="button is-small" data-delete-comment="<?=$comment['id']; ?>"><i class="fa fa-trash"></i></button>
                             <?php } ?>
                         </div>
