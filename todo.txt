@@ -1,101 +1,11 @@
-TODO
-
-- lepší youtube přehrávač (obrázek uživatele, seznam songů, možnost repostu právě hrajícího)
-- vypisovat url ve výpisech uživatelů
-- odkazy na tagy, typy postů atd...
-- prověřit, zda NSFW blogy automaticky postují NSFW
-- sepsat blogpost se seznamem budoucích featur
-- nahrávací tlačítko i na /friends
-- ujasnit friends (featuring/this user follows these people)
-- vypisy členů/skupin různě - abecedně, dle popularity, dle poslední aktivity
-- /all s repostama
-
-- editace postů a zobrazování, že byl post editován
-
-- nezobrazovat NSFW obrázky v RSS
-
-- import stashe
-- nový typ obsahu zvuk / mp4
-- playlisty na zvuk (soundcloud / podcast)
-- mrtvá schránka
-- bezpečnostní log (registrace, přihlášení, zakládání skupin, změna nastavení...)
-- ukládat poslední aktivitu uživatele, když se nepřihlásí 14 dní, půjde kopie DM/komentářů do mailu)
-- komentáře
-- notifikace
-- mentions
-- při registraci stáhnout gravatar ale udělat jeho mirror
-- export části DB
-- napsat Privacy policy a implementovat mazání profilů
-
-BUGY
-
-- neukazují se skupiny, které nemají členy
-- vyřešit velikost uploadu
-- repost kliknutí na obrázek nerepostne
-
-PLÁN
-
-- friends of a friends
-- reposty z loforo
-- friends/followers lists
-- bonzovací tlačítko
-- lepší share
-- optimalizace pro velký provoz
-- scrapování lofora a souperu (možná i mastodonu)
-
-VIZE
-
-- how not to became /pol
-- chronologická timeline
-- žádné dark patterns nebo dopamine microdosage in social media
-- nonprofit družstvo
-- RSSkový klient
-- porn
-- reactions obrázky
-
-- turbolinks?
-- security log
-- change log
-- updatovat text repostů?
-
-HOTOVO
-
-- vlastní CSS (např. 600px široký kontejner)
-- optimalizovat velikosti obrázků - max 80vh? (optimalizovat nudle)
-- odkaz na TOS v patě
-- učesat jejich CSSko (slejvají se názvy) (seznam přátel)
-
-* * *
-
-STATS:
-
-select count(*) from blogs where is_group=0;
-
-SELECT name, posts_count, count(*)
-    FROM blogs b
-    INNER JOIN (SELECT blog_id, COUNT(*) AS posts_count FROM posts GROUP BY blog_id) AS m ON m.blog_id=b.id
-    WHERE b.is_group=0 AND b.is_visible
-    ORDER BY posts_count DESC;
-
-select date(datetime,"unixepoch"), count(*)
-from posts
-group by date(datetime,"unixepoch")
-
--- poslední aktivita uživatelů:
-select name, strftime('%Y-%m-%d %H:%M:%S', datetime(dt, 'unixepoch')) as last_seen
-from (
-select b.name as name, max(datetime) as dt
-from blogs b
-inner join posts p on p.author_id=b.id
-where b.is_group=0
-group by name
-) as derived
-order by dt desc
-
----
-
-some tips from someone who host high traffic services for living -- your code always sends Set-Cookie and no-cache, this will really hammer your system. You should send set-cookie for logged users, so you can add microcaching (like up to 3s). Also, switching to some API rather than generating full html will help you a lot, as you would be able to cache posts on API evne for logged users
-or even have javascript+api to handle logged in users, while whole HTML being the same for logged in and not logged users
-this allows you to do harmless 3s microcaching and handle 100x more traffic
-also, when you put cloudflare in front of your service without cookies and with cache, cloudflare can also handle lots of traffic for you
-having javascript add the tiny 'repost' button would mean html stays the same
+- better videos player (with reposting)
+- better filtering of feeds (by tags, post type)
+- new audio/video post types
+- sounds playlist
+- list users/groups by last activity, popularity, alphabet
+- show that post/comment was edited (maybe even history of posts)
+- anonymous feedback form (also known as dead drop)
+- disabling comments
+- /all with reposts
+- friends of a friends (list)
+- RSS client with one click reposting to Kyselo

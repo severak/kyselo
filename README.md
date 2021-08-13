@@ -2,20 +2,15 @@
 
 self-hosted Soup.io open source clone
 
-**[public beta here](https://kyselo.eu/)**
+public beta is at https://kyselo.eu
 
 ## Current status
 
 I am able to import backup/archived RSS feed and display it in an ugly interface. It's also possible to post new content, repost, create & join groups and send DMs to other users.
 
-Lot of features are missing or in development currently (see `todo.txt` if you understand czech).
+Lot of features are missing or in development currently (see [`todo.txt`](todo.txt) if you understand czech).
 
 See [public beta](https://kyselo.eu/all) (you need invitation code).
-
-Also see examples of imported content (on older version of Kyselo):
-
- - [severak's soup](http://resoup.svita.cz/severak) (made from my own soup backup from September 2015)
- - [cat's soup](http://resoup.svita.cz/cats) (made from [RSS fragments](http://web.archive.org/web/*/http://cats.soup.io/rss) acquired via archive.org)
 
 ## Project goals
 
@@ -28,7 +23,7 @@ Also see examples of imported content (on older version of Kyselo):
 
  - v 0.5 - easy import and read only display of backup ✔ 
  - v 0.6 - it's possible to post updates ✔ 
- - v 1.0 - usable multiuser Soup.io clone ⌛ 
+ - v 1.0 - usable multiuser Soup.io clone ✔ 
  - v 2.0 - ~~distributed social network~~ integrated RSS reader
 
 ## Software equirements
@@ -48,7 +43,7 @@ Also see examples of imported content (on older version of Kyselo):
 
 ## Credits
 
-Made by [Severák](https://tilde.town/~severak/) of [http://severak.soup.io/](https://web.archive.org/web/20191225090201/http://severak.soup.io/)
+Made by [Severák](https://tilde.town/~severak/) of [http://severak.soup.io/](https://web.archive.org/web/20191225090201/http://severak.soup.io/), now at https://kyselo.eu/severak
 
 I used following components:
 
@@ -59,4 +54,3 @@ I used following components:
  - [Font Awesome](http://fontawesome.io) by Dave Gandy
  - [Medium Editor](https://yabwe.github.io/medium-editor/)
  - [Undraw](https://undraw.co/) illustrations
- 
