@@ -89,6 +89,9 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 			echo '<p>from <a href="' . $post['source'] . '">' . $post['source'] . '</a></p>';
 		}
 	} else if ($post['type']==5) { // video
+        if (!empty($post['title'])) {
+            echo '<h2>' . $post['title'] . '</h2>';
+        }
 		if (!empty($post['preview_html'])) {
 			echo '<div class="kyselo-video" data-id="'.$post['id'].'">';
 			if ($showFullVideo) {

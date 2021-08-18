@@ -261,6 +261,7 @@ function get_post_form($postType, $canPostAs=null)
 		$form->field('from', ['label'=>'From', 'placeholder'=>'http://example.org/funny-cat-picture']);
 	} elseif ($postType==5) {
 		$form->field('source', ['label'=>'Video URL', 'placeholder'=>'https://www.youtube.com/watch?v=YT0k99hCY5I', 'required'=>true]);
+        $form->field('body', ['type'=>'textarea', 'class'=>'kyselo-editor', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Description']);
 	} else {
 		throw new Exception('Not yet!');
 	}
@@ -306,7 +307,7 @@ function finish_post($newPost, $form, $required=true)
 		if ($info->type=='video') {
 			$newPost['url'] = $newPost['source'];
 			$newPost['preview_html'] = $info->code;
-			$newPost['body'] = $info->title;
+			$newPost['title'] = $info->title;
 		} elseif ($required) {
 			$form->error('source', 'Not a valid video.');
 		}

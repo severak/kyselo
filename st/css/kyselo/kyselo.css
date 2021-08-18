@@ -294,3 +294,12 @@ blockquote {
 :target {
 	font-weight: bold;
 }
+
+/* temporary fixes from test */
+.kyselo-play-video {
+	font-size: 22.5vmin
+}
+.kyselo-video iframe {
+	width: 72vmin;
+	height: 54vmin
+}
