@@ -13,13 +13,13 @@ Flight::route('/act/register', function() {
 	/** @var Sparrow $db */
 	$db = Flight::db(); // TODO - refactor na rows
 	$request = Flight::request();
-	
+
 	$form = new severak\forms\form(['method'=>'POST']);
 	$form->field('username', ['label'=>'User name / URL', 'required'=>true]);
 	$form->field('email', ['label'=>'E-mail', 'type'=>'email', 'required'=>true]);
 	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
 	$form->field('password_again', ['label'=>'and again', 'type'=>'password', 'required'=>true]);
-	
+
 	// BIG TODO: wording of error messages
 	if (Flight::config('invitation_code')) {
 		$form->field('invitation_code', ['label'=>'Invitation code', 'placeholder'=>'xyzzy', 'required'=>true]);
@@ -27,7 +27,7 @@ Flight::route('/act/register', function() {
 			return in_array($v, Flight::config('invitation_code'));
 		}, 'You cannot register without valid invitation code.');
 	}
-	
+
 	$form->field('terms_agreement', ['label'=>'I agree with terms of service', 'type'=>'checkbox']);
 	kyselo_csrf($form);
 	$form->field('register', ['label'=>'Register new account', 'type'=>'submit']);
@@ -37,26 +37,26 @@ Flight::route('/act/register', function() {
 		$db = Flight::db();
 		return $db->from('blogs')->where('name', $name)->count() == 0;
 	}, 'Username already in use. Choose another.');
-	
+
 	$form->rule('username', function($name) {
 		return preg_match('~^[a-z]([a-z0-9]{2,})$~', $name)===1;
 	}, 'Bad username format: 3 or more lower case letters and numbers allowed, must start with letter.');
-	
+
 	// todo: validovat mail + posílat mailem ověření
-	
+
 	// todo: password sanity test
 
 	$form->rule('password_again', function($password, $fields) {
 		return $password==$fields['password'];
 	}, 'Must match previous password.');
-	
+
 	$form->rule('terms_agreement', function($agreed){
 		return !empty($agreed);
-	}, 'You cannot use our service without terms agreement.');	
+	}, 'You cannot use our service without terms agreement.');
 
 	if ($request->method=='POST') {
 		$form->fill($_POST);
-		
+
 		if  ($form->validate()) {
 
 			$db->from('users')->insert([
@@ -109,7 +109,7 @@ Flight::route('/act/register', function() {
 			Flight::redirect('/act/login');
 		}
 	}
-	
+
 	Flight::render('header', ['title' => 'registration' ]);
 	Flight::render('form', [
 		'form' => $form,
@@ -135,40 +135,40 @@ Flight::route('/act/login', function() {
 
 	$rows = Flight::rows();
 	$request = Flight::request();
-	
+
 	$form = new severak\forms\form(['method'=>'POST']);
 	$form->field('username', ['label'=>'User name', 'required'=>true]);
 	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
 	$form->field('login', ['label'=>'Login', 'type'=>'submit']);
-	
+
 	if (!empty($_GET['as'])) {
 		$form->fill(['username'=>$_GET['as']]);
 	}
-	
+
 	if ($request->method=='POST') {
 		$form->fill($_POST);
-		
+
 		if ($form->validate()) {
 			$blog = $rows->one('blogs', ['name'=>$form->values['username']]);
 			if (!empty($blog)) {
 				$user = $rows->one('users', $blog['user_id']);
 				if (password_verify($_POST['password'], $user['password'])) {
-					
+
 					$groupsFromDb = $rows
 						->with('memberships', 'id', 'blog_id', ['member_id'=>$blog['id'] ])
 						->more('blogs', [], ['name'=>'asc']);
-						
-					
+
+
 					$groups = [];
 					foreach ($groupsFromDb as $group) {
 						$groups[$group['id']] = [
-							'id'=>$group['id'], 
-							'name'=>$group['name'], 
+							'id'=>$group['id'],
+							'name'=>$group['name'],
 							'title'=>$group['title'],
 							'avatar_url'=>$group['avatar_url']
 						];
 					}
-					
+
 					$_SESSION['user'] = [
 						'id' => $blog['id'],
 						'name' => $blog['name'],
@@ -176,7 +176,7 @@ Flight::route('/act/login', function() {
 						'avatar_url' => $blog['avatar_url'],
 						'groups'=> $groups
 					];
-					
+
 					Flight::redirect('/' . $blog['name'] . '/friends');
 				}
 			}
@@ -318,9 +318,37 @@ Flight::route('/act/logout', function() {
 	if (empty($_SESSION['user']['name'])) {
 		Flight::redirect('/');
 	}
-	
+
 	$_SESSION['user'] = false;
 	session_destroy();
 	Flight::redirect('/');
 });
 
+
+// auth for XMPP server
+Flight::route('/act/xmpp-auth/@method', function ($method){
+    if ($method=='check_password') {
+        $rows = Flight::rows();
+        $user = $rows->with('users', 'user_id', 'id')->one('blogs', ['name'=>$_GET['user'], 'is_group'=>'0']);
+
+        if (!$user) {
+            echo 'false';
+            exit;
+        }
+
+        if (password_verify($_GET['pass'], $user['password'])) {
+            echo 'true';
+        } else {
+            echo 'false';
+        }
+    } elseif ($method=='user_exists') {
+        $rows = Flight::rows();
+        $user = $rows->one('blogs', ['name'=>$_GET['user'], 'is_group'=>'0']);
+
+        if ($user) echo 'true';
+        if (!$user) echo 'false';
+
+    } else {
+        return Flight::response()->status(501)->write('Unsupported method.')->send();
+    }
+});
