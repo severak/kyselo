@@ -15,15 +15,56 @@
         }
         #status { width:88px;display:block;float:left;margin-top:15px; }
     </style>
+    <script src="uboot.js"></script>
 </head>
 <body>
-<div id="content"></div>
+<div id="content">loading...</div>
 <div>
     <span id="status">Connecting...</span>
-    <input type="text" id="input" disabled="disabled" />
+
+        <input type="text" id="input"/>
+        <button id="send">send!</button>
 </div>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+
+<script>
+ub.whenReady(function () {
+    var userName = 'pepa';
+    var connection = new WebSocket('ws://127.0.0.1:1337');
+
+    var input = ub.gebi('input');
+
+    connection.onopen = function() {
+        connection.send(JSON.stringify({act: 'login', user: userName}));
+    };
+
+    connection.onerror = function(err) {
+        console.log(err);
+    };
+
+    connection.onmessage = function (message) {
+        var recieved = JSON.parse(message.data);
+
+        var act = recieved.act || '?';
+
+        if (act=='welcome' && recieved.history) {
+            ub.gebi('content').innerText = JSON.stringify(recieved.history);
+        }
+    };
+
+    ub.on('send', 'click', function (ev) {
+        // TODO - proč se nechce pověsit na enter v poli?
+        // TODO - protože se to musí chytat na formu
+        ub.stop(ev);
+
+        var text = input.value;
+
+        input.value = '';
+
+        connection.send(JSON.stringify({act: 'message', user: userName, message: text}))
+    });
+});
+
 </script>
-<script src="./frontend.js"></script>
+
 </body>
 </html>
