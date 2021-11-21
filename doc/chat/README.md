@@ -12,12 +12,19 @@ based on [this tutorial](https://medium.com/@martin.sikora/node-js-websocket-sim
 
 ## protocol
 
+- simple IRC-like groupchat (with just one group)
+- DM later
+- both clients and server are somewhat dumb and trust each other
+
+protocol example:
+
 ```
 CLIENT
 {act: login, user: alice}
 
 SERVER
 {act: welcome, history: [...], present: [bob] }
+{act: online, user: alice}
 
 CLIENT
 {act: message, user: alice, message: 'ahoj!'}
@@ -26,12 +33,11 @@ SERVER
 {act: message, from: bob, message: 'taky ahoj!'}
 
 SERVER
-{act: entered, who: jack}
-
-
+{act: offline, user: jack}
 ```
 
-## design
+## todo
 
-- jednoduchý IRC-like hromadný chat s jednou místností
-- DMka
+- better UI (showing dates etc)
+- some glitches with duplicated users
+- DMs

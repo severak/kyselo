@@ -18,48 +18,103 @@
     <script src="uboot.js"></script>
 </head>
 <body>
-<div id="content">loading...</div>
+    <div id="history">loading...</div>
 <div>
-    <span id="status">Connecting...</span>
-
+    <form id="frm">
         <input type="text" id="input"/>
-        <button id="send">send!</button>
+    </form>
+    <div id="roster"></div>
 </div>
 
 <script>
 ub.whenReady(function () {
-    var userName = 'pepa';
-    var connection = new WebSocket('ws://127.0.0.1:1337');
-
+    // used DOM elements
     var input = ub.gebi('input');
+    var history= ub.gebi('history');
+    var roster= ub.gebi('roster');
+
+    // variables and status
+    var usersOnline = [];
+    var userName = prompt('Jak se chceme jmenovat?', 'pepa');
+    document.title = userName; // pro lepší debug
+    var connection = new WebSocket('ws://127.0.0.1:1337');
 
     connection.onopen = function() {
         connection.send(JSON.stringify({act: 'login', user: userName}));
     };
 
     connection.onerror = function(err) {
-        console.log(err);
+        input.value = '*** chat has disconnected ***';
+        input.disabled = true;
+        roster.innerText = ''; // nobody is online when disconnected
+        // we want user to do F5
     };
 
+    function addChatLine(line)
+    {
+        var newp = document.createElement('p');
+        newp.innerText = line.user + ': ' + line.message;
+        history.appendChild(newp);
+    }
+
+    function updateRoster()
+    {
+        var online = usersOnline.filter(function (name) {
+            return name!=userName;
+        });
+
+        // TODO - deduplikace jde chytřeji
+        online = online.filter(function(item, pos, self) {
+            return self.indexOf(item) == pos;
+        });
+
+        if (online.length<1) {
+            roster.innerText = 'nobody online';
+        } else {
+            roster.innerText = 'online: ' + (online.join(', '));
+        }
+    }
+
     connection.onmessage = function (message) {
-        var recieved = JSON.parse(message.data);
+        try {
+            var recieved = JSON.parse(message.data);
+        } catch (e) {
+            return; // we don't understand, we ignore
+        }
 
         var act = recieved.act || '?';
+        console.log(recieved);
 
         if (act=='welcome' && recieved.history) {
-            ub.gebi('content').innerText = JSON.stringify(recieved.history);
+            history.innerText = '';
+            for (var i = 0; i < recieved.history.length; i++) {
+                addChatLine(recieved.history[i]);
+            }
+            usersOnline = recieved.present;
+            updateRoster();
+        }
+
+        if (act=='message') {
+            addChatLine(recieved);
+        }
+
+        if (act=='online') {
+            usersOnline.push(recieved.user);
+            updateRoster();
+        }
+
+        if (act=='offline') {
+            usersOnline = usersOnline.filter(function (name) {
+                return name != recieved.user;
+            });
+            updateRoster();
         }
     };
 
-    ub.on('send', 'click', function (ev) {
-        // TODO - proč se nechce pověsit na enter v poli?
-        // TODO - protože se to musí chytat na formu
+    ub.on('frm', 'submit', function (ev) {
         ub.stop(ev);
-
         var text = input.value;
-
         input.value = '';
-
         connection.send(JSON.stringify({act: 'message', user: userName, message: text}))
     });
 });

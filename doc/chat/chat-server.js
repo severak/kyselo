@@ -8,10 +8,12 @@ var webSocketServer = require('websocket').server;
 var http = require('http');
 
 // GLOBALS
-// latest 100 messages
+// chat history
 var history = [];
+var historyMaxLength = 30;
 // list of currently connected clients (users)
 var clients = [];
+var usersOnline = [];
 
 /**
  * HTTP server
@@ -53,34 +55,56 @@ wsServer.on('request', function (request) {
 
     connection.on('message', function (message) {
         if (message.type === 'utf8') { // accept only text
-            var recieved = JSON.parse(message.utf8Data);
+            try {
+                var recieved = JSON.parse(message.utf8Data);
+            } catch (e) {
+                return; // we don't understand, we ignore
+            }
+
             var act = recieved.act || '?';
             console.log(recieved);
 
             if (act=='login' && recieved.user) {
-
+                // somebody entered room
                 userName = recieved.user;
+                usersOnline.push(userName);
+
+                // send them welcome message with chat history
                 connection.send(JSON.stringify({
                     act: 'welcome',
-                    history: history
+                    history: history,
+                    present: usersOnline
                 }));
 
-                // TODO - zde hlásit ostatním, že někdo přišel
-            }
-
-            if (act=='message' && recieved.message) {
-
-                // TODO - přidat ke zprávě datum
-                // TODO - uložit zprávu do historie
-                // TODO - rozeslat všem
+                // and notify everyone about user going online
                 for (var i = 0; i < clients.length; i++) {
-                    // TODO
-                    clients[i].sendUTF(json);
+                    clients[i].sendUTF(JSON.stringify({
+                        act: 'online',
+                        user: userName
+                        // TODO - zde předávat ikonku uživatele
+                    }));
                 }
             }
 
+            if (act=='message' && recieved.message) {
+                // an message was received
 
+                // adding date to message (clients can have different dates and times)
+                recieved.date = Date.now().toString();
 
+                // adding message to history
+                if (history.length > historyMaxLength) {
+                    history.shift();
+                }
+                history.push(recieved);
+
+                // forwarding message to others
+                for (var i = 0; i < clients.length; i++) {
+                    clients[i].sendUTF(JSON.stringify(recieved));
+                }
+            }
+
+            // TODO - implement direct messages somehow
         }
     });
 
@@ -88,6 +112,19 @@ wsServer.on('request', function (request) {
         if (userName !== false) {
             console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");      // remove user from the list of connected clients
             clients.splice(thisConnectionIndex, 1);
+
+            usersOnline = usersOnline.filter(function (name) {
+                return name==userName;
+            });
+
+            // notify others user went offline
+            for (var i = 0; i < clients.length; i++) {
+                clients[i].sendUTF(JSON.stringify({
+                    act: 'offline',
+                    user: userName
+                }));
+            }
+
         }
     });
 
