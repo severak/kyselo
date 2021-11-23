@@ -186,6 +186,12 @@ Flight::route('/act/toggle_nsfw', function(){
 });
 
 Flight::route('/act/chat', function () {
+
+    if (!Flight::config('chat_websocket_url')) {
+        Flight::forbidden();
+    }
+    Flight::requireLogin();
+
     Flight::render('header', ['title'=>Flight::config('site_name') . ' - chat']);
     Flight::render('chat', ['user'=>Flight::user()]);
     Flight::render('footer', []);
