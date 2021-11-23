@@ -14,6 +14,7 @@ var historyMaxLength = 30;
 // list of currently connected clients (users)
 var clients = [];
 var usersOnline = [];
+var icons = {};
 
 /**
  * HTTP server
@@ -46,9 +47,7 @@ wsServer.on('request', function (request) {
     // (http://en.wikipedia.org/wiki/Same_origin_policy)
     // TODO - zde kontrolovat zda je to z Kysela
     var connection = request.accept(null, request.origin);
-
-    // we need to know client index to remove them on 'close' event
-    var thisConnectionIndex = clients.push(connection) - 1;
+    clients.push(connection);
     var userName = false;
 
     console.log((new Date()) + ' Connection accepted.');
@@ -67,21 +66,23 @@ wsServer.on('request', function (request) {
             if (act=='login' && recieved.user) {
                 // somebody entered room
                 userName = recieved.user;
+                icons[userName] = recieved.icon;
                 usersOnline.push(userName);
 
                 // send them welcome message with chat history
                 connection.send(JSON.stringify({
                     act: 'welcome',
                     history: history,
-                    present: usersOnline
+                    present: usersOnline,
+                    icons: icons
                 }));
 
                 // and notify everyone about user going online
                 for (var i = 0; i < clients.length; i++) {
                     clients[i].sendUTF(JSON.stringify({
                         act: 'online',
-                        user: userName
-                        // TODO - zde předávat ikonku uživatele
+                        user: userName,
+                        icon: recieved.icon
                     }));
                 }
             }
@@ -91,6 +92,7 @@ wsServer.on('request', function (request) {
 
                 // adding date to message (clients can have different dates and times)
                 recieved.date = Date.now().toString();
+                recieved.icon = icons[recieved.user];
 
                 // adding message to history
                 if (history.length > historyMaxLength) {
@@ -110,12 +112,28 @@ wsServer.on('request', function (request) {
 
     connection.on('close', function (connection) {
         if (userName !== false) {
-            console.log((new Date()) + " Peer " + connection.remoteAddress + " disconnected.");      // remove user from the list of connected clients
+            // TODO - ověřit si zda předělané tohle je OK
+            console.log((new Date()) + " Peer " + connection + " disconnected.");      // remove user from the list of connected clients
+            console.log(connection);
+            console.log(userName + ' goes offline');
+
+            var thisConnectionIndex = -1;
+            for (var i = 0; i < clients.length; i++) {
+                if (clients[i]==connection) {
+                    thisConnectionIndex = i;
+                }
+            }
             clients.splice(thisConnectionIndex, 1);
 
-            usersOnline = usersOnline.filter(function (name) {
-                return name==userName;
-            });
+            var userIndex = -1;
+            for (var i = 0; i < usersOnline.length; i++) {
+                if (usersOnline[i]==userName) {
+                    userIndex = i;
+                }
+            }
+            usersOnline.splice(userIndex, 1);
+
+            console.log(usersOnline);
 
             // notify others user went offline
             for (var i = 0; i < clients.length; i++) {
