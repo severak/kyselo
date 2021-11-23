@@ -185,6 +185,12 @@ Flight::route('/act/toggle_nsfw', function(){
 	Flight::json(['show_nsfw'=>$_SESSION['show_nsfw']]);
 });
 
+Flight::route('/act/chat', function () {
+    Flight::render('header', ['title'=>Flight::config('site_name') . ' - chat']);
+    Flight::render('chat', ['user'=>Flight::user()]);
+    Flight::render('footer', []);
+});
+
 Flight::route('/act/stats', function() {
     $user = Flight::user();
     if (!($user && $user['id']==1)) Flight::forbidden();

@@ -94,7 +94,10 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
       </div>
 
 	<a class="navbar-item" href="#" id="kyselo_nsfw_switch"><span class="show">show</span>/<span class="hide">hide</span> NSFW&nbsp;<i class="fa fa-eye<?php if (empty($_SESSION['show_nsfw'])) echo '-slash'; ?>"></i></a>
-	<a class="navbar-item" href="/">about&nbsp;<i class="fa fa-question"></i></a>
+    <?php if (Flight::config('chat_websocket_url')) { ?>
+        <a class="navbar-item" href="/act/chat">chat&nbsp;<i class="fa fa-comments"></i></a>
+    <?php } ?>
+    <a class="navbar-item" href="/">about&nbsp;<i class="fa fa-question"></i></a>
 
 
 	<?php } else { ?>
