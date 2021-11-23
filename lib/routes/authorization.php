@@ -324,31 +324,3 @@ Flight::route('/act/logout', function() {
 	Flight::redirect('/');
 });
 
-
-// auth for XMPP server
-Flight::route('/act/xmpp-auth/@method', function ($method){
-    if ($method=='check_password') {
-        $rows = Flight::rows();
-        $user = $rows->with('users', 'user_id', 'id')->one('blogs', ['name'=>$_GET['user'], 'is_group'=>'0']);
-
-        if (!$user) {
-            echo 'false';
-            exit;
-        }
-
-        if (password_verify($_GET['pass'], $user['password'])) {
-            echo 'true';
-        } else {
-            echo 'false';
-        }
-    } elseif ($method=='user_exists') {
-        $rows = Flight::rows();
-        $user = $rows->one('blogs', ['name'=>$_GET['user'], 'is_group'=>'0']);
-
-        if ($user) echo 'true';
-        if (!$user) echo 'false';
-
-    } else {
-        return Flight::response()->status(501)->write('Unsupported method.')->send();
-    }
-});
