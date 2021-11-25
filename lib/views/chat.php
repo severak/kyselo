@@ -7,9 +7,6 @@
         </div>
         <hr>
         <div class="media">
-            <div class="media-left">
-                &nbsp;
-            </div>
             <div class="media-content">
                 <form id="frm">
                     <input id="input" class="input is-medium" placeholder="write your message here..." value="*** loading ***">
@@ -65,12 +62,15 @@
         var usersOnline = [];
         var icons = {};
         var isVisible = true;
+        var prevDate = '';
 
         var userName = <?=json_encode($user['name']); ?>;
         var icon = <?=json_encode(kyselo_small_image($user['avatar_url'], 32, true)); ?>;
         var connection = new WebSocket(<?=json_encode(Flight::config('chat_websocket_url')); ?>);
 
-        Notification.requestPermission();
+        if ('Notification' in window) {
+            Notification.requestPermission();
+        }
 
         document.addEventListener("visibilitychange", function() {
             isVisible = document.visibilityState === 'visible';
@@ -90,14 +90,44 @@
             // we want user to do F5
         };
 
+        var _pad = function (n, c) {
+            n = String(n)
+            while (n.length < c) {
+                n = '0' + n
+            }
+            return n
+        };
+
+        function formatDate(time) {
+            return time.getDate() + '.' + time.getMonth() + '.' + time.getFullYear();
+        }
+
+        function formatTime(time) {
+            return _pad(time.getHours(), 2) + ':' + _pad(time.getMinutes(), 2);
+        }
+
         function addChatLine(line)
         {
             console.log(line);
             var time = new Date(parseInt(line.date));
+            if (formatDate(time)!=prevDate) {
+                prevDate = formatDate(time);
+                var _div = ub.makeElem('div', {'class':'media'});
+                var _left = ub.makeElem('div', {'class': 'media-left'});
+                var _right = ub.makeElem('div', {'class':'media-content'});
+
+                _left.appendChild(ub.makeElem('i', {'class':'fa fa-calendar'}));
+                _left.appendChild(ub.makeElem('span', {}, ' ' + prevDate));
+
+                _div.appendChild(_left);
+                _div.appendChild(_right);
+                history.appendChild(_div);
+            }
+
             var div = ub.makeElem('div', {'class': 'media'});
 
             var left = ub.makeElem('div', {'class': 'media-left'});
-            left.appendChild(ub.makeElem('span', {}, time.getHours()+':'+time.getMinutes() + ' '));
+            left.appendChild(ub.makeElem('span', {'title': formatDate(time)}, formatTime(time) + ' '));
             left.appendChild(ub.makeElem('img', {'src': line.icon || '#'}));
             left.appendChild(ub.makeElem('strong', {}, ' ' +  line.user));
 
@@ -119,7 +149,7 @@
 
                 var uname = usersOnline[i];
                 if (uname==userName) {
-                    continue; // we don't want to write ouself
+                    continue; // we don't want to write ourself
                 }
                 if (written[uname]) {
                     continue; // this user is already in roster
@@ -134,12 +164,16 @@
         }
 
         function spawnNotification(body, icon, title) {
-            if (Notification.permission=='granted') {
+            if ('Notification' in window && Notification.permission=='granted') {
                 var options = {
                     body: body,
                     icon: icon
                 };
-                var notification = new Notification(title, options);
+                try {
+                    new Notification(title, options);
+                } catch (e) {
+                    // old android do not like notification this way
+                }
             }
         }
 
