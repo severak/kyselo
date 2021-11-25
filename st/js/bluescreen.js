@@ -1,6 +1,6 @@
 // Windows 98 like bluescreen
 window.onerror = function(message, source, lineno, colno, error) {
-    var pre = document.createElement('pre');
+    var pre = document.createElement('div');
     pre.innerText = source + ':' + lineno  + ':\n' + message;
     pre.style.fontFamily = 'monospace';
     pre.style.backgroundColor = 'blue';
@@ -9,6 +9,8 @@ window.onerror = function(message, source, lineno, colno, error) {
     pre.style.top = 0;
     pre.style.left = 0;
     pre.style.zIndex = 1000;
+    pre.style.display = 'block';
+    pre.style.overflow = "scroll"
 
     var bluescreen = function () {
         document.body.appendChild(pre);
