@@ -5,7 +5,15 @@ var webSocketsServerPort = 1337;// websocket and http servers
 
 // DEPENDENCIES
 var webSocketServer = require('websocket').server;
-var http = require('http');
+var http = require('https'); // <-- change this to http if you not use HTTPS on you Kyselo installation
+const fs = require('fs');
+
+// read ssl certificate
+// these are from Let's Encrypt certbot
+var privateKey = fs.readFileSync('ssl-cert/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('ssl-cert/fullchain.pem', 'utf8');
+
+var credentials = { key: privateKey, cert: certificate };
 
 // GLOBALS
 // chat history
@@ -17,12 +25,15 @@ var usersOnline = [];
 var icons = {};
 
 /**
- * HTTP server
+ * HTTPS server
+ *
+ * remove credientals if you not use them
  */
-var server = http.createServer(function (request, response) {
+var server = http.createServer(credentials, function (request, response) {
     // Not important for us. We're writing WebSocket server,
     // not HTTP server
 });
+
 server.listen(webSocketsServerPort, function () {
     console.log((new Date()) + " Server is listening on port " + webSocketsServerPort);
 });

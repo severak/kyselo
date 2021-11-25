@@ -6,16 +6,16 @@ based on [this tutorial](https://medium.com/@martin.sikora/node-js-websocket-sim
 
 1) upload `chat-server.js` to server
 2) install nodejs and websocket here (`npm install websocket`)
-3) start `chat-server.js`
-4) set `chat_websocket_url` config value for Kyselo
-5) start chatting
+3) setup certificates if you Kyselo runs on HTTPS
+4) start `chat-server.js`
+5) set `chat_websocket_url` config value for Kyselo
+6) start chatting
 
 ## protocol
 
 - simple IRC-like groupchat (with just one group)
 - DM later
 - both clients and server are somewhat dumb and trust each other
-
 protocol example:
 
 ```
@@ -41,3 +41,4 @@ SERVER
 - better UI (showing dates etc)
 - some glitches with duplicated users
 - DMs
+- some authentification (to prevent spoofing usernames)
