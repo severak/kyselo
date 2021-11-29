@@ -9,7 +9,7 @@
         <div class="media">
             <div class="media-content">
                 <form id="frm">
-                    <input id="input" class="input is-medium" placeholder="write your message here..." value="*** loading ***">
+                    <input id="input" class="input is-medium" placeholder="write your message here..." value="*** loading ***" autocomplete="off">
                 </form>
             </div>
         </div>
