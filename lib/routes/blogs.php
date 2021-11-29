@@ -8,8 +8,6 @@ Flight::route('/', function(){
 
 // everyone page
 Flight::route('/all', function(){
-	$db = Flight::db();
-
 	$filter = new kyselo\timeline(Flight::rows());
 	$filter->mode = 'all';
 	$filter->filter($_GET);
@@ -48,8 +46,6 @@ Flight::route('/all', function(){
 
 // everyone RSS
 Flight::route('/all/rss', function(){
-    $db = Flight::db();
-
     $filter = new kyselo\timeline(Flight::rows());
     $filter->mode = 'all';
     $filter->filter($_GET, false);
@@ -68,9 +64,8 @@ Flight::route('/all/rss', function(){
 
 // post detail
 Flight::route('/@name/post/@postid', function($name, $postId){
-	$db = Flight::db();
-
-	$blog = $db->from('blogs')->where('name', $name)->where('is_visible', 1)->select()->one();
+	$rows = Flight::rows();
+    $blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
 
 	if (empty($blog)) {
 		Flight::notFound();
@@ -106,7 +101,6 @@ Flight::route('/@name/post/@postid', function($name, $postId){
 
 // blog posts
 Flight::route('/@name', function($name){
-	$db = Flight::db();
 	$rows = Flight::rows();
 
 	$blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
@@ -204,10 +198,9 @@ Flight::route('/@name/rss', function($name){
 
 // /@blog/friends
 Flight::route('/@name/friends', function($name){
-	$db = Flight::db();
 	$rows = Flight::rows();
 
-	$blog = $db->from('blogs')->where('name', $name)->where('is_visible', 1)->select()->one();
+	$blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
 
 	if (empty($blog)) {
 		Flight::notFound();
@@ -250,7 +243,6 @@ Flight::route('/@name/friends', function($name){
 });
 
 Flight::route('/@name/videos', function($name){
-    $db = Flight::db();
     $rows = Flight::rows();
 
     $blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
@@ -289,7 +281,6 @@ Flight::route('/@name/videos', function($name){
 });
 
 Flight::route('/@name/journal', function($name){
-    $db = Flight::db();
     $rows = Flight::rows();
 
     $blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
