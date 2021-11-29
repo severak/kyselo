@@ -197,6 +197,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                 <details>
                     <summary><i class="fa fa-comments"></i> <?=$post['comments_count']; ?> comments</summary>
                 <?php } // $commentsCollapsed ?>
+                <?php if (!empty($post['comments'])) { ?>
 
                     <?php foreach ($post['comments'] as $comment) { ?>
                         <div class="media kyselo-comment" id="comment<?=$comment['id']; ?>">
@@ -245,6 +246,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                 <?php if ($commentsCollapsed) { ?>
                 </details>
                 <?php } ?>
+        <?php }  // if ($comments) ?>
 		</div>
 </div>
 <?php
