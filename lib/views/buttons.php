@@ -28,10 +28,11 @@ if (empty($user)) {
     }
     // group:
     if (!empty($blog) && $blog['name']!='all' && $blog['name']!=$user['name'] && $blog['is_group']) {
-        $friendshipExists = Flight::db()->from('friendships')->where('from_blog_id', $user['blog_id'])->where('to_blog_id', $blog['id'])->count() > 0;
+        $friendshipExists = Flight::rows()->count('friendships', ['from_blog_id'=> $user['blog_id'], 'to_blog_id'=> $blog['id']]) > 0;
         // follow
         echo '<a href="/act/follow?who='.$blog['name'].'" class="button is-medium is-dark kyselo-switch '.($friendshipExists ? 'on' : 'off').'" title="'.($friendshipExists ? 'un' : '').'follow this group"><i class="fa fa-heart"></i><span class="kyselo-hidden"> follow</span></a>';
-        $membership = Flight::db()->from('memberships')->where('member_id', $user['blog_id'])->where('blog_id', $blog['id'])->one();
+
+        $membership = Flight::rows()->one('memberships', ['member_id'=> $user['blog_id'], 'blog_id'=> $blog['id']]);
         // member
         echo '<a href="/act/member?who='.$blog['name'].'" class="button is-medium is-dark kyselo-switch '.($membership ? 'on' : 'off').' '.(!empty($friendship['is_admin']) ? 'is-admin' : '').'" title="'.($membership ? 'leave' : 'became member of').' this group"><i class="fa fa-user-plus"></i><span class="kyselo-hidden"> member</span></a>';
 
@@ -49,7 +50,7 @@ if (empty($user)) {
     }
     // other blog:
     if (!empty($blog) && $blog['name']!='all' && $blog['name']!=$user['name'] && !$blog['is_group']) {
-        $friendshipExists = Flight::db()->from('friendships')->where('from_blog_id', $user['blog_id'])->where('to_blog_id', $blog['id'])->count() > 0;
+        $friendshipExists = Flight::rows()->count('friendships', ['from_blog_id'=> $user['blog_id'], 'to_blog_id'=> $blog['id']]) > 0;
         // follow
         echo '<a href="/act/follow?who='.$blog['name'].'" class="button is-medium is-dark kyselo-switch '.($friendshipExists ? 'on' : 'off').'" title="'.($friendshipExists ? 'un' : '').'follow this blog"><i class="fa fa-heart"></i><span class="kyselo-hidden"> follow</span></a>';
         // message
