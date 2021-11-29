@@ -8,7 +8,7 @@ public beta is at https://kyselo.eu
 
 I am able to import backup/archived RSS feed and display it in an ugly interface. It's also possible to post new content, repost, create & join groups and send DMs to other users.
 
-Lot of features are missing or in development currently (see [`todo.txt`](todo.txt) if you understand czech).
+Lot of features are missing or in development currently (see [`todo.txt`](todo.txt)).
 
 See [public beta](https://kyselo.eu/all) (you need invitation code).
 
@@ -47,7 +47,7 @@ Made by [Severák](https://tilde.town/~severak/) of [http://severak.soup.io/](ht
 
 I used following components:
 
- - [Flight framework](http://flightphp.com)
+ - [Flight framework](http://flightphp.com) by Mike Cao
  - [Flourish unframework](http://flourishlib.com) by Will Bond
  - [Medoo](http://medoo.in) database framework by Catfan (they are also [nice social network](https://catfan.me/))
  - [Pure CSS](https://purecss.io) framework by Yahoo! Inc

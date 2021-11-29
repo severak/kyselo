@@ -1,11 +1,37 @@
+BUGS
+
+- uable to change password - https://bitbucket.org/severak/kyselo/issues/54/changing-the-password
+
+SECURITY
+
+- implement CSRF, even for AJAX - https://bitbucket.org/severak/kyselo/issues/23/implement-csrf-for-ajax
+
+PLAN
+
+- cache the images better - https://bitbucket.org/severak/kyselo/issues/55/image-caching
+- other types - https://bitbucket.org/severak/kyselo/issues/16/other-types-of-content
 - better videos player (with reposting)
 - better filtering of feeds (by tags, post type)
 - new audio/video post types
 - sounds playlist
 - list users/groups by last activity, popularity, alphabet
 - show that post/comment was edited (maybe even history of posts)
-- anonymous feedback form (also known as dead drop)
 - disabling comments
 - /all with reposts
 - friends of a friends (list)
+
+NICE TO HAVE
+
+- anonymous feedback form (also known as dead drop)
 - RSS client with one click reposting to Kyselo
+- changing tags when reposting - https://bitbucket.org/severak/kyselo/issues/45/sleek-tag-management-on-reposts
+- keyboard navigation - https://bitbucket.org/severak/kyselo/issues/49/enable-keyboard-navigation
+- save NSFW preferences - https://bitbucket.org/severak/kyselo/issues/51/save-nsfw-preference-in-user-account
+- filters for follows - https://bitbucket.org/severak/kyselo/issues/47/filters-for-follows
+- tags on all and friends - https://bitbucket.org/severak/kyselo/issues/46/global-tag-filters
+- https://bitbucket.org/severak/kyselo/issues/42/bitchute
+- dark theme - https://bitbucket.org/severak/kyselo/issues/37/dark-theme
+
+OTHER
+
+- https://bitbucket.org/severak/kyselo/issues/4/various-info-to-recreate
