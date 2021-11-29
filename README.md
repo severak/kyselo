@@ -47,7 +47,7 @@ Made by [Severák](https://tilde.town/~severak/) of [http://severak.soup.io/](ht
 
 I used following components:
 
- - [Flight framework](http://flightphp.com) and [Sparrow](https://github.com/mikecao/sparrow) database toolkit by Mike Cao
+ - [Flight framework](http://flightphp.com)
  - [Flourish unframework](http://flourishlib.com) by Will Bond
  - [Medoo](http://medoo.in) database framework by Catfan (they are also [nice social network](https://catfan.me/))
  - [Pure CSS](https://purecss.io) framework by Yahoo! Inc

@@ -64,11 +64,6 @@ Flight::map('requireLogin', function() {
 	if (!Flight::user()) Flight::redirect('/act/login');
 });
 
-Flight::register('db', 'sparrow', [], function($db) use($config) {
-	$db->setDb('pdosqlite://localhost/' . __DIR__ . '/' . $config['database']);
-	$db->show_sql = true;
-});
-
 Flight::map('rows', function() use($config) {
 	static $rows = null;
 	if (!$rows) {
