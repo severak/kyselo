@@ -10,8 +10,7 @@ Flight::route('/act/register', function() {
 		Flight::redirect('/' . $_SESSION['user']['name'] . '/friends');
 	}
 
-	/** @var Sparrow $db */
-	$db = Flight::db(); // TODO - refactor na rows
+    $rows = Flight::rows();
 	$request = Flight::request();
 
 	$form = new severak\forms\form(['method'=>'POST']);
@@ -33,9 +32,8 @@ Flight::route('/act/register', function() {
 	$form->field('register', ['label'=>'Register new account', 'type'=>'submit']);
 	// todo: catchpa - viz http://jecas.cz/recaptcha
 
-	$form->rule('username', function($name) {
-		$db = Flight::db();
-		return $db->from('blogs')->where('name', $name)->count() == 0;
+	$form->rule('username', function($name) use ($rows) {
+		return $rows->count('blogs', ['name'=>$name]) == 0;
 	}, 'Username already in use. Choose another.');
 
 	$form->rule('username', function($name) {
@@ -59,48 +57,41 @@ Flight::route('/act/register', function() {
 
 		if  ($form->validate()) {
 
-			$db->from('users')->insert([
-				'blog_id' => 0,
-				'email' => $form->values['email'],
-				'password' => password_hash($form->values['password'], KYSELO_PASSWORD_ALG),
-				'is_active' => 1
-			])->execute();
+		    $userId = $rows->insert('users', [
+                'blog_id' => 0,
+                'email' => $form->values['email'],
+                'password' => password_hash($form->values['password'], KYSELO_PASSWORD_ALG),
+                'is_active' => 1
+            ]);
 
-			$userId = $db->insert_id;
+		    $blogId = $rows->insert('blogs', [
+                'name' => $form->values['username'],
+                'title' => $form->values['username'],
+                'about' => 'I am new here',
+                'avatar_url'=> '/st/img/undraw_unicorn.png',
+                'user_id' => $userId,
+                'since' => date('Y-m-d H:i:s')
+            ]);
 
-			$db->from('blogs')->insert([
-				'name' => $form->values['username'],
-				'title' => $form->values['username'],
-				'about' => 'I am new here',
-				'avatar_url'=> '/st/img/undraw_unicorn.png', // todo - zkusit tahat fotku z Gravataru
-				'user_id' => $userId,
-				'since' => date('Y-m-d H:i:s')
-			])->execute();
-
-			$blogId = $db->insert_id;
-
-			$db->from('users')->update(['blog_id'=>$blogId])->where(['id'=>$userId])->execute();
+		    $rows->update('users', ['blog_id'=>$blogId], $userId);
 
 			// autofollow on registration
-            $db->from('friendships')
-                ->insert([
-                    'from_blog_id'=>$blogId,
-                    'to_blog_id'=>1,
-                    'since'=>date('Y-m-d H:i:s'),
-                    'is_bilateral'=>0
-                ])
-                ->execute();
+
+            $rows->insert('friendships', [
+                'from_blog_id'=>$blogId,
+                'to_blog_id'=>1,
+                'since'=>date('Y-m-d H:i:s'),
+                'is_bilateral'=>0
+            ]);
 
             // ping admin when someone registers
-            $db->from('messages')
-                ->insert([
-                    'id_from'=>1,
-                    'id_to'=>2,
-                    'text'=>sprintf('SYSTEM: New user %s registered!', $form->values['username']),
-                    'datetime'=>strtotime('now'),
-                    'is_read'=>0
-                ])
-                ->execute();
+            $rows->insert('messages', [
+                'id_from'=>1,
+                'id_to'=>2,
+                'text'=>sprintf('SYSTEM: New user %s registered!', $form->values['username']),
+                'datetime'=>strtotime('now'),
+                'is_read'=>0
+            ]);
 
             // TODO uvítací mail
 
