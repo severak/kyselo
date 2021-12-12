@@ -335,3 +335,28 @@ Flight::route('/@name/custom.css', function($name){
     echo $blog['custom_css'];
 });
 
+Flight::route('/act/random', function (){
+    $rows = Flight::rows();
+
+    $where = ['is_visible'=>1];
+
+    if (!empty($_GET['from']) && $_GET['from']!='all') {
+        $blog = $rows->one('blogs', ['name'=>$_GET['from'], 'is_visible'=>1]);
+
+        if (empty($blog)) {
+            Flight::forbidden();
+        }
+
+        $where['blog_id'] = $blog['id'];
+    }
+
+    $randomPost = $rows->with('blogs', 'blog_id', 'id', ['is_visible'=>1])->one('posts', $where, $rows->fragment('RANDOM()'));
+
+    if (!$randomPost) {
+        // this means something bad or user has no visible posts
+        Flight::notFound();
+    }
+
+    Flight::redirect(sprintf('/%s/post/%d', $randomPost['name'], $randomPost['id']), 302);
+});
+
