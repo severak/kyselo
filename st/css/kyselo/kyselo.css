@@ -303,3 +303,8 @@ blockquote {
 	width: 72vmin;
 	height: 54vmin
 }
+
+/* to prevent leaks from toooo  long PREs */
+.content pre {
+	white-space: normal !important;
+}
