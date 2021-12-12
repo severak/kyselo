@@ -248,8 +248,9 @@ blockquote {
 }
 
 .kyselo-the-end {
-	max-width: 100%;
-	max-height: 50vh;
+	background: rgba(0,0,0, 0);
+	background: linear-gradient(0deg, rgba(0,0,0,1) 5%, rgba(0,0,128,0) 100%);
+	text-align: center;
 }
 
 .kyselo-friendlist {

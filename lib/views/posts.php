@@ -253,14 +253,18 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 }
 
 if (!empty($more_link)) {
-	echo '<p>▼ <a href="'.$more_link.'">see more...</a> ▼</p>';
+    echo '<div class="media"><div style="width: 64px">&nbsp;</div><div>';
+	echo '<a href="'.$more_link.'" class="button is-medium">▼ see more... ▼</a>';
+	echo '</div></div>';
 }
 
 if (!empty($the_end)) {
-    echo '<div class="kyselo-the-end">';
-    echo '<p>You have reached the end...</p>';
-	echo '<p><img src="/st/img/undraw_a_moment_to_relax_bbpa.png" alt="THE END" class="kyselo-the-end"></p>';
+    echo '<div class="media kyselo-the-end"><div style="width: 64px">&nbsp;</div><div>';
+    echo '<div>';
+    echo '<p>You have reached <a href="https://www.youtube.com/watch?v=ZeMlQEWEg2Q" target="_blank">the end</a>...</p>';
+	echo '<p><img src="/st/img/the-end.png" alt="THE END"></p>';
 	echo '</div>';
+    echo '</div></div>';
 }
 
 ?>
