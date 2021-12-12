@@ -1,5 +1,6 @@
 <?php
 namespace severak\database;
+use PDOException;
 use severak\database\usageException;
 use severak\database\query;
 use \PDO;
@@ -9,11 +10,11 @@ use \PDO;
 class rows
 {
 	protected $_with = [];
-	
+
 	public $pdo;
 	public $pages = -1;
 	public $log = [];
-	
+
 	public function __construct(PDO $pdo)
 	{
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -30,7 +31,7 @@ class rows
 		$this->_reset();
 		return $this->_execute($Q)->fetch(PDO::FETCH_ASSOC);
 	}
-	
+
 	public function more($table, $where=[], $order=[], $limit=30)
 	{
 		$Q = $this->fragment('SELECT '.$this->_what($table).' FROM ' . $table);
@@ -41,7 +42,7 @@ class rows
 		$this->_reset();
 		return $this->_execute($Q)->fetchAll(PDO::FETCH_ASSOC);
 	}
-	
+
 	public function count($table, $where=[])
 	{
 		$Q = $this->fragment('SELECT count(*) FROM ' . $table);
@@ -50,32 +51,32 @@ class rows
 		$this->_reset();
 		return (int) $this->_execute($Q)->fetchColumn();
 	}
-	
+
 	public function page($table, $where=[], $order=[], $page=1, $perPage=30)
 	{
 		$Q = $this->fragment('SELECT count(*) FROM ' . $table);
 		$Q = $this->_addJoins($Q, $table);
 		$Q = $this->_addWhere($Q, $where, $table);
 		$count = $this->_execute($Q)->fetchColumn();
-		
+
 		$Q = $this->fragment('SELECT '.$this->_what($table).' FROM ' . $table);
 		$Q = $this->_addJoins($Q, $table);
 		$Q = $this->_addWhere($Q, $where, $table);
 		$Q = $this->_addOrder($Q, $order);
 		$Q = $this->_addLimit($Q, $perPage);
 		$Q = $this->_addOffset($Q, $perPage * ($page-1));
-		
+
 		$this->_reset();
 		$this->pages = ceil($count/$perPage);
 		return $this->_execute($Q)->fetchAll(PDO::FETCH_ASSOC);
 	}
-	
+
 	public function with($table, $from='id', $to='id', $where=[])
 	{
 		$this->_with[] = ['table'=>$table, 'from'=>$from, 'to'=>$to, 'where'=>$where, 'inner'=>true];
 		return $this;
 	}
-	
+
 	public function insert($table, $data)
 	{
 		if (!empty($this->_with)) throw new usageException('Method rows::insert doesn\'t work with JOINs.');
@@ -85,12 +86,12 @@ class rows
 		$this->_reset();
 		return $this->pdo->lastInsertId();
 	}
-	
+
 	public function update($table, $data, $where)
 	{
 		if (!empty($this->_with)) throw new usageException('Method rows::update doesn\'t work with JOINs.');
 		if (empty($where)) throw new usageException('Method rows::update with empty WHERE is insecure.');
-		
+
 		$Q = $this->fragment('UPDATE ' . $table . ' SET');
 		$and = '';
 		foreach ($data as $k=>$v) {
@@ -98,30 +99,30 @@ class rows
 			$and = ', ';
 		}
 		$Q = $this->_addWhere($Q, $where, $table);
-		
+
 		$this->_reset();
-		
+
 		return $this->_execute($Q)->rowCount();
 	}
-	
+
 	public function delete($table, $where)
 	{
 		if (!empty($this->_with)) throw new usageException('Method rows::delete doesn\'t work with JOINs.');
 		if (empty($where)) throw new usageException('Method rows::delete with empty WHERE is insecure.');
-		
+
 		$Q = $this->fragment('DELETE FROM ' . $table);
 		$Q = $this->_addWhere($Q, $where, $table);
-		
+
 		$this->_reset();
-		
+
 		return $this->_execute($Q)->rowCount();
 	}
-	
+
 	public function fragment($sql, $params=[])
 	{
 		return new query($sql, $params);
 	}
-	
+
 	public function query($sql, $params=[])
 	{
 		if (func_num_args()>1 && !is_array($params)) {
@@ -131,13 +132,13 @@ class rows
 		}
 		return new query($sql, $params);
 	}
-	
+
 	protected function _addJoins(query $Q, $table)
 	{
 		if (empty($this->_with)) {
 			return $Q;
 		}
-		
+
 		foreach ($this->_with as $with) {
 			$Q = $Q->add('INNER JOIN ' . $with['table'] . ' ON ' . $table . '.' . $with['from'] . '=' . $with['table'] . '.' . $with['to']);
 			if (!empty($with['where'])) {
@@ -146,7 +147,7 @@ class rows
 		}
 		return $Q;
 	}
-	
+
 	protected function _what($table) {
 		if (empty($this->_with)) {
 			return '*';
@@ -156,9 +157,9 @@ class rows
 			$joined[] = $with['table'] . '.*';
 		}
 		return implode(', ', $joined) . ', ' . $table . '.*';
-		
+
 	}
-	
+
 	protected function _addWhere(query $Q, $where, $table)
 	{
 		if (empty($where)) {
@@ -166,7 +167,7 @@ class rows
 		}
 		return $Q->add('WHERE')->add($this->_where($where, $table));
 	}
-	
+
 	protected function _where($where, $table)
 	{
 		if (is_numeric($where)) {
@@ -175,7 +176,7 @@ class rows
 		if (is_object($where) and $where instanceof query) {
 			return $where;
 		}
-		
+
 		$Q = $this->fragment('');
 		$and = '';
 		foreach ($where as $k=>$v) {
@@ -193,13 +194,19 @@ class rows
 		}
 		return $Q;
 	}
-	
+
 	protected function _addOrder($Q, $order)
 	{
 		if (empty($order)) {
 			return $Q;
 		}
 		$Q = $Q->add('ORDER BY');
+
+        if (is_object($order) and $order instanceof query) {
+            $Q = $Q->add($order);
+            return $Q;
+        }
+
 		$and = '';
 		foreach ($order as $k=>$v) {
 			$Q = $Q->add($and . $k  . ' ' .  (strtoupper($v)=='ASC' ? 'ASC' : 'DESC'));
@@ -207,32 +214,37 @@ class rows
 		}
 		return $Q;
 	}
-	
+
 	protected function _addLimit($Q, $limit)
 	{
 		return $Q->add('LIMIT ' . sprintf('%d', $limit));
 	}
-	
+
 	protected function _addOffset($Q, $offset)
 	{
 		return $Q->add('OFFSET ' . sprintf('%d', $offset));
 	}
-	
+
 	protected function _execute(query $Q)
 	{
 		return $this->execute($Q);
 	}
-	
+
 	public function execute(query $Q)
 	{
 		$this->log[] = $Q;
-		
-		$stmt = $this->pdo->prepare($Q->sql);
+
+		try {
+            $stmt = $this->pdo->prepare($Q->sql);
+        } catch (PDOException $exception) {
+		    throw new usageException('Probably bad SQL generated: ' . $Q->sql . PHP_EOL . PHP_EOL . 'Original error: ' . $exception->getMessage(), 500);
+        }
+
 		$stmt->execute($Q->params);
-		
+
 		return $stmt;
 	}
-	
+
 	protected function _reset()
 	{
 		$this->_with = [];
