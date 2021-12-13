@@ -13,6 +13,7 @@
         <h2>You can</h2>
         <div class="buttons">
         <a href="/all" class="button is-fullwidth"><i class="fa fa-globe"></i>&nbsp;look around</a>
+        <a href="/act/random" class="button is-fullwidth"><i class="fa fa-random"></i>&nbsp;find random gems</a>
         <a href="/act/register" class="button is-fullwidth"><i class="fa fa-sign-in"></i>&nbsp;join us</a>
         <a href="/act/post?type=4" class="button  is-fullwidth is-primary"><i class="fa fa-photo"></i>&nbsp;post some cats</a>
         <a href="https://bitbucket.org/severak/kyselo" class="button  is-fullwidth"><i class="fa fa-git"></i>&nbsp;see our code</a>
@@ -32,9 +33,9 @@
     <div class="column">
         <img src="/st/img/undraw_programming_2svr.png" alt="" class="image">
     </div>
-</div>  
+</div>
 <hr>
-<div class="columns">  
+<div class="columns">
     <div class="column content">
         <center>
         <img src="/st/img/soup_was_best.png" class="image" alt="(Soup was the best)">
