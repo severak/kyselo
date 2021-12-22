@@ -131,7 +131,8 @@ Flight::route('/@name', function($name){
 		'blog'=>$blog,
 		'user' => Flight::user(),
 		'more_link'=>$moreLink,
-		'the_end'=>$theEnd
+		'the_end'=>$theEnd,
+        'page_count' => $filter->countPages()
 	]);
     Flight::render('buttons', [
         'blog'=>$blog,

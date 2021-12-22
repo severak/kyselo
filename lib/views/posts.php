@@ -258,6 +258,12 @@ if (!empty($more_link)) {
 	echo '</div></div>';
 }
 
+if (!empty($page_count['remains'])) {
+    echo '<div class="media"><div style="width: 64px">&nbsp;</div><div>';
+    echo '<p>just ' . $page_count['remains'] .  ' pages to end...</p>';
+    echo '</div></div>';
+}
+
 if (!empty($the_end)) {
     echo '<div class="media kyselo-the-end"><div style="width: 64px">&nbsp;</div><div>';
     echo '<div>';
