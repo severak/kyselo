@@ -274,6 +274,7 @@ require __DIR__ . '/lib/routes/messages.php';
 require __DIR__ . '/lib/routes/comments.php';
 require __DIR__ . '/lib/routes/groups.php';
 require __DIR__ . '/lib/routes/interop.php';
+require __DIR__ . '/lib/routes/backup.php';
 require __DIR__ . '/lib/routes/test.php';
 
 Flight::start();
