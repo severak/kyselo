@@ -103,7 +103,6 @@ class embed
             }
 
             if (strpos($metas['og:image'], '/profile_images/')!==false || strpos($metas['og:image'], '/card_imag/')!==false) {
-                dump($metas);
                 return (object) [
                     'type'=>'article',
                     'title'=> $metas['og:title'],
