@@ -225,7 +225,8 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                             <?php } ?>
                         </div>
                     </div>
-                    <?php } // comments ?>
+                    <?php } // foreach comments ?>
+                    <?php } // if comments ?>
 
                     <?php if (!empty($user)) { ?>
                     <div class="comment-post-form" data-post-id="<?=$post['id'];?>">
@@ -246,7 +247,6 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                 <?php if ($commentsCollapsed) { ?>
                 </details>
                 <?php } ?>
-        <?php }  // if ($comments) ?>
 		</div>
 </div>
 <?php
