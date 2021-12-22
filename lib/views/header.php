@@ -121,7 +121,10 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
           <a class="navbar-item" href="/act/messages/inbox"><i class="fa fa-envelope"></i>&nbsp;inbox</a>
           <a class="navbar-item" href="/act/messages/outbox"><i class="fa fa-paper-plane"></i>&nbsp;outbox</a>
           <a class="navbar-item" href="/act/notifications"><i class="fa fa-bell"></i>&nbsp;notifications</a>
-		<hr class="navbar-divider">
+		  <hr class="navbar-divider">
+          <a class="navbar-item" href="/act/random"><i class="fa fa-random"></i>&nbsp;random post</a>
+          <a class="navbar-item" href="/act/random?from=<?=$userName; ?>"><img src="<?= kyselo_small_image($userAvatar,32,true); ?>" style="width: 1em">&nbsp;my random post&nbsp;<i class="fa fa-random"></i></a>
+		  <hr class="navbar-divider">
           <a class="navbar-item" href="/act/logout"><i class="fa fa-sign-out"></i>&nbsp;logout</a>
         </div>
       </div>
