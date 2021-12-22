@@ -18,6 +18,8 @@ class timeline
 
     public $moreLink = null;
 
+    public $moreSince = null;
+
     public $currentParams = '';
 
     /** @var rows */
@@ -94,10 +96,13 @@ class timeline
 
         $posts = $rows->execute($Q)->fetchAll(PDO::FETCH_ASSOC);
 
+        $this->moreSince = null;
+
 		if (count($posts)==31) {
             $lastPost = array_pop($posts);
 
             $moreParams = ['since'=>date('Y-m-d\TH:i:s', $lastPost['datetime'])];
+            $this->moreSince = $lastPost['datetime'];
 
             if ($this->type) {
                 $moreParams['type'] = $this->type;
@@ -142,5 +147,34 @@ class timeline
         }
 
         return $posts;
+    }
+
+    public function countPages()
+    {
+        if ($this->mode != 'own') {
+            throw new \BadMethodCallException('countPageAndPages only works in own mode now');
+        }
+
+        if ($this->tag || $this->type) {
+            return []; // we cannot count this now
+        }
+
+        $postsTotal = $this->_rows->count('posts', $this->_rows->fragment('blog_id=? AND is_visible=1', [$this->blogId]));
+        if ($this->since) {
+            $postsRemains = $this->_rows->count('posts', $this->_rows->fragment('blog_id=? AND is_visible=1 AND datetime <= ?', [$this->blogId, $this->since]));
+        } else {
+            $postsRemains = $postsTotal;
+        }
+
+        return ['total'=>ceil($postsTotal/30), 'remains'=>floor($postsRemains/30)];
+    }
+
+    public function moveToNextPage()
+    {
+        if ($this->moreSince) {
+            $this->since = $this->moreSince;
+            return true;
+        }
+        return false;
     }
 }
