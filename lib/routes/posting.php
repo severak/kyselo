@@ -61,7 +61,7 @@ Flight::route('/act/post', function() {
 		if ($hint->type=='video') {
 			$form->fill(['source'=>$hint->url]);
 		} elseif ($hint->type=='photo') {
-			$form->fill(['source'=>$hint->image, 'from'=>$hint->url]);
+			$form->fill(['source'=>$hint->image, 'from'=>$hint->url, 'body'=>(!empty($hint->description) ? '<blockquote>'.$hint->description.'</blockquote>' : '')]);
 		} elseif (!empty($_GET['quote'])) {
 			$form->fill(['source'=>$hint->url, 'title'=>$hint->title, 'body'=>'<blockquote>'.$_GET['quote'].'</blockquote>']);
 		} else {

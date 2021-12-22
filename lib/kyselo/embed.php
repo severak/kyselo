@@ -11,6 +11,8 @@ class embed
             return self::_loforo($url);
         } elseif (strpos($url, 'souper.io/')!==false) {
             return self::_souper($url);
+        } elseif (strpos($url, 'twitter.com/')!==false) {
+            return self::_twitter($url);
         }
 
         return null;
@@ -84,6 +86,42 @@ class embed
         } catch (\Exception $e) {
 
         }
+        return null;
+    }
+
+    protected static function _twitter($url)
+    {
+        $html = file_get_contents($url);
+        if (!$html) return null;
+        try {
+            $dom = new \DOMDocument();
+            @$dom->loadHTML($html);
+            $xml = simplexml_import_dom($dom);
+            $metas = [];
+            foreach ($xml->xpath('//meta') as $meta) {
+                $metas[(string) $meta['property'] ] = (string) $meta['content'];
+            }
+
+            if (strpos($metas['og:image'], '/profile_images/')!==false || strpos($metas['og:image'], '/card_imag/')!==false) {
+                dump($metas);
+                return (object) [
+                    'type'=>'article',
+                    'title'=> $metas['og:title'],
+                    'description'=>$metas['og:description'],
+                    'url'=>$url
+                ];
+            } else {
+                return (object) [
+                    'type'=>'photo',
+                    'url'=>$url,
+                    'image'=>$metas['og:image'],
+                    'description'=>(strpos($metas['og:description'], '“https://t.co/')!==false ? $metas['og:title'] :  $metas['og:description'])
+                ];
+            }
+        } catch (\Exception $e) {
+
+        }
+
         return null;
     }
 }
