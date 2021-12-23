@@ -18,8 +18,9 @@ if (!empty($friends)) {
     echo '</div><hr>';
 }
 
-$showFullVideo = count($posts)==1;
+$showFullVideo = false;
 $commentsCollapsed = count($posts)>1;
+$showComments = empty($hideComments);
 
 foreach ($posts as $post) {
 $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
@@ -193,6 +194,8 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 						<?php } ?>
                 </div>
 
+
+                <?php if ($showComments) { ?>
                 <?php if ($commentsCollapsed && ($post['comments_count'] || !empty($user))) { ?>
                 <details>
                     <summary><i class="fa fa-comments"></i> <?=$post['comments_count']; ?> comments</summary>
@@ -247,6 +250,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                 <?php if ($commentsCollapsed) { ?>
                 </details>
                 <?php } ?>
+                <?php } // $showComments ?>
 		</div>
 </div>
 <?php
