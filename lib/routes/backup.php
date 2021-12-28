@@ -7,6 +7,7 @@ Flight::route('/act/backup', function (){
     $rows = Flight::rows();
 
     header('Content-type: text/plain; charset=utf8');
+    header('Content-Disposition: attachment; filename="'.$user['name'].'.jsonl"');
 
     $postsCount = $rows->count('posts', ['blog_id'=>$user['id'], 'is_visible'=>1]);
 
@@ -44,16 +45,62 @@ Flight::route('/act/restore', function() {
     $form = new severak\forms\form(['method'=>'post']);
     $form->field('upload', ['type'=>'file', 'label'=>'Backup file']);
     $form->field('url_prefix', ['label'=>'Image URL prefix', 'required'=>true]);
-    $form->field('blog', ['type'=>'select', 'options'=>$blogSelect]);
+    $form->field('blog_id', ['type'=>'select', 'options'=>$blogSelect]);
     $form->field('check', ['type'=>'submit', 'label'=>'Check it!']);
 
-    // TODO - upload backupu
-    // TODO - čtení řádku po řádce
-    // TODO - krok 1: nalezení fotky a pokus o její stažení
-    // TODO - krok 2: uložení do DB
+    $formatter = new kyselo\backup\format();
 
-    // TODO - kyselo_upload_tmp
-    // TODO - kyselo_mirror_image
+    $request = Flight::request();
+    if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
+        $uploadTmp = $_FILES['upload']['tmp_name'];
+        try {
+            $file = new SplFileObject($uploadTmp);
+
+            // check if we can download something
+            while (!$file->eof()) {
+                $post = $formatter->backup2post($file->fgets());
+                if (!empty($post['type']) && $post['type']==4) {
+                    $url = kyselo_mirror_image($form->values['url_prefix'] . $post['url']);
+                    if (!$url) {
+                        $form->error('url_prefix', 'We cannot download images from here.');
+                    }
+                    break;
+                }
+            }
+
+            if ($form->isValid) {
+                // download and save it all
+                $file->rewind();
+
+                ob_end_clean();
+                echo 'importing...' . PHP_EOL;
+
+                while (!$file->eof()) {
+                    $post = $formatter->backup2post($file->fgets());
+                    if (!empty($post['type'])) {
+                        if ($post['type']==4) {
+                            $post['url'] = kyselo_mirror_image($form->values['url_prefix'] . $post['url']);
+                        }
+                        $post['blog_id'] = $form->values['blog_id'];
+                        $post['author_id'] = $form->values['blog_id'];
+                        $postId = $rows->insert('posts', $post);
+                        if (!empty($post['tags'])) {
+                            foreach (explode(' ', $post['tags']) as $tag) {
+                                $rows->insert('post_tags', ['blog_id'=>$post['blog_id'], 'post_id'=>$postId, 'tag'=>$tag]);
+                            }
+                        }
+
+                        echo '.';
+                    }
+                }
+
+                Flight::flash('Blog imported.', true);
+                Flight::redirect('/act/restore');
+            }
+        } catch (Exception $e) {
+            $form->error('upload', $e->getMessage());
+        }
+    }
 
 
     Flight::render('header', ['title' => 'restore backup' ]);

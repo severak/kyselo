@@ -165,6 +165,39 @@ function kyselo_download_image($form, $name)
 	return null;
 }
 
+function kyselo_mirror_image($url)
+{
+    $tmpDir = Flight::rootpath() . '/tmp';
+    if (empty($url)) {
+        return null; // empty download throws no error
+    }
+    $tmpName = tempnam($tmpDir, 'download');
+    $content = @file_get_contents($url);
+    $bytes = file_put_contents($tmpName, $content);
+    if ($bytes===false || $bytes==0) {
+        return null;
+    }
+    $md5 = md5_file($tmpName);
+    try {
+        $image = new fImage($tmpName);
+    } catch (fValidationException $e) {
+        return null;
+    }
+    $md5_path = '/pub/' . substr($md5, 0, 2) . '/' . substr($md5, 2, 2) . '/' . substr($md5, 4, 2) . '/' . $md5 . '.'. $image->getType();
+    $prefix = Flight::rootpath();
+    if (file_exists($prefix . $md5_path)) {
+        return $md5_path; // file exists already, no need to rewrite it
+    }
+    $dirname = pathinfo($md5_path, PATHINFO_DIRNAME);
+    if (!is_dir($prefix. $dirname)) {
+        mkdir($prefix . $dirname, 0777, true);
+    }
+    if (rename($tmpName, $prefix. $md5_path)) {
+        return $md5_path;
+    }
+    return null;
+}
+
 function kyselo_small_image($path, $size, $square=false)
 {
     if (empty($path)) return '';
@@ -262,6 +295,26 @@ function detect_xss($html)
     if (strpos($html,'<script')!==false) return true;
     // if (strpos($html,'javascript:')!==false) return true;
     return false; // probably not XSS
+}
+
+function get_info($url)
+{
+    $info = kyselo\embed::embed($url);
+    if ($info) return $info;
+
+    $cookieJar = str_replace('//', '/', Flight::rootpath().'/tmp/embed-cookies.'.uniqid());
+    $CURL = new Embed\Http\CurlDispatcher([CURLOPT_COOKIEJAR=>$cookieJar]);
+    return Embed\Embed::create($url, null, $CURL);
+}
+
+function generate_uuid() {
+    return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+        mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
+        mt_rand( 0, 0xffff ),
+        mt_rand( 0, 0x0fff ) | 0x4000,
+        mt_rand( 0, 0x3fff ) | 0x8000,
+        mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
+    );
 }
 
 // routes:

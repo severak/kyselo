@@ -39,4 +39,48 @@ class format
 
         echo json_encode($out) . PHP_EOL;
     }
+
+    public function backup2post($line)
+    {
+        $in = json_decode($line, true);
+
+        // guid
+        $post = ['datetime'=>$in['datetime'], 'tags'=>implode(' ', $in['tags'] ? $in['tags'] : []), 'guid'=>generate_uuid()];
+
+        if ($in['type']=='text') {
+            $post['type'] = 1;
+            $post['title'] = $in['title'];
+            $post['body'] = $in['html'];
+        } else if ($in['type']=='link') {
+            $post['type'] = 2;
+            $post['title'] = $in['title'];
+            $post['body'] = $in['description'];
+            $post['source'] = $in['url'];
+        } else if ($in['type']=='quote') {
+            $post['type'] = 3;
+            $post['title'] = $in['byline'];
+            $post['body'] = $in['quote'];
+        } else if ($in['type']=='image') {
+            $post['type'] = 4;
+            $post['url'] = $in['url'];
+            $post['body'] = $in['description'];
+            $post['source'] = $in['source'];
+        } else if ($in['type']=='video') {
+            $post['type'] = 5;
+            $post['title'] = $in['title'];
+            $post['body'] = $in['body'];
+            $post['source'] = $in['source'];
+            $post['url'] = $in['source'];
+            $info = get_info($post['url']);
+            if ($info->type=='video') {
+                $post['preview_html'] = $info->code;
+            }
+        }
+
+        if (!empty($post['body']) && detect_xss($post['body'])) {
+            return null; // we don't want to import this as it's probably some virus or other nasty stuff
+        }
+
+        return $post;
+    }
 }

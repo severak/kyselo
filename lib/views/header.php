@@ -124,7 +124,14 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 		  <hr class="navbar-divider">
           <a class="navbar-item" href="/act/random"><i class="fa fa-random"></i>&nbsp;random post</a>
           <a class="navbar-item" href="/act/random?from=<?=$userName; ?>"><img src="<?= kyselo_small_image($userAvatar,32,true); ?>" style="width: 1em">&nbsp;my random post&nbsp;<i class="fa fa-random"></i></a>
-		  <hr class="navbar-divider">
+          <hr class="navbar-divider">
+          <a class="navbar-item" href="/act/backup"><i class="fa fa-save"></i>&nbsp;download backup</a>
+          <?php if($userName=='admin') { ?>
+          <a class="navbar-item" href="/act/restore"><i class="fa fa-cloud-upload"></i>&nbsp;restore backup</a>
+          <a class="navbar-item" href="/act/stats"><i class="fa fa-table"></i>&nbsp;usage stats</a>
+
+          <?php } // if admin ?>
+          <hr class="navbar-divider">
           <a class="navbar-item" href="/act/logout"><i class="fa fa-sign-out"></i>&nbsp;logout</a>
         </div>
       </div>
