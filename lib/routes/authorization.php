@@ -160,6 +160,7 @@ Flight::route('/act/login', function() {
 						];
 					}
 
+                    kyselo_start_session();
 					$_SESSION['user'] = [
 						'id' => $blog['id'],
 						'name' => $blog['name'],
@@ -311,6 +312,7 @@ Flight::route('/act/logout', function() {
 	}
 
 	$_SESSION['user'] = false;
+    // TODO - mazání uživatele
 	session_destroy();
 	Flight::redirect('/');
 });

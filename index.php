@@ -28,10 +28,20 @@ Debugger::$errorTemplate = __DIR__ . '/lib/views/500.htm';
 // init flourish
 flight\core\Loader::addDirectory("lib/flourish");
 
+function kyselo_start_session()
+{
+    if (session_status() != PHP_SESSION_ACTIVE) {
+        session_start();
+    }
+}
+
 // start session
 session_name('kyselo');
 session_set_cookie_params(14 * 24 * 60 * 60); // 14 days
-session_start();
+ini_set('session.gc_maxlifetime', 14 * 24 * 60 * 60);
+if (isset($_COOKIE[session_name()])) {
+    session_start();
+}
 
 // global helpers:
 Flight::map('rootpath', function() {
@@ -57,6 +67,7 @@ Flight::map('user', function($property=null) {
 });
 
 Flight::map('flash', function($msg, $success=true) {
+    kyselo_start_session();
 	$_SESSION['flash'][] = ['msg'=>$msg, 'class'=>$success ? 'success' : 'error'];
 });
 
