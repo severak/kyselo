@@ -2,7 +2,7 @@
 
 Kyselo can generate backup of users blogs in [JSON lines](https://jsonlines.org/) format formatted using these rules:
 
-First line is metadata. It's used to check if all it has different format:
+First line is metadata. It's used to check if all was properly imported. It's JSON object in this format:
 
 - `is_metadata` = `true`
 - `count` - number of exported posts
