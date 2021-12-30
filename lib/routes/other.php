@@ -240,4 +240,51 @@ group by date(datetime,"unixepoch")
     Flight::render('footer', []);
 });
 
+// TODO - this will be better served by some static pages
+if (Flight::config('tos_post')) {
+    Flight::route('/act/tos', function (){
+        $rows = Flight::rows();
+        $blog = $rows->one('blogs', ['name'=>'admin', 'is_visible'=>1]);
+
+        $filter = new kyselo\timeline(Flight::rows());
+        $filter->mode = 'one';
+        $filter->blogId = $blog['id'];
+        $filter->postId = Flight::config('tos_post');
+        $filter->withComments = false;
+        $posts = $filter->posts();
+
+        Flight::render('header', ['title' => $posts[0]['title'], 'rss'=>sprintf('/%s/rss', $blog['name']), 'ogp_post'=>$posts[0] ]);
+        Flight::render('posts', [
+            'posts'=> $posts,
+            'blog' => $blog,
+            'user' => Flight::user(),
+            'hideComments'=>true
+        ]);
+        Flight::render('footer', []);
+    });
+}
+
+
+if (Flight::config('gdpr_post')) {
+    Flight::route('/act/privacy-policy', function (){
+        $rows = Flight::rows();
+        $blog = $rows->one('blogs', ['name'=>'admin', 'is_visible'=>1]);
+
+        $filter = new kyselo\timeline(Flight::rows());
+        $filter->mode = 'one';
+        $filter->blogId = $blog['id'];
+        $filter->postId = Flight::config('gdpr_post');
+        $filter->withComments = false;
+        $posts = $filter->posts();
+
+        Flight::render('header', ['title' => $posts[0]['title'], 'rss'=>sprintf('/%s/rss', $blog['name']), 'ogp_post'=>$posts[0] ]);
+        Flight::render('posts', [
+            'posts'=> $posts,
+            'blog' => $blog,
+            'user' => Flight::user(),
+            'hideComments'=>true
+        ]);
+        Flight::render('footer', []);
+    });
+}
 

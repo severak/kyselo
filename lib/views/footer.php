@@ -8,6 +8,14 @@
     ?>.
     <?php } // if ?>
     </p>
+
+    <?php if (Flight::config('tos_post')) {
+        echo '</p><a href="/act/tos">Terms of service</a></p>';
+    } ?>
+    <?php if (Flight::config('gdpr_post')) {
+        echo '</p><a href="/act/privacy-policy">Privacy policy</a></p>';
+    } ?>
+
     </footer>
 </div>
 
