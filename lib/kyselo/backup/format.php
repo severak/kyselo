@@ -44,6 +44,10 @@ class format
     {
         $in = json_decode($line, true);
 
+        if (isset($in['is_metadata'])) {
+            return $in; // metadata logic is in import itself
+        }
+
         // guid
         $post = ['datetime'=>$in['datetime'], 'tags'=>implode(' ', $in['tags'] ? $in['tags'] : []), 'guid'=>generate_uuid()];
 

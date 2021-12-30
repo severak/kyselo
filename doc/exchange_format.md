@@ -2,7 +2,13 @@
 
 Kyselo can generate backup of users blogs in [JSON lines](https://jsonlines.org/) format formatted using these rules:
 
-Each line of backup is one JSON object representing one posted post.
+First line is metadata. It's used to check if all it has different format:
+
+- `is_metadata` = `true`
+- `count` - number of exported posts
+- `blog` - info about exported blog 
+
+Following lines are backup itself where each line is JSON object representing one posted post.
 
 Every post has following metadata:
 
@@ -43,7 +49,7 @@ Additional data are present according to types of post.
 
 - `source` - source URL of video (link to youtube mostly)
 -  `title` - title of video
-- `description` - (optional) description of videoas HTML
+- `description` - (optional) description of video as HTML
 
 ## TODO
 
