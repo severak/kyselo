@@ -250,4 +250,14 @@ class rows
 		$this->_with = [];
 		$this->pages = -1;
 	}
+
+	public function begin()
+    {
+        $this->pdo->beginTransaction();
+    }
+
+    public function commit()
+    {
+        $this->pdo->commit();
+    }
 }

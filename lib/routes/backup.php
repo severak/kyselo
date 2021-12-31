@@ -35,6 +35,7 @@ Flight::route('/act/backup', function (){
 });
 
 Flight::route('/act/restore', function() {
+    $starttime = microtime(true);
     $user = Flight::user();
     if (!($user && $user['id']==1)) Flight::forbidden();
 
@@ -52,7 +53,7 @@ Flight::route('/act/restore', function() {
     $form->field('upload', ['type'=>'file', 'label'=>'Backup file']);
     $form->field('url_prefix', ['label'=>'Image URL prefix', 'required'=>true]);
     $form->field('image_method', ['label'=>'Image upload method', 'type'=>'select', 'options'=>['ftp'=>'by FTP', 'mirror'=>'download & mirror', 'save_prefix'=>'save absolute prefix']]);
-    $form->field('check', ['type'=>'submit', 'label'=>'Check it!']);
+    $form->field('check', ['type'=>'submit', 'label'=>'Import data']);
 
     $formatter = new kyselo\backup\format();
 
@@ -86,6 +87,8 @@ Flight::route('/act/restore', function() {
                 ob_end_clean();
                 echo 'importing...' . PHP_EOL;
 
+                $rows->begin();
+
                 while (!$file->eof()) {
                     $post = $formatter->backup2post($file->fgets());
 
@@ -118,7 +121,10 @@ Flight::route('/act/restore', function() {
                     }
                 }
 
-                Flight::flash('Blog imported.', true);
+                $endtime = microtime(true); // Bottom of page
+
+                Flight::flash(sprintf('Blog imported - %d posts in %f s.', $imported, $endtime - $starttime), true);
+                $rows->commit();
 
                 if ($imported != $postCount) {
                     Flight::flash(sprintf('Only %d of %d posts were imported.', $imported, $postCount), false);
