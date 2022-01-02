@@ -58,6 +58,7 @@ Flight::route('/act/member', function(){
 
 	$membershipExists = $rows->count('memberships', ['member_id'=>$user['blog_id'], 'blog_id'=>$blog['id']]) > 0;
 
+	kyselo_start_session();
 	if ($membershipExists) {
 		unset($_SESSION['user']['groups'][$blog['id']]);
 		$rows->delete('memberships', ['member_id'=>$user['blog_id'], 'blog_id'=>$blog['id']]);
@@ -139,7 +140,8 @@ Flight::route('/act/settings/@name', function($name){
 	Flight::render('blog_header', [
 		'blog'=>$blog,
 		'user'=>Flight::user(),
-		'tab'=>'settings'
+		'tab'=>'settings',
+        'settings_subtab' => 'settings'
 	]);
 	Flight::render('form', ['form'=>$form]);
 	Flight::render('bookmarklet', ['blog'=>$blog]);
