@@ -1,6 +1,3 @@
-BUGS
-
-- uable to change password - https://bitbucket.org/severak/kyselo/issues/54/changing-the-password
 
 SECURITY
 
@@ -8,6 +5,7 @@ SECURITY
 
 PLAN
 
+- API for posting and downloading backups & command line client
 - cache the images better - https://bitbucket.org/severak/kyselo/issues/55/image-caching
 - other types - https://bitbucket.org/severak/kyselo/issues/16/other-types-of-content
 - better videos player (with reposting)
