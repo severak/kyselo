@@ -303,6 +303,51 @@ Flight::route('/act/unlocked', function (){
     Flight::render('footer', []);
 });
 
+Flight::route('/act/change-password', function (){
+    Flight::requireLogin();
+
+    $rows = Flight::rows();
+    $req = Flight::request();
+
+    $blog = $rows->one('blogs', ['id'=>$_SESSION['user']['blog_id']]);
+
+    $form = new severak\forms\form(['method'=>'POST']);
+    $form->field('user_id', ['type'=>'hidden']);
+    $form->field('old_password', ['label'=>'Old password', 'type'=>'password', 'required'=>true]);
+    $form->field('password', ['label'=>'New password', 'type'=>'password', 'required'=>true]);
+    $form->field('password_again', ['label'=>'and again', 'type'=>'password', 'required'=>true]);
+    $form->field('reset', ['type'=>'submit']);
+
+    $form->rule('password_again', function($password, $fields) {
+        return $password==$fields['password'];
+    }, 'Must match previous password.');
+
+
+    if ($req->method=='POST' && $form->fill($_POST) && $form->validate()) {
+        $user = $rows->one('users', $blog['user_id']);
+        if (!password_verify($_POST['old_password'], $user['password'])) {
+            $form->error('old_password', 'Old password not entered correctly!');
+        }
+
+        if ($form->isValid) {
+            $rows->update('users', ['password'=>password_hash($form->values['password'], KYSELO_PASSWORD_ALG)], $user['id']);
+            Flight::flash('Password changed.');
+            Flight::redirect('/' . $_SESSION['user']['name']);
+        }
+    }
+
+    Flight::render('header', ['title' => 'password reset' ]);
+    Flight::render('blog_header', [
+        'blog'=>$blog,
+        'user'=>Flight::user(),
+        'tab'=>'settings',
+        'settings_subtab' => 'settings'
+    ]);
+    Flight::render('form', [
+        'form' => $form,
+    ]);
+    Flight::render('footer', []);
+});
 
 
 // logout
