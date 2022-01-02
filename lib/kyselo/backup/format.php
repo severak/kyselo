@@ -35,6 +35,7 @@ class format
             $out['title'] = $post['title'];
             $out['body'] = $post['body'];
             $out['source'] = $post['source'];
+            $out['preview_html'] = $post['preview_html'];
         }
 
         echo json_encode($out) . PHP_EOL;
