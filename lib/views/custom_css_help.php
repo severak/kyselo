@@ -1,8 +1,5 @@
 
-<hr>
 <div class="content">
-
-<p><button id="reloadStyles" class="button is-warning">update custom CSS preview</button></p>
 
 <h2 class="subtitle">custom CSS style help &amp; generator</h2>
 
@@ -80,16 +77,27 @@
 
     <div class="field">
         <div class="control">
-            <button class="button is-warning" id="generate_css">generate CSS code</button>
+            <button class="button" id="generate_css"><i class="fa fa-paint-brush"></i>&nbsp;generate CSS code</button>
+            <button class="button" id="reloadStyles"><i class="fa fa-refresh"></i>&nbsp;reload custom CSS</button>
+            <button class="button" id="removeStyles"><i class="fa fa-trash"></i>&nbsp;remove custom CSS</button>
         </div>
     </div>
 
 </form>
 
 <script>
-$('#reloadStyles').on('click', function () {
+$('#reloadStyles').on('click', function (event) {
+    event.preventDefault();
     $('style').remove();
     var newStyle = $('<style/>').html($('#custom_css').val());
+    $(document.body).append(newStyle);
+});
+
+$('#removeStyles').on('click', function (event) {
+    event.preventDefault();
+    $('style').remove();
+    $('#custom_css').val('');
+    var newStyle = $('<style/>');
     $(document.body).append(newStyle);
 });
 

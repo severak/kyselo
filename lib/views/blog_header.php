@@ -5,12 +5,13 @@
 // - $user
 // - $tab
 // - $subtab
+// - $settings_subtab
 ?>
 <div class="media">
 	<div class="media-left">
 		<div class="kyselo-big-profile">
 			<a href="/<?=$blog['name']; ?>"><img class="image is-128x128" src="<?php echo kyselo_small_image($blog['avatar_url'], 128, true); ?>"/></a>
-		</div>	
+		</div>
 	</div>
 	<div class="media-center kyselo-about">
 		<a href="/<?=$blog['name']; ?>"><h1 class="title"><?php echo $blog['title']; ?></h1></a>
@@ -48,6 +49,17 @@
             <a href="<?=kyselo_url('/%s/rss%s', [$blog['name'], $subtabQ]); ?>" class="button"><i class="fa fa-rss"></i>&nbsp;RSS</a>
 </div>
 <hr>
+<?php } //endif $subtab?>
+
+<?php if (isset($settings_subtab)) { ?>
+    <div class="buttons">
+        <a href="<?=kyselo_url('/act/settings/%s', [$blog['name']]); ?>" class="button"><i class="fa fa-cog"></i>&nbsp;<?=$blog['is_group'] ? 'group' : 'blog'; ?> settings</a>
+        <a href="<?=kyselo_url('/act/custom-css/%s', [$blog['name']]); ?>" class="button"><i class="fa fa-paint-brush"></i>&nbsp;custom CSS</a>
+        <?php if (!$blog['is_group']) { ?>
+            <a href="<?=kyselo_url('/act/change-password'); ?>" class="button"><i class="fa fa-key"></i>&nbsp;change password</a>
+        <?php }  ?>
+    </div>
+    <hr>
 <?php } //endif $subtab?>
 
 <?php if (isset($rsslink)) { ?>

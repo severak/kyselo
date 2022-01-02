@@ -114,14 +114,12 @@ Flight::route('/act/settings/@name', function($name){
 	$form->field('upload', ['label'=>'Change logo', 'type'=>'file']);
     $form->field('has_journal', ['label'=>'journal view enabled', 'type'=>'checkbox']);
     $form->field('has_videos', ['label'=>'videos playlist enabled', 'type'=>'checkbox']);
-    $form->field('custom_css', ['label'=>'custom CSS', 'type'=>'textarea', 'rows'=>5, 'placeholder'=>'/* write custom CSS here */', 'id'=>'custom_css']);
-	kyselo_csrf($form);
+    kyselo_csrf($form);
 	$form->field('save', ['label'=>'Save blog settings', 'type'=>'submit']);
 
 	$form->fill($blog);
 
 	$form->rule('about', function ($html) {return !detect_xss($html);}, 'Please don\'t hack us!');
-	$form->rule('custom_css', function ($html) {return !detect_xss($html);}, 'Please don\'t hack us!');
 
 	if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
 		$update = $form->values;
@@ -145,8 +143,55 @@ Flight::route('/act/settings/@name', function($name){
 	]);
 	Flight::render('form', ['form'=>$form]);
 	Flight::render('bookmarklet', ['blog'=>$blog]);
-	Flight::render('custom_css_help');
 	Flight::render('footer', []);
+});
+
+// /act/settings/@blog
+Flight::route('/act/custom-css/@name', function($name){
+    Flight::requireLogin();
+    $request = Flight::request();
+    $rows = Flight::rows();
+    $user = Flight::user();
+
+    $blog = $rows->one('blogs', ['name'=>$name]);
+
+    if (empty($blog)) {
+        Flight::notFound();
+    }
+
+    if ($user['blog_id']!=$blog['id'] && !isset($user['groups'][$blog['id']])) {
+        Flight::forbidden();
+    }
+
+    $form = new severak\forms\form(['method'=>'post']);
+    $form->field('custom_css', ['label'=>'custom CSS', 'type'=>'textarea', 'rows'=>5, 'placeholder'=>'/* write custom CSS here */', 'id'=>'custom_css']);
+    $form->field('save', ['label'=>'Save custom CSS', 'type'=>'submit']);
+
+    $form->fill($blog);
+
+    $form->rule('custom_css', function ($html) {return !detect_xss($html);}, 'Please don\'t hack us!');
+
+    if ($request->method=='POST' && $form->fill($_POST) && $form->validate()) {
+        $update = $form->values;
+        unset($update['save']);
+
+
+        if ($form->isValid) {
+            $rows->update('blogs', $update, $blog['id']);
+            Flight::redirect('/'.$blog['name']);
+        }
+    }
+
+    Flight::render('header', ['title' => $blog["title"] . ' - custom CSS' ]);
+    Flight::render('blog_header', [
+        'blog'=>$blog,
+        'user'=>Flight::user(),
+        'tab'=>'settings',
+        'settings_subtab' => 'custom_css'
+    ]);
+    Flight::render('custom_css_help');
+    Flight::render('form', ['form'=>$form]);
+    Flight::render('footer', []);
 });
 
 Flight::route('/act/iframe/@id', function($id) {
