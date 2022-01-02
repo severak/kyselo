@@ -99,7 +99,7 @@
         };
 
         function formatDate(time) {
-            return time.getDate() + '.' + time.getMonth() + '.' + time.getFullYear();
+            return time.getDate() + '.' + (time.getMonth()+1) + '.' + time.getFullYear();
         }
 
         function formatTime(time) {
@@ -108,7 +108,7 @@
 
         function addChatLine(line)
         {
-            console.log(line);
+            //console.log(line);
             var time = new Date(parseInt(line.date));
             if (formatDate(time)!=prevDate) {
                 prevDate = formatDate(time);
