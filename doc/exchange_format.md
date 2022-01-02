@@ -50,6 +50,7 @@ Additional data are present according to types of post.
 - `source` - source URL of video (link to youtube mostly)
 -  `title` - title of video
 - `description` - (optional) description of video as HTML
+- `preview_html` - (optional) HTML to embed video player
 
 ## TODO
 
