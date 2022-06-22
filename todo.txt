@@ -2,6 +2,8 @@ COMING SOON
 
 - last posted by page
 - better homepage (with feature list, Kyselo photo etc, link to https://gist.github.com/severak/40ff7eb6eec7a16dacfd67dfd5b69c4f)
+- notification on unread messages (after cca one week, with count of unread notifications)
+- reply to comment
 
 SECURITY
 
