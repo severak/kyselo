@@ -11,6 +11,7 @@ SECURITY
 
 PLAN
 
+- OCR (Tesseract) for fulltext search in memes
 - migrate to github/tildegit/gitlab whatever
 - API for posting and downloading backups & command line client
 - cache the images better - https://bitbucket.org/severak/kyselo/issues/55/image-caching
