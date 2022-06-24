@@ -15,7 +15,11 @@ foreach ($members as $member) { ?>
             <h2 class="subtitle"><?= $member['title']; ?></h2>
             </a>
             <div class="content"><?= $member['about']; ?></div>
+            <?php if (isset($member['last_seen'])) { ?>
+            <i class="fa fa-calendar"></i>&nbsp;last seen <?=date('j.n.Y', strtotime($member['since'])); ?>
+            <?php } else { ?>
             <i class="fa fa-calendar"></i>&nbsp;joined <?=date('j.n.Y', strtotime($member['since'])); ?>
+            <?php } ?>
         </div>
         <div class="media-left">
         </div>

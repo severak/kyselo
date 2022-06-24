@@ -79,7 +79,19 @@ Flight::route('/all/members', function (){
     /** @var rows $rows */
     $rows = Flight::rows();
 
-    $members = $rows->more('blogs', ['is_visible'=>1, 'is_group'=>0], ['name'=>'asc'], 300);
+    if (isset($_GET['sortBy']) && $_GET['sortBy']=='lastSeen') {
+        $members = $rows->execute($rows->query('SELECT blogs.*, lsu.maxdt as last_seen
+FROM (
+SELECT blog_id, MAX(datetime) as maxdt
+FROM posts
+GROUP BY blog_id
+) as lsu
+inner join blogs on lsu.blog_id=blogs.id
+where blogs.is_group=0
+order by maxdt desc'))->fetchAll();
+    } else {
+        $members = $rows->more('blogs', ['is_visible'=>1, 'is_group'=>0], ['name'=>'asc'], 300);
+    }
 
     Flight::render('header', ['title' => sprintf('all from %s', Flight::config('site_name'))]);
     Flight::render('blog_header', [
