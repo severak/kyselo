@@ -80,7 +80,7 @@ Flight::route('/all/members', function (){
     $rows = Flight::rows();
 
     if (isset($_GET['sortBy']) && $_GET['sortBy']=='lastSeen') {
-        $members = $rows->execute($rows->query('SELECT blogs.*, lsu.maxdt as last_seen
+        $members = $rows->execute($rows->query('SELECT blogs.*, datetime(lsu.maxdt, "unixepoch") as last_seen
 FROM (
 SELECT blog_id, MAX(datetime) as maxdt
 FROM posts
