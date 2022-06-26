@@ -177,4 +177,35 @@ class timeline
         }
         return false;
     }
+
+    public function lastPostBy()
+    {
+        /*
+SELECT blog_id, MAX(datetime) as maxdt, id
+FROM posts
+GROUP BY blog_id
+         */
+
+        $rows = $this->_rows;
+
+
+        $Q = $rows->query('SELECT a.name, a.avatar_url, COALESCE(g.name, a.name) AS slug_name, g.name AS group_name, g.avatar_url AS group_avatar_url, p.*
+FROM (
+SELECT blog_id, MAX(datetime) as maxdt, id as post_id
+FROM posts
+GROUP BY blog_id
+ORDER BY maxdt DESC
+) AS lsu
+INNER JOIN posts p ON lsu.post_id=p.id
+INNER JOIN blogs a ON p.author_id=a.id
+LEFT OUTER JOIN blogs g ON p.blog_id=g.id AND p.author_id!=p.blog_id
+LIMIT 30');
+
+
+        // TODO - stránkování
+
+
+
+        return $rows->execute($Q)->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
