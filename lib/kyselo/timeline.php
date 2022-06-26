@@ -13,6 +13,7 @@ class timeline
     public $since = null;
     public $name = null;
     public $limit = 30;
+    public $page;
 
     public $withComments = false;
 
@@ -91,6 +92,10 @@ class timeline
         }
 
         $Q = $Q->add('ORDER BY p.datetime DESC LIMIT ?', [$this->limit+1]);
+
+        if ($this->page) {
+            $Q = $Q->add(' OFFSET ?', [($this->page - 1) * $this->limit]);
+        }
 
         //echo $Q->interpolate(); die;
 
