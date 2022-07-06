@@ -1,6 +1,10 @@
 <?php
 namespace severak\cligen;
 
+// TODO - get inspiration here:
+// - https://github.com/vlang/v/tree/master/vlib/flag
+// - https://modules.vlang.io/flag.html
+
 class app
 {
     public static function parseArgv($args)
