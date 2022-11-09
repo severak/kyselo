@@ -335,3 +335,72 @@ if (Flight::config('gdpr_post')) {
     });
 }
 
+// CRONjob for notifying people to actually use Kyselo
+Flight::route('/act/cron', function(){
+    $rows = Flight::rows();
+
+    header('Content-type: text/plain; charset=utf-8');
+
+    if (!isset($_GET['key']) || $_GET['key']!=Flight::config('cron_key')) {
+        die('Invalid cron key!');
+    }
+
+    $allBlogs = $rows->more('blogs', ['is_group'=>0], [], 999);
+
+    foreach ($allBlogs as $blog) {
+
+        $user = $rows->one('users', ['id'=>$blog['user_id']]);
+        $unreadMessages = $rows->count('messages', ['id_to'=>$blog['id'], 'is_read'=>0]);
+        $unreadNotifications = $rows->count('notifications', ['id_to'=>$blog['id'], 'is_read'=>0]);
+
+        if ($unreadMessages > 0 || $unreadNotifications > 5) {
+            // we want to notify user if there is a unread message or more than 4 unread notifications
+            $msg = 'Hi ' . $blog['name'] . ',' . PHP_EOL;
+            $msg .= 'you have ' ;
+            if ($unreadMessages>0) {
+                $msg .= $unreadMessages . ' unread messages ';
+            }
+            if ($unreadMessages>0 && $unreadNotifications>0) {
+                $msg .= 'and ';
+            }
+            if ($unreadNotifications >0) {
+                $msg .= $unreadNotifications . ' new notifications ';
+            }
+            $msg .= 'at ' . kyselo_url('') . PHP_EOL;
+            $msg .= PHP_EOL . '';
+
+            if ($unreadMessages) {
+                $msg .= 'Please log-in to ' . Flight::config('site_name') . ' to read them. ' . PHP_EOL . PHP_EOL;
+            } else {
+                $msg .= 'Please log-in to ' . Flight::config('site_name') . ' to mute this notification. ' . PHP_EOL . PHP_EOL;
+            }
+            $msg .= 'If you forgot your password please visit ' . kyselo_url('/act/unlock') . ' to unlock your account. ';
+
+            $msg .= PHP_EOL . PHP_EOL.  '';
+
+            $msg .= 'See you soon on ' . Flight::config('site_name') . '!';
+
+            $msg .= PHP_EOL . PHP_EOL  . 'Your friendly bots from ' . Flight::config('site_name');
+
+            if ($unreadMessages > 0) {
+                $subject = sprintf('%d new messages on %s' , $unreadMessages, Flight::config('site_name'));
+            } else {
+                $subject = sprintf('new notifications on %s', Flight::config('site_name'));
+            }
+
+
+            $email = kyselo_email();
+            $email->addRecipient($user['email']);
+            $email->setSubject(sprintf($subject));
+            $email->setBody($msg, false);
+
+            try {
+                $email->send();
+                echo $user['email'] . ' will got mail'. PHP_EOL .  $msg . PHP_EOL . '===' . PHP_EOL . PHP_EOL;
+            } catch (Exception $exception) {
+                echo $exception->getMessage();
+            }
+        }
+    }
+});
+
