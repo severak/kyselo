@@ -50,7 +50,7 @@ class timeline
         }
     }
 
-    protected function _postProcesPosts($posts)
+    protected function _postProcessPosts($posts)
     {
         $rows = $this->_rows;
 
@@ -161,7 +161,7 @@ class timeline
 
         }
 
-        $posts = $this->_postProcesPosts($posts);
+        $posts = $this->_postProcessPosts($posts);
 
         return $posts;
     }
@@ -237,7 +237,7 @@ LEFT OUTER JOIN blogs g ON p.blog_id=g.id AND p.author_id!=p.blog_id');
             $this->moreLink = '/act/last-posts-by' . '?' . http_build_query($moreParams);
         }
 
-        $posts =  $this->_postProcesPosts($posts);
+        $posts =  $this->_postProcessPosts($posts);
 
         return $posts;
     }
