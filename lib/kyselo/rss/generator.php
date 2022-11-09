@@ -36,7 +36,7 @@ class generator
 
             $item->description = $desc;
 
-            if ($post['type']==4) {
+            if ($post['type']==4 && file_exists($post['url'])) {
                 $item->enclosure['url'] = $this->urlPrefix . $post['url'];
                 $item->enclosure['length'] = filesize($this->pathPrefix . $post['url']);
                 $item->enclosure['type'] = \fFile::determineMimeType($this->pathPrefix . $post['url']);
