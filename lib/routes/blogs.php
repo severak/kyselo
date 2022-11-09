@@ -62,6 +62,44 @@ Flight::route('/all/rss', function(){
     echo $rss->generate(['title'=>sprintf('all on %s', Flight::config('site_name')), 'about'=>'(but no reposts)', 'name'=>'all'], $posts);
 });
 
+// everyone with reposts
+Flight::route('/raw', function(){
+    $filter = new kyselo\timeline(Flight::rows());
+    $filter->mode = 'raw';
+    $filter->filter($_GET);
+    $filter->withComments = true;
+
+    $posts = $filter->posts();
+    $moreLink = $filter->moreLink;
+    $theEnd = !$filter->moreLink;
+
+    Flight::render('header', ['title' => sprintf('all from %s', Flight::config('site_name')) ]);
+    Flight::render('blog_header', [
+        'blog'=>[
+            'name'=>'all',
+            'title'=>sprintf('all from %s', Flight::config('site_name')),
+            'is_group'=>true,
+            'id'=>-1,
+            'about'=>'(including reposts)',
+            'avatar_url'=>'/st/img/undraw_different_love_a3rg.png'
+        ],
+        'user'=>Flight::user(),
+        'tab'=>'blog'
+    ]);
+    Flight::render('posts', [
+        'posts'=>$posts,
+        'more_link'=>$moreLink,
+        'the_end'=>$theEnd,
+        'user' => Flight::user()
+    ]);
+    Flight::render('buttons', [
+        'blog'=>['name'=>'all', 'is_group'=>false],
+        'user'=>Flight::user()
+    ]);
+    Flight::render('footer', []);
+});
+
+
 // post detail
 Flight::route('/@name/post/@postid', function($name, $postId){
 	$rows = Flight::rows();
