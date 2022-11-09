@@ -36,7 +36,7 @@
             <a href="<?=kyselo_url('/%s/tags', [$blog['name']]); ?>" class="button"><i class="fa fa-tags"></i>&nbsp;tags</a>
             <?php if (!empty($blog['has_journal'])) { ?>
             <a href="<?=kyselo_url('/%s/journal', [$blog['name']]); ?>" class="button"><i class="fa fa-list"></i>&nbsp;journal</a>
-            <?php } // has_headlines_view ?>
+            <?php } // has_journal ?>
             <?php if (!empty($blog['has_videos'])) { ?>
             <a href="<?=kyselo_url('/%s/videos', [$blog['name']]); ?>" class="button"><i class="fa fa-youtube-play"></i>&nbsp;playlist</a>
             <?php } // has_playlist_view ?>
@@ -62,12 +62,15 @@
     <hr>
 <?php } //endif $subtab?>
 
-<?php if (isset($rsslink)) { ?>
+<?php if (isset($all)) { ?>
+    <?php // TODO - this is just for /all link?>
     <div class="buttons">
-            <a href="<?=$rsslink; ?>" class="button"><i class="fa fa-rss"></i> RSS</a>
+        <a href="/all/rss" class="button"><i class="fa fa-rss"></i>&nbsp;RSS</a>
+        <a href="/raw" class="button"><i class="fa fa-truck"></i>&nbsp;unfiltered view</a>
+        <a href="/act/last-posts-by" class="button"><i class="fa fa-calendar"></i>&nbsp;last posts by each user</a>
     </div>
     <hr>
-<?php } //endif $rsslink?>
+<?php } //endif $all?>
 
 <style>
 <?php echo (isset($blog['custom_css']) ? $blog['custom_css'] : ''); ?>

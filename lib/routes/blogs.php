@@ -29,7 +29,7 @@ Flight::route('/all', function(){
         ],
         'user'=>Flight::user(),
         'tab'=>'blog',
-        'rsslink'=>kyselo_url('/all/rss', [], $_GET)
+        'all'=>true
     ]);
 	Flight::render('posts', [
 		'posts'=>$posts,
@@ -84,7 +84,8 @@ Flight::route('/raw', function(){
             'avatar_url'=>'/st/img/undraw_different_love_a3rg.png'
         ],
         'user'=>Flight::user(),
-        'tab'=>'blog'
+        'tab'=>'blog',
+        'all'=>true
     ]);
     Flight::render('posts', [
         'posts'=>$posts,
@@ -120,7 +121,7 @@ Flight::route('/act/last-posts-by', function(){
         ],
         'user'=>Flight::user(),
         'tab'=>'blog',
-        // 'rsslink'=>kyselo_url('/all/rss', [], $_GET)
+        'all'=>true
     ]);
     Flight::render('posts', [
         'posts'=>$posts,
