@@ -1,9 +1,8 @@
 COMING SOON
 
-- last posted by page
 - better homepage (with feature list, Kyselo photo etc, link to https://gist.github.com/severak/40ff7eb6eec7a16dacfd67dfd5b69c4f)
-- notification on unread messages (after cca one week, with count of unread notifications)
-- reply to comment
+- reply to a comment (and tag who you are replying to)
+- facebook-like memories AKA on this day (how to make it unobtrusive?)
 
 SECURITY
 
@@ -38,6 +37,11 @@ NICE TO HAVE
 - tags on all and friends - https://bitbucket.org/severak/kyselo/issues/46/global-tag-filters
 - https://bitbucket.org/severak/kyselo/issues/42/bitchute
 - dark theme - https://bitbucket.org/severak/kyselo/issues/37/dark-theme
+
+LONG TERM PLAN (AKA KYSELO 2.0)
+
+- federate with Fediverse (Mastodon and other ActivityPub-speaking software)
+- start consumer cooperative entity/nonprofit which will run Kyselo in case I got hit by bus
 
 OTHER
 
