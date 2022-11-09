@@ -5,7 +5,7 @@ use PDO;
 
 class timeline
 {
-    public $mode = 'own'; // own, friends, all, one
+    public $mode = 'own'; // own, friends, all, one, raw
     public $blogId = 0;
 	public $postId = null;
     public $tag = null;
@@ -47,6 +47,33 @@ class timeline
 
         if (!empty($params)) {
             $this->currentParams = '?' . http_build_query($params);
+        }
+    }
+
+    protected function _postProcesPosts($posts)
+    {
+        $rows = $this->_rows;
+
+        foreach ($posts as $ord=>$post) {
+            if (!empty($post['repost_of'])) {
+                $posts[$ord]['reposted_from'] = $rows
+                    ->with('blogs', 'blog_id')
+                    ->one('posts', $post['repost_of']);
+            }
+
+            if ($post['reposts_count']>0) {
+                $posts[$ord]['reposted_by'] = $rows
+                    ->with('blogs', 'reposted_by')
+                    ->more('reposts', ['post_id'=>$post['id']]);
+            }
+
+            $posts[$ord]['comments'] = [];
+            if ($this->withComments && $post['comments_count']>0) {
+                $posts[$ord]['comments'] = $rows
+                    ->with('blogs', 'author_id')
+                    ->more('comments', ['post_id'=>$post['id'], 'is_visible'=>'1'], ['datetime'=>'asc'], 999);
+            }
+
         }
     }
 
@@ -126,30 +153,13 @@ class timeline
             if ($this->mode=='all') {
                 $this->moreLink = '/all?' . http_build_query($moreParams);
             }
-
-        }
-
-        foreach ($posts as $ord=>$post) {
-            if (!empty($post['repost_of'])) {
-                $posts[$ord]['reposted_from'] = $rows
-                    ->with('blogs', 'blog_id')
-                    ->one('posts', $post['repost_of']);
-            }
-
-            if ($post['reposts_count']>0) {
-                $posts[$ord]['reposted_by'] = $rows
-                    ->with('blogs', 'reposted_by')
-                    ->more('reposts', ['post_id'=>$post['id']]);
-            }
-
-            $posts[$ord]['comments'] = [];
-            if ($this->withComments && $post['comments_count']>0) {
-                $posts[$ord]['comments'] = $rows
-                    ->with('blogs', 'author_id')
-                    ->more('comments', ['post_id'=>$post['id'], 'is_visible'=>'1'], ['datetime'=>'asc'], 999);
+            if ($this->mode=='raw') {
+                $this->moreLink = '/raw?' . http_build_query($moreParams);
             }
 
         }
+
+        $this->_postProcesPosts($posts);
 
         return $posts;
     }
@@ -185,12 +195,6 @@ class timeline
 
     public function lastPostBy()
     {
-        /*
-SELECT blog_id, MAX(datetime) as maxdt, id
-FROM posts
-GROUP BY blog_id
-         */
-
         $rows = $this->_rows;
 
 
@@ -203,14 +207,36 @@ ORDER BY maxdt DESC
 ) AS lsu
 INNER JOIN posts p ON lsu.post_id=p.id
 INNER JOIN blogs a ON p.author_id=a.id
-LEFT OUTER JOIN blogs g ON p.blog_id=g.id AND p.author_id!=p.blog_id
-LIMIT 30');
+LEFT OUTER JOIN blogs g ON p.blog_id=g.id AND p.author_id!=p.blog_id');
 
+        if ($this->since) {
+            if (!is_numeric($this->since)) $this->since = strtotime($this->since);
+            $Q = $Q->add(' WHERE p.datetime <= ?', [$this->since]);
+        }
 
-        // TODO - stránkování
+        $Q = $Q->add('LIMIT 31');
 
+        $posts = $rows->execute($Q)->fetchAll(PDO::FETCH_ASSOC);
 
+        if (count($posts)==31) {
+            $lastPost = array_pop($posts);
 
-        return $rows->execute($Q)->fetchAll(PDO::FETCH_ASSOC);
+            $moreParams = ['since'=>date('Y-m-d\TH:i:s', $lastPost['datetime'])];
+            $this->moreSince = $lastPost['datetime'];
+
+            if ($this->type) {
+                $moreParams['type'] = $this->type;
+            }
+
+            if ($this->tag) {
+                $moreParams['tag'] = $this->tag;
+            }
+
+            $this->moreLink = '/act/last-posts-by' . '?' . http_build_query($moreParams);
+        }
+
+        $this->_postProcesPosts($posts);
+
+        return $posts;
     }
 }
