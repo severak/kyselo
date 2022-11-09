@@ -89,15 +89,26 @@ GROUP BY blog_id
 inner join blogs on lsu.blog_id=blogs.id
 where blogs.is_group=0
 order by maxdt desc'))->fetchAll();
+    } elseif (isset($_GET['sortBy']) && $_GET['sortBy']=='numberOfPosts') {
+            $members = $rows->execute($rows->query('SELECT blogs.*, lsu.posts_count
+FROM (
+SELECT blog_id, COUNT(*) as posts_count
+FROM posts
+GROUP BY blog_id
+) as lsu
+inner join blogs on lsu.blog_id=blogs.id
+where blogs.is_group=0
+order by lsu.posts_count desc'))->fetchAll();
     } else {
         $members = $rows->more('blogs', ['is_visible'=>1, 'is_group'=>0], ['name'=>'asc'], 300);
     }
 
-    Flight::render('header', ['title' => sprintf('all from %s', Flight::config('site_name'))]);
+    Flight::render('header', ['title' => sprintf('users of %s', Flight::config('site_name'))]);
     Flight::render('blog_header', [
-        'blog'=>['name'=>'all', 'title'=>sprintf('all from %s', Flight::config('site_name')), 'is_group'=>true, 'id'=>-1, 'about'=>'(member list)', 'avatar_url'=>'/st/img/undraw_different_love_a3rg.png'],
+        'blog'=>['name'=>'all', 'title'=>sprintf('users of %s', Flight::config('site_name')), 'is_group'=>true, 'id'=>-1, 'about'=>'(member list)', 'avatar_url'=>'/st/img/undraw_different_love_a3rg.png'],
         'user'=>Flight::user(),
-        'tab'=>'members'
+        'tab'=>'members',
+        'members'=>true
     ]);
     Flight::render('members', [
         'members'=>$members

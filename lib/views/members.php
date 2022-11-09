@@ -17,6 +17,8 @@ foreach ($members as $member) { ?>
             <div class="content"><?= $member['about']; ?></div>
             <?php if (isset($member['last_seen'])) { ?>
             <i class="fa fa-calendar"></i>&nbsp;last seen <?=date('j.n.Y', strtotime($member['last_seen'])); ?>
+            <?php } elseif (isset($member['posts_count'])) { ?>
+            <i class="fa fa-diamond"></i>&nbsp;<?=$member['posts_count']; ?> posts
             <?php } else { ?>
             <i class="fa fa-calendar"></i>&nbsp;joined <?=date('j.n.Y', strtotime($member['since'])); ?>
             <?php } ?>

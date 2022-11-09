@@ -63,11 +63,19 @@
 <?php } //endif $subtab?>
 
 <?php if (isset($all)) { ?>
-    <?php // TODO - this is just for /all link?>
     <div class="buttons">
         <a href="/all/rss" class="button"><i class="fa fa-rss"></i>&nbsp;RSS</a>
         <a href="/raw" class="button"><i class="fa fa-truck"></i>&nbsp;unfiltered view</a>
         <a href="/act/last-posts-by" class="button"><i class="fa fa-calendar"></i>&nbsp;last posts by each user</a>
+    </div>
+    <hr>
+<?php } //endif $all?>
+
+<?php if (isset($members)) { ?>
+    <div class="buttons">
+        <a href="/all/members" class="button"><i class="fa fa-sort-alpha-asc"></i>&nbsp;by alphabet</a>
+        <a href="/all/members?sortBy=lastSeen" class="button"><i class="fa fa-sort-numeric-asc"></i>&nbsp;by last activity</a>
+        <a href="/all/members?sortBy=numberOfPosts" class="button"><i class="fa fa-calendar"></i>&nbsp;by number of posts</a>
     </div>
     <hr>
 <?php } //endif $all?>
