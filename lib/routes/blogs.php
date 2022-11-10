@@ -116,7 +116,7 @@ Flight::route('/act/last-posts-by', function(){
             'title'=>sprintf('last posts from %s', Flight::config('site_name')),
             'is_group'=>true,
             'id'=>-1,
-            'about'=>'(last post from each user or group)',
+            'about'=>'(last post from each user)',
             'avatar_url'=>'/st/img/undraw_different_love_a3rg.png'
         ],
         'user'=>Flight::user(),

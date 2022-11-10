@@ -204,6 +204,7 @@ class timeline
 FROM (
 SELECT blog_id, MAX(datetime) as maxdt, id as post_id
 FROM posts
+WHERE blog_id=author_id
 GROUP BY blog_id
 ORDER BY maxdt DESC
 ) AS lsu
