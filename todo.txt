@@ -7,13 +7,10 @@ COMING SOON
 - reply to a comment (and tag who you are replying to)
 - facebook-like memories AKA on this day (how to make it unobtrusive?)
 
-BUGS
-
-- comments not loaded on last-posts-by page
-
 SECURITY
 
 - implement CSRF, even for AJAX - https://bitbucket.org/severak/kyselo/issues/23/implement-csrf-for-ajax
+- better sanitization of input - try posting this link https://stackoverflow.com/questions/8318911/why-does-html-think-chucknorris-is-a-color
 
 PLAN
 
