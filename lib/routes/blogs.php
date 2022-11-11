@@ -105,6 +105,7 @@ Flight::route('/act/last-posts-by', function(){
     $timeline = new kyselo\timeline(Flight::rows());
 
     $timeline->filter($_GET, true);
+    $timeline->withComments = true;
     $posts = $timeline->lastPostBy();
     $moreLink = $timeline->moreLink;
     $theEnd = !$timeline->moreLink;
