@@ -16,7 +16,8 @@ CREATE TABLE blogs (
 	user_id INT NOT NULL,
 	is_visible INT DEFAULT 1,
 	is_nsfw INT DEFAULT 0,
-	is_spam INT DEFAULT 0
+	is_spam INT DEFAULT 0,
+	exclude_from_robots INT DEFAULT  0
 );
 
 -- todo: blog_skins
