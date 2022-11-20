@@ -105,6 +105,17 @@ div.kyselo-editor.invalid {
 	color: red;
 }
 
+.kyselo-editor ol li {
+	display: list-item;
+	list-style-position: inside;
+}
+
+.kyselo-editor ul li {
+	display: list-item;
+	list-style-type: disc;
+	list-style-position: inside;
+}
+
 /* tabs*/
 ul.kyselo-tabs {
     list-style: none;
