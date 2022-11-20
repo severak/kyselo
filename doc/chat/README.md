@@ -16,6 +16,7 @@ based on [this tutorial](https://medium.com/@martin.sikora/node-js-websocket-sim
 - simple IRC-like groupchat (with just one group)
 - DM later
 - both clients and server are somewhat dumb and trust each other
+
 protocol example:
 
 ```
@@ -41,4 +42,4 @@ SERVER
 - better UI (showing dates etc)
 - some glitches with duplicated users
 - DMs
-- some authentification (to prevent spoofing usernames)
+- some authentification (to prevent spoofing usernames etc)
