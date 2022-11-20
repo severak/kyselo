@@ -14,3 +14,14 @@ foreach ($tags as $tag=>$num) {
 
     echo '<a href="/'.$blog['name'].'?tag='.$tag.'" style="font-size: '.$size.'px; text-decoration: none;">#'.$tag.'&nbsp;'. $num. '×</a> ';
 }
+
+echo '<hr>';
+
+$icons = ['', 'book', 'link', 'paragraph', 'camera', 'youtube-play', 'file', 'star', 'calendar'];
+$type2code = ['text'=>1, 'link'=>2, 'quote'=>3, 'image'=>4, 'video'=>5, 'file'=>6, 'review'=>7, 'event'=>8];
+
+foreach ($type2code as $type=>$code) {
+    if (isset($types[$code])) {
+        echo '<a href="/'.$blog['name'].'?type='.$type.'" class="button"><i class="fa fa-'.$icons[$code].'"></i>&nbsp;'.$types[$code].' '.$type.'s</a> ';
+    }
+}

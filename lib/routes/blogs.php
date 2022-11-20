@@ -233,6 +233,11 @@ Flight::route('/@name/tags', function($name){
 	group by tag
 	order by count(*) desc', [$blog['id']]))->fetchAll(PDO::FETCH_KEY_PAIR);
 
+    $types = $rows->execute($rows->fragment('select type, count(*) as cnt
+    from posts
+    where blog_id=?
+    group by type', [$blog['id']]))->fetchAll(PDO::FETCH_KEY_PAIR);
+
 	Flight::render('header', ['title' => $blog["title"] . ' - tags' ]);
 	Flight::render('blog_header', [
 		'blog'=>$blog,
@@ -242,6 +247,7 @@ Flight::route('/@name/tags', function($name){
 	]);
 	Flight::render('tags', [
 		'tags'=>$tags,
+		'types'=>$types,
 		'blog'=>$blog
 	]);
 	Flight::render('footer', []);
