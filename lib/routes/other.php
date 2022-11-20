@@ -336,20 +336,6 @@ if (Flight::config('gdpr_post')) {
     });
 }
 
-Flight::route('/robots.txt', function(){
-    $rows = Flight::rows();
-
-    header('Content-type: text/plain');
-    echo 'User-agent: *' . PHP_EOL;
-    echo 'Disallow: /act/' . PHP_EOL;
-
-    $excludedBlogs = $rows->more('blogs', ['exclude_from_robots'=>1], [], 999);
-
-    foreach ($excludedBlogs as $blog) {
-        echo 'Disallow: /'.$blog['name'].'/' . PHP_EOL;
-    }
-});
-
 // CRONjob for notifying people to actually use Kyselo
 Flight::route('/act/cron', function(){
     $rows = Flight::rows();

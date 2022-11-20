@@ -6,6 +6,20 @@ Flight::route('/', function(){
 	Flight::render('footer', []);
 });
 
+Flight::route('/robots.txt', function(){
+    $rows = Flight::rows();
+
+    header('Content-type: text/plain');
+    echo 'User-agent: *' . PHP_EOL;
+    echo 'Disallow: /act/' . PHP_EOL;
+
+    $excludedBlogs = $rows->more('blogs', ['exclude_from_robots'=>1], [], 999);
+
+    foreach ($excludedBlogs as $blog) {
+        echo 'Disallow: /'.$blog['name'].'/' . PHP_EOL;
+    }
+});
+
 // everyone page
 Flight::route('/all', function(){
 	$filter = new kyselo\timeline(Flight::rows());
