@@ -279,6 +279,38 @@ Flight::route('/@name/rss', function($name){
 	echo $rss->generate($blog, $posts);
 });
 
+// /@blog/twtxt.txt
+Flight::route('/@name/twtxt', function($name){
+    $rows = Flight::rows();
+
+    $blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
+
+    if (empty($blog)) {
+        Flight::notFound();
+    }
+
+    $filter = new kyselo\timeline(Flight::rows());
+    $filter->blogId = $blog['id'];
+    $filter->mode = 'own';
+    $filter->type = 'text';
+    $filter->filter($_GET, false);
+
+    $posts = $filter->posts();
+
+    $urlPrefix = kyselo_url('/');
+
+    header('Content-type: text/plain; charset=utf8');
+    foreach ($posts as $post) {
+        $body= strip_tags($post['body']);
+        if ((strlen($body) + strlen($post['title'])) < 136 ) {
+            $text = (empty($post['title']) ? '' : $post['title'] . ' / ')  . $body;
+        } else {
+            $text = $post['title'] . '. See ' .  $urlPrefix .  $post['slug_name'] . '/post/' . $post['id'];
+        }
+        echo date(DATE_RFC3339, $post['datetime']) . "\t" . $text . "\n";
+    }
+});
+
 // /@blog/friends
 Flight::route('/@name/friends', function($name){
 	$rows = Flight::rows();
