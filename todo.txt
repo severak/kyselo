@@ -1,32 +1,29 @@
 COMING SOON
 
 - better homepage (with feature list, Kyselo photo etc, link to https://gist.github.com/severak/40ff7eb6eec7a16dacfd67dfd5b69c4f)
-- links to different types of posts on tags page
-- bridge to fediverse
 - stats on demand
 - reply to a comment (and tag who you are replying to)
 - facebook-like memories AKA on this day (how to make it unobtrusive?)
 
-SECURITY
+SECURITY ISSUES
 
 - implement CSRF, even for AJAX - https://bitbucket.org/severak/kyselo/issues/23/implement-csrf-for-ajax
 - better sanitization of input - try posting this link https://stackoverflow.com/questions/8318911/why-does-html-think-chucknorris-is-a-color
 
-PLAN
+PLANS AND IDEAS
 
+- sockpuppets (AKA secondary blogs)
 - OCR (Tesseract) for fulltext search in memes
-- migrate to github/tildegit/gitlab whatever
-- API for posting and downloading backups & command line client
+- API for posting & command line client
+- better backup scheme
 - cache the images better - https://bitbucket.org/severak/kyselo/issues/55/image-caching
-- other types - https://bitbucket.org/severak/kyselo/issues/16/other-types-of-content
+- other types of content - https://bitbucket.org/severak/kyselo/issues/16/other-types-of-content
 - better videos player (with reposting)
 - better filtering of feeds (by tags, post type)
 - new audio/video post types
 - sounds playlist
-- list users/groups by last activity, popularity, alphabet
 - show that post/comment was edited (maybe even history of posts)
 - disabling comments
-- /all with reposts
 - friends of a friends (list)
 - crosspost to loforo?
 
