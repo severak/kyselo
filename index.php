@@ -341,8 +341,8 @@ function count_pph($posts)
     if ($startTime && $endTime) {
         $timeDiff = $startTime->diff($endTime);
 
-        if ($postCount > 24 && $timeDiff->days < 1) {
-            return '<i class="fa fa-rocket"></i> ' . number_format($postCount / $timeDiff->h, 2) . ' posts per hour';
+        if ($timeDiff->days < 1) {
+            return '<i class="fa fa-rocket"></i> ' . number_format($postCount / max(1, $timeDiff->h), 2) . ' posts per hour';
         } else if ($timeDiff->days < 30) {
             return '<i class="fa fa-car"></i> ' . number_format($postCount / $timeDiff->days, 2) . ' posts per day';
         } else {
