@@ -49,7 +49,8 @@ Flight::route('/all', function(){
 		'posts'=>$posts,
 		'more_link'=>$moreLink,
 		'the_end'=>$theEnd,
-		'user' => Flight::user()
+		'user' => Flight::user(),
+        'show_speed' => true
 	]);
 	Flight::render('buttons', [
         'blog'=>['name'=>'all', 'is_group'=>false],
@@ -105,7 +106,8 @@ Flight::route('/raw', function(){
         'posts'=>$posts,
         'more_link'=>$moreLink,
         'the_end'=>$theEnd,
-        'user' => Flight::user()
+        'user' => Flight::user(),
+        'show_speed' => true
     ]);
     Flight::render('buttons', [
         'blog'=>['name'=>'all', 'is_group'=>false],
@@ -142,7 +144,8 @@ Flight::route('/act/last-posts-by', function(){
         'posts'=>$posts,
         'more_link'=>$moreLink,
         'the_end'=>$theEnd,
-        'user' => Flight::user()
+        'user' => Flight::user(),
+        'show_speed' => true
     ]);
     Flight::render('buttons', [
         'blog'=>['name'=>'all', 'is_group'=>false],
@@ -222,7 +225,8 @@ Flight::route('/@name', function($name){
 		'user' => Flight::user(),
 		'more_link'=>$moreLink,
 		'the_end'=>$theEnd,
-        'page_count' => $filter->countPages()
+        'page_count' => $filter->countPages(),
+        'show_speed' => true
 	]);
     Flight::render('buttons', [
         'blog'=>$blog,

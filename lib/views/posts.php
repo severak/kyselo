@@ -262,9 +262,14 @@ if (!empty($more_link)) {
 	echo '</div></div>';
 }
 
-if (!empty($page_count['remains'])) {
+if (!empty($page_count['remains']) || isset($show_speed)) {
     echo '<div class="media"><div style="width: 64px">&nbsp;</div><div>';
-    echo '<p>just ' . $page_count['remains'] .  ' pages to end...</p>';
+    if (isset($show_speed)) {
+        echo '<p>Timeline speed: '.count_pph($posts).'</p>';
+    }
+    if (!empty($page_count['remains'])) {
+        echo '<p>Just ' . $page_count['remains'] .  ' pages to end...</p>';
+    }
     echo '</div></div>';
 }
 

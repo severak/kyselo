@@ -328,6 +328,31 @@ function generate_uuid() {
     );
 }
 
+function count_pph($posts)
+{
+    $postCount = count($posts);
+    if ($postCount==0) {
+        return '0 posts per hour';
+    }
+
+    $startTime = date_create('@' . $posts[0]['datetime']);
+    $endTime = date_create('@' . $posts[count($posts)-1]['datetime']);
+
+    if ($startTime && $endTime) {
+        $timeDiff = $startTime->diff($endTime);
+
+        if ($postCount > 24 && $timeDiff->days < 1) {
+            return '<i class="fa fa-rocket"></i> ' . number_format($postCount / $timeDiff->h, 2) . ' posts per hour';
+        } else if ($timeDiff->days < 30) {
+            return '<i class="fa fa-car"></i> ' . number_format($postCount / $timeDiff->days, 2) . ' posts per day';
+        } else {
+            return '<i class="fa fa-bicycle"></i> ' . number_format($postCount / ($timeDiff->days/30), 2) . ' posts per month';
+        }
+    }
+
+    return '? posts per hour';
+}
+
 // routes:
 
 require __DIR__ . '/lib/routes/blogs.php';
