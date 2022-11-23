@@ -23,24 +23,27 @@
     </div>
 </div>
 
-<div class="columns is-vcentered">
+<hr>
+
+<div class="columns is-vcentered" id="features" style="padding-top: 3em">
     <div class="column">
         <a href="https://xkcd.com/2699/">
             <img src="st/img/feature_comparison.png" class="image">
         </a>
     </div>
     <div class="column content">
-        <h2 id="features">What makes us different?</h2>
+        <h2>What makes us different?</h2>
         <p>from other social networks:</p>
         <ul>
             <li>hight quality memes - we don't add <a href="https://xkcd.com/1683/">another layer of JPEG artifacts</a> to your memes</li>
+            <li>we have <a href="https://medium.com/@echohack/promise-theory-the-ethics-of-algorithmic-news-feeds-and-chronological-timelines-443a044d1221">chronological timeline</a></li>
+            <li>but you can also <a href="https://kyselo.eu/updates/post/29621">hear those who are less talkative</a> </li>
             <li>everything is public and you can <a href="https://kyselo.eu/updates/post/9421">follow our users</a> from your RSS client</li>
             <li>RSS client built into Kyselo <a href="https://kyselo.eu/todo.txt">coming soon™</a></li>
             <li>you can <a href="https://kyselo.eu/updates/post/17852">customize your profile page</a></li>
             <li>Kyselo is <a href="https://kyselo.eu/updates/post/12328">multipurpose</a> - can be used as social network but also as personal meme storage, bookmark manager, journal/diary or youtube playlist</li>
             <li>you can use our magic dice™ to find <a href="https://kyselo.eu/updates/post/23837">random memes</a></li>
             <li><a href="https://kyselo.eu/updates/post/20199">stole memes from others</a> with our bookmarklet</li>
-            <li>you can also <a href="https://kyselo.eu/updates/post/29621">hear those who are less talkative</a> </li>
             <?php if (Flight::config('chat_websocket_url')) { ?>
                 <li>we have <a href="https://kyselo.eu/updates/post/23369">realtime chat</a></li>
             <?php } ?>
@@ -50,6 +53,8 @@
         <p>For detailed feature comparation with other Soup.io clones see <a href="https://gist.github.com/severak/40ff7eb6eec7a16dacfd67dfd5b69c4f">this gist</a>.</p>
     </div>
 </div>
+
+<hr>
 
 <div class="columns is-vcentered">
     <div class="column content">

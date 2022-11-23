@@ -1,6 +1,5 @@
 COMING SOON
 
-- better homepage (with feature list, Kyselo photo etc, link to https://gist.github.com/severak/40ff7eb6eec7a16dacfd67dfd5b69c4f)
 - stats on demand
 - reply to a comment (and tag who you are replying to)
 - facebook-like memories AKA on this day (how to make it unobtrusive?)
