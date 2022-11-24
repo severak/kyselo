@@ -44,7 +44,7 @@ Flight::route('/act/comment', function() {
         ]);
     }
 
-    if (!$mentioned) {
+    if (!$mentioned && $post['author_id']!=$user['blog_id']) {
         // notify post author
         $rows->insert('notifications', [
             'id_to' => $post['author_id'],
