@@ -160,7 +160,15 @@ Zepto(function(){
 			}
 		});
 		return false;
-	}
+	};
+
+	// mention someone in new comment
+	$('[data-mention]').on('click', function (evt) {
+		var mention = $(evt.target).attr('data-mention') ? $(evt.target).attr('data-mention') : $(evt.target).parents('.button').attr('data-mention');
+		var textarea = $(evt.target).parents('.comments').find('textarea');
+		textarea.val('@' + mention + ' ' + textarea.val());
+		textarea.focus();
+	});
 
 	// navbar for phones
 	$(".navbar-burger").click(function() {

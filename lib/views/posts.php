@@ -200,6 +200,9 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                 <details>
                     <summary><i class="fa fa-comments"></i> <?=$post['comments_count']; ?> comments</summary>
                 <?php } // $commentsCollapsed ?>
+
+                    <div class="comments">
+
                 <?php if (!empty($post['comments'])) { ?>
 
                     <?php foreach ($post['comments'] as $comment) { ?>
@@ -220,6 +223,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                             <?=kyselo_markup($comment['text']); ?>
                         </div>
                         <div class="media-right">
+                            <button class="button is-small" data-mention="<?=$comment['name']; ?>"><i class="fa fa-reply"></i></button>
                             <?php if (can_edit_comment($comment)) { ?>
                                 <button class="button is-small" data-edit-comment="<?=$comment['id']; ?>"><i class="fa fa-pencil"></i></button>
                             <?php } ?>
@@ -237,7 +241,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                         <form class="mt-2 mb-2">
                             <div class="field">
                                 <div class="control">
-                                    <textarea placeholder="text of your comment..." rows="2" class="textarea"></textarea>
+                                    <textarea placeholder="text of your comment..." rows="2" class="textarea" id="commentbox<?=$post['id'];?>"></textarea>
                                 </div>
                                 <div>
                                     <button class="button is-info is-fullwidth comment-post-button">Post comment</button>
@@ -246,6 +250,8 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                         </form>
                     </div>
                     <?php } // $user ?>
+
+                    </div> <!-- class comments -->
 
                 <?php if ($commentsCollapsed) { ?>
                 </details>
