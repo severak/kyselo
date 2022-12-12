@@ -37,6 +37,7 @@ class app
         foreach ($params as $param) {
             $paramName = $param->getName();
             if (isset($args[$paramName])) {
+                // TODO  - cry when we got true but true it's not expected
                 $funParams[] = $args[$paramName];
             } elseif ($param->isDefaultValueAvailable()) {
                 $funParams[] = $param->getDefaultValue();
@@ -70,10 +71,10 @@ class app
                 $help = new help($function->getDocComment(), $function->getParameters());
                 $funParams = self::makeParams($function->getParameters(), self::parseArgv($args));
                 if ($funParams===false) {
-                    echo $help->getUsage($scriptName);
+                    echo $help->getUsage($scriptName. ' ' . $subcommand);
                     exit(1);
                 }
-                $function->invokeArgs($object, $funParams);
+                $function->invokeArgs($app, $funParams);
                 exit(0);
             } else {
                 echo $mainHelp->listSubcommands($object, $scriptName);

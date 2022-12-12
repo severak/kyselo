@@ -31,7 +31,7 @@ class help
                 $matches2 = [];
                 if (preg_match('~@param\s+(\w+)\s+\$(\w+)\s+(.+)~', $docLine, $matches2)) {
                     $this->types[$matches2[2]] = $matches2[1];
-                    $this->paramHelp[$matches2[2]] = $matches2[3];
+                    $this->paramHelp[$matches2[2]] = trim($matches2[3]);
                 } elseif (strpos($docLine, '@param')!==false){
                     // TODO - implement better exception throwing with link to bug in code
                     throw new \BadMethodCallException('Function/method doc not properly encoded: ' . PHP_EOL . $docComment);
@@ -127,6 +127,10 @@ class help
 
         foreach ($object->getMethods() as $method) {
             $methodName = $method->getName();
+            if (substr($methodName, 0, 2)=='__') {
+                continue;
+            }
+
             $methodHelp = new help($method->getDocComment());
             $usage .= '  ' . $methodName . str_repeat(' ', $longest - strlen($methodName)) . ' ' . $methodHelp->getShortDesc() . PHP_EOL;
         }
