@@ -10,13 +10,16 @@ class app
     public static function parseArgv($args)
     {
         $params = [];
-        foreach ($args as $arg) {
+        while ($arg = array_shift($args)) {
             // TODO - parse argv in better way, this is too strict (but somehow works)
             $matches = [];
-            if (preg_match('~--([\w]+)=(.+)~', $arg, $matches)) {
+            if (preg_match('~--?([\w]+)=(.+)~', $arg, $matches)) {
                 $params[$matches[1]] = $matches[2];
-            } elseif (preg_match('~--([\w]+)~', $arg, $matches)) {
+            } elseif (preg_match('~--?([\w]+)~', $arg, $matches)) {
                 $params[$matches[1]] = true;
+                if (isset($args[0]) && substr($args[0], 0, 1)!='-') {
+                   $params[$matches[1]] = array_shift($args);
+                }
             } else {
                 $params['_'][] = $arg;
             }
@@ -26,7 +29,7 @@ class app
 
     /**
      * @param \ReflectionParameter[] $params
-     * @param array                  $args
+     * @param array $args
      */
     public static function makeParams($params, $args)
     {
@@ -38,7 +41,6 @@ class app
             } elseif ($param->isDefaultValueAvailable()) {
                 $funParams[] = $param->getDefaultValue();
             } else {
-                echo sprintf('Missing parameter %s!', $paramName) . PHP_EOL . PHP_EOL;
                 return false;
             }
         }
@@ -54,25 +56,46 @@ class app
 
         if (is_object($app)) {
             $object = new \ReflectionObject($app);
-            // TODO - implementovat subcomandy
+            $mainHelp = new help($object->getDocComment());
+
+            if (empty($args) || (isset($args[0]) && $args[0]=='--help')) {
+                echo $mainHelp->listSubcommands($object, $scriptName);
+                exit(1);
+            }
+
+            $subcommand = array_shift($args);
+            if ($object->hasMethod($subcommand)) {
+                // is valid subcommand
+                $function = $object->getMethod($subcommand);
+                $help = new help($function->getDocComment(), $function->getParameters());
+                $funParams = self::makeParams($function->getParameters(), self::parseArgv($args));
+                if ($funParams===false) {
+                    echo $help->getUsage($scriptName);
+                    exit(1);
+                }
+                $function->invokeArgs($object, $funParams);
+                exit(0);
+            } else {
+                echo $mainHelp->listSubcommands($object, $scriptName);
+                exit(1);
+            }
         } else {
             $params = self::parseArgv($args);
             $function = new \ReflectionFunction($app);
+            $help = new help($function->getDocComment(), $function->getParameters());
 
             if (isset($params['help'])) {
-                $help = new \severak\cligen\help($function->getDocComment());
-                echo $help->getUsage();
+                echo $help->getUsage($scriptName);
                 exit(0);
             } else {
                 $funParams = self::makeParams($function->getParameters(), self::parseArgv($args));
-                if (!$funParams) {
-                    $help = new \severak\cligen\help($function->getDocComment());
-                    echo $help->getUsage();
-                    exit(0);
+                if ($funParams===false) {
+                    echo $help->getUsage($scriptName);
+                    exit(1);
                 }
                 $function->invokeArgs($funParams);
+                exit(0);
             }
         }
-        exit(1);
     }
 }

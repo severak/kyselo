@@ -5,13 +5,25 @@ class help
 {
     public $paramHelp = [];
     public $types = [];
+    public $defaults = [];
     public $shortDesc = '';
     public $longDesc = '';
 
-    public function __construct($docComment)
+    /**
+     * help constructor.
+     * @param $docComment
+     * @param \ReflectionParameter[]|null $paramsDef
+     * @throws \Exception
+     */
+    public function __construct($docComment, $paramsDef=null)
     {
+        // TODO - maybe change constructor to accept reflectionmethod or reflection function
+        if (empty($docComment)) {
+            throw new \Exception('Please define some help text while defining cligen app.');
+        }
+
         // TODO - better parsing of doc comments, this is toooo hackish
-        foreach (explode(PHP_EOL, $docComment) as $ord=>$line) {
+        foreach (explode("\n", $docComment) as $ord=>$line) {
             $matches = [];
             if (preg_match('~\s*\*\s*(.+)~', $line, $matches)) {
                 $docLine = $matches[1];
@@ -33,16 +45,94 @@ class help
                 }
             }
         }
+
+        if ($paramsDef) {
+            foreach ($paramsDef as $param) {
+                if ($param->isDefaultValueAvailable()) {
+                    $this->defaults[$param->getName()] = $param->getDefaultValue();
+                }
+            }
+        }
     }
 
-    public function getUsage()
+    public function getShortDesc()
     {
-        $usage =  $this->longDesc . PHP_EOL;
-        foreach ($this->paramHelp as $paramName=>$help) {
-            // TODO - odmezerovat místo tabu
-            $usage .= '--' . $paramName . "\t" . $help . PHP_EOL;
+        return $this->shortDesc;
+    }
+
+    protected function _printable($value)
+    {
+        if (is_null($value)) {
+            return 'NULL';
+        } elseif ($value===true) {
+            return 'TRUE';
+        } elseif ($value===false) {
+            return 'FALSE';
         }
+        return strval($value);
+    }
+
+    public function getUsage($appName='')
+    {
+        $usage = '';
+
+        if ($appName) {
+            $usage = 'Usage: ' . $appName . ' ';
+
+            foreach ($this->paramHelp as $paramName=>$help) {
+                if (isset($this->defaults[$paramName])) {
+                    $usage .= '[--' . $paramName . '] ';
+                } else {
+                    $usage .= '--' . $paramName . ' ';
+                }
+            }
+
+            $usage .= PHP_EOL. PHP_EOL;
+        }
+
+        if (!empty($this->paramHelp)) {
+            $lengths = array_map('strlen', array_keys($this->paramHelp));
+            $longest = max($lengths);
+
+            $usage .=  $this->longDesc . PHP_EOL;
+            foreach ($this->paramHelp as $paramName=>$help) {
+                $default = '';
+                if (isset($this->defaults[$paramName])) {
+                    $default = ' (default: ' . $this->_printable($this->defaults[$paramName]) . ')';
+                }
+
+                $usage .= ' --' . $paramName . str_repeat(' ', $longest - strlen($paramName)) . " " . $help . $default .  PHP_EOL;
+            }
+        }
+
         return $usage;
+    }
+
+
+    public function listSubcommands(\ReflectionObject $object, $appName='')
+    {
+        $usage = $this->longDesc . PHP_EOL . PHP_EOL;
+
+        if ($appName) {
+            $usage .= 'Usage: ' . $appName . ' <subcommand>' . PHP_EOL . PHP_EOL;
+        }
+
+        $usage .= 'Possible subcommands: ' . PHP_EOL . PHP_EOL;
+
+        $_methodNameLens = [];
+        foreach ($object->getMethods() as $method) {
+            $_methodNameLens[] = strlen($method->getName());
+        }
+        $longest = max($_methodNameLens);
+
+        foreach ($object->getMethods() as $method) {
+            $methodName = $method->getName();
+            $methodHelp = new help($method->getDocComment());
+            $usage .= '  ' . $methodName . str_repeat(' ', $longest - strlen($methodName)) . ' ' . $methodHelp->getShortDesc() . PHP_EOL;
+        }
+
+        return $usage;
+
     }
 
 }
