@@ -28,7 +28,7 @@ Flight::route('/act/backup', function (){
     do {
         $posts = $filter->posts();
         foreach ($posts as $post) {
-            $formatter->post2backup($post);
+            echo $formatter->post2backup($post);
         }
     } while ($filter->moveToNextPage());
     die;

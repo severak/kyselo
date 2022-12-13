@@ -38,7 +38,7 @@ class format
             $out['preview_html'] = $post['preview_html'];
         }
 
-        echo json_encode($out) . PHP_EOL;
+        return json_encode($out) . PHP_EOL;
     }
 
     public function backup2post($line)
