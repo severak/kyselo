@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 
+use flight\template\View;
 use kyselo\backup\format;
 
 if (php_sapi_name()!='cli') {
@@ -31,12 +32,12 @@ class kyselo
     /**
      * Generates backup.
      *
-     * @param string $blog      for blog.
-     * @param string $dropTo    directory where to drop ZIP file.
-     * @param string $urlPrefix returned URL prefix.
+     * @param string $blog for blog.
      */
-    public function backup($blog, $dropTo='./pub/backup', $urlPrefix='https://backup.kyselo.eu/')
+    public function backup($blog)
     {
+        global $config;
+
         if (!set_time_limit(0)) {
             die(sprintf('Not enough time for import - just %d s.', ini_get('max_execution_time')));
         }
@@ -47,12 +48,16 @@ class kyselo
         }
 
         @mkdir(__DIR__ . '/pub/backup/');
-        $zipName = fFilesystem::makeUniqueName(__DIR__ . '/pub/backup/' . $blog, 'zip');
+
+        $zipPrefix = substr(uniqid('', true), -5);;
+        $zipName = fFilesystem::makeUniqueName(__DIR__ . '/pub/backup/' . $blog.  '-' . $zipPrefix, 'zip');
 
         $postsCount = $this->rows->count('posts', ['blog_id'=>$blogData['id'], 'is_visible'=>1]);
 
         $zip = new ZipArchive();
         $zip->open($zipName, ZipArchive::CREATE);
+
+        $includedAvatars = [];
 
         $formatter = new kyselo\backup\format();
         $filter = new kyselo\timeline($this->rows);
@@ -62,11 +67,28 @@ class kyselo
         $pages =  $filter->countPages();
         $page = 0;
 
+        $view = new View(__DIR__ . '/lib/views');
+        $site_url = $config['site_url'];
+
         $jsonl = json_encode(['is_metadata'=>true, 'count'=>$postsCount, 'blog'=>['name'=>$blogData['name'], 'title'=>$blogData['title'], 'description'=>$blogData['about'], 'avatar_url'=>$blogData['avatar_url'], 'since'=>$blogData['since'], 'custom_css'=>$blogData['custom_css']]]) . PHP_EOL;
 
         do {
             $posts = $filter->posts();
             foreach ($posts as $post) {
+                // saving avatars
+                if (!in_array($post['avatar_url'], $includedAvatars)) {
+                    $zip->addFile(__DIR__ . '/' . $post['avatar_url'], ltrim($post['avatar_url'], '/'));
+                    $zip->setCompressionName(ltrim($post['avatar_url'], '/'), ZipArchive::CM_STORE);
+                    $includedAvatars[] = $post['avatar_url'];
+                }
+
+                if (!empty($post['group_avatar_url']) && !in_array($post['group_avatar_url'], $includedAvatars)) {
+                    $zip->addFile(__DIR__ . '/' . $post['group_avatar_url'], ltrim($post['group_avatar_url'], '/'));
+                    $zip->setCompressionName(ltrim($post['group_avatar_url'], '/'), ZipArchive::CM_STORE);
+                    $includedAvatars[] = $post['group_avatar_url'];
+                }
+
+                // saving image
                 if ($post['type']==4) {
                     $zip->addFile(__DIR__ . '/' . $post['url'], ltrim($post['url'], '/'));
                     $zip->setCompressionName(ltrim($post['url'], '/'), ZipArchive::CM_STORE);
@@ -74,8 +96,14 @@ class kyselo
                 $jsonl .= $formatter->post2backup($post);
             }
 
-            // todo - write page backup
-            // todo - write index.html and page0000.html
+            $pageName = ($page > 0) ? sprintf('page%04d.html', $page) : 'index.html';
+            $nextPage  = ($filter->moreSince) ? sprintf('page%04d.html', $page+1) : false;
+
+            ob_start();
+            $view->render('archive.php', ['posts'=>$posts, 'next_page'=>$nextPage,  'blog'=>$blogData, 'site_url'=>$site_url]);
+            $pageContent = ob_get_clean();
+
+            $zip->addFromString($pageName, $pageContent);
 
             $page++;
 
@@ -89,14 +117,79 @@ class kyselo
         echo 'writing jsonl...' . PHP_EOL;
         $zip->addFromString($blog . '.jsonl', $jsonl);
 
+        $style = <<<STYLE
+/* bare bones CSS style to display something legible: */
+
+img {
+    height: auto;
+    max-width: 100%;
+}
+
+.image.is-128x128 {
+    height: 128px;
+    width: 128px;
+}
+
+.image.is-64x64 {
+    height: 64px;
+    width: 64px;
+}
+
+.kyselo-container {
+    max-width: 1152px;
+    margin: auto;
+}
+
+.ub-cols {
+    display: flex;
+    box-sizing: border-box;
+}
+
+.kyselo-post {
+    border-bottom: 1px solid gray;
+}
+
+.kyselo-post div {
+    padding: 1em;
+}
+
+/* NSFW pics */
+.is-nsfw .kyselo-post-body img {
+    background-color: lightgrey;
+    filter: blur(10px) sepia(1) opacity(0.3);
+    -webkit-filter: blur(10px) sepia(1) opacity(0.3);
+}
+
+.kyselo-image {
+    max-height: 80vh;
+}
+
+.kyselo-image-square {
+    max-height: 80vh;
+}
+
+.kyselo-next-page {
+    font-size: x-large;
+    display: block;
+    text-align: center;
+    padding: 1.5em;
+}
+
+/* your custom style: */
+
+STYLE;
+
+        $style .= $blogData['custom_css'];
+
+        $zip->addFromString('style.css', $style);
 
         echo 'finishing zip...' . PHP_EOL;
 
-        // todo - writte date to the comment
+        $zip->setArchiveComment(sprintf('Backup for %s/%s generated at %s', $site_url, $blog, date('Y-m-d')));
 
         $zip->close();
 
-        echo 'Written to ' . $zipName;
+        echo 'Written to ' . $site_url . '/pub/backup/' . pathinfo($zipName, PATHINFO_BASENAME);
     }
 }
 
