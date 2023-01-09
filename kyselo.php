@@ -189,7 +189,7 @@ STYLE;
 
         $zip->close();
 
-        echo 'Written to ' . $site_url . '/pub/backup/' . pathinfo($zipName, PATHINFO_BASENAME);
+        echo 'Written to ' . $site_url . '/pub/backup/' . pathinfo($zipName, PATHINFO_BASENAME) . PHP_EOL;
     }
 }
 

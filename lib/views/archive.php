@@ -21,7 +21,7 @@
     $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 
     echo '<div class="kyselo-post ub-cols '.$nsfwClass.'">';
-    echo '<div><a href="'.$site_url.'/'.$post['slug_name'].'"><img src=".'.$post['avatar_url'].'" class="image is-64x64"><br>' .  $post['name'].'</a>';
+    echo '<div><a href="'.$site_url.'/'.$post['name'].'"><img src=".'.$post['avatar_url'].'" class="image is-64x64"><br>' .  $post['name'].'</a>';
     if (!empty($post['group_name'])) {
         echo ' in<br><a href="'.$site_url.'/'.$post['group_name'].'"><img src=".'.$post['group_avatar_url'].'" class="image is-64x64"><br>' .  $post['group_name'] . '</a>';
     }
@@ -115,7 +115,7 @@
         echo '<p>reposted by ';
         foreach ($post['reposted_by'] as $repost) {
             $repostedTo[$repost['name']] = true;
-            echo '<a href="/'.$repost['name'].'/post/'.$repost['repost_id'].'">' . $repost['name'] . '</a> ';
+            echo '<a href="'.$site_url.'/'.$repost['name'].'/post/'.$repost['repost_id'].'">' . $repost['name'] . '</a> ';
         }
         echo '</p>';
     }
