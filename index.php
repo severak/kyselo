@@ -109,7 +109,8 @@ function kyselo_upload_image($form, $name)
 		array(
 			'image/gif',
 			'image/jpeg',
-			'image/png'
+			'image/png',
+            'image/webp'
 		),
 		'The file uploaded is not an image.'
 	);
