@@ -10,7 +10,7 @@ echo '<div class="kyselo-gallery">';
 foreach ($posts as $post) {
     $date = date('M Y', $post['datetime']);
     if ($date != $prevDate) {
-        echo '</ul><h2>'.$date.'</h2><ul>';
+        echo '<h2>'.$date.'</h2>';
     }
     echo '<a href="/' . $post['slug_name'] . '/post/' . $post['id'] .'">';
     echo '<img src="' . kyselo_small_image($post['url'], 320, true) . '">';
