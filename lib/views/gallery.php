@@ -8,12 +8,13 @@ if (empty($posts)) {
 
 echo '<div class="kyselo-gallery">';
 foreach ($posts as $post) {
+    $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
     $date = date('M Y', $post['datetime']);
     if ($date != $prevDate) {
         echo '<h2>'.$date.'</h2>';
     }
     echo '<a href="/' . $post['slug_name'] . '/post/' . $post['id'] .'">';
-    echo '<img src="' . kyselo_small_image($post['url'], 320, true) . '">';
+    echo '<img src="' . kyselo_small_image($post['url'], 320, true) . '" class="'.$nsfwClass.'">';
     echo '</a>';
     $prevDate = $date;
 }
