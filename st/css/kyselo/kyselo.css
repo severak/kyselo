@@ -306,6 +306,16 @@ blockquote {
 	z-index: 1000;
 }
 
+.kyselo-gallery img {
+	width: 320px;
+}
+
+@media (max-width: 768px) {
+	.kyselo-gallery img {
+		width: 48vw;
+	}
+}
+
 /* comment by anchor */
 :target {
 	font-weight: bold;

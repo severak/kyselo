@@ -113,6 +113,7 @@ Flight::route('/act/settings/@name', function($name){
 	$form->field('is_nsfw', ['label'=>'is NSFW blog', 'type'=>'checkbox']);
 	$form->field('upload', ['label'=>'Change logo', 'type'=>'file']);
     $form->field('has_journal', ['label'=>'journal view enabled', 'type'=>'checkbox']);
+    $form->field('has_gallery', ['label'=>'gallery view enabled', 'type'=>'checkbox']);
     $form->field('has_videos', ['label'=>'videos playlist enabled', 'type'=>'checkbox']);
     $form->field('exclude_from_robots', ['label'=>'exclude from search engines', 'type'=>'checkbox']);
     kyselo_csrf($form);

@@ -12,6 +12,7 @@ CREATE TABLE blogs (
 	since TEXT,
     has_videos INT DEFAULT 0,
     has_journal INT DEFAULT 0,
+    has_gallery INT DEFAULT 0,
 	is_group INT DEFAULT 0,
 	user_id INT NOT NULL,
 	is_visible INT DEFAULT 1,

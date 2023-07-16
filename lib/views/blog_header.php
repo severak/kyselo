@@ -37,6 +37,9 @@
             <?php if (!empty($blog['has_journal'])) { ?>
             <a href="<?=kyselo_url('/%s/journal', [$blog['name']]); ?>" class="button"><i class="fa fa-list"></i>&nbsp;journal</a>
             <?php } // has_journal ?>
+            <?php if (!empty($blog['has_gallery'])) { ?>
+                <a href="<?=kyselo_url('/%s/gallery', [$blog['name']]); ?>" class="button"><i class="fa fa-photo"></i>&nbsp;gallery</a>
+            <?php } // has_gallery ?>
             <?php if (!empty($blog['has_videos'])) { ?>
             <a href="<?=kyselo_url('/%s/videos', [$blog['name']]); ?>" class="button"><i class="fa fa-youtube-play"></i>&nbsp;playlist</a>
             <?php } // has_playlist_view ?>

@@ -435,6 +435,8 @@ Flight::route('/@name/journal', function($name){
 
     $posts = $filter->posts();
 
+    // TODO - paginate
+
     Flight::render('header', ['title' => $blog["title"] . ' - journal', 'rss'=>sprintf('/%s/rss%s', $blog['name'], $filter->currentParams), 'ogp_blog'=>$blog ]);
     Flight::render('blog_header', [
         'blog'=>$blog,
@@ -444,6 +446,49 @@ Flight::route('/@name/journal', function($name){
     ]);
     Flight::render('journal', [
         'posts'=>$posts
+    ]);
+    Flight::render('buttons', [
+        'blog'=>$blog,
+        'user'=>Flight::user()
+    ]);
+    Flight::render('footer', []);
+});
+
+Flight::route('/@name/gallery', function($name){
+    $rows = Flight::rows();
+
+    $blog = $rows->one('blogs', ['name'=>$name, 'is_visible'=>1]);
+
+    if (empty($blog)) {
+        Flight::notFound();
+    }
+    //if (!$blog['has_gallery']) {
+        // Flight::forbidden();
+    //}
+
+    $filter = new kyselo\timeline(Flight::rows());
+    $filter->mode = 'own';
+    $filter->blogId = $blog['id'];
+    $filter->filter($_GET);
+    $filter->type = 'image';
+    $filter->limit = 16;
+
+    $posts = $filter->posts();
+
+    $moreLink = $filter->moreLink;
+    $theEnd = !$filter->moreLink;
+
+    Flight::render('header', ['title' => $blog["title"] . ' - gallery', 'rss'=>sprintf('/%s/rss%s', $blog['name'], $filter->currentParams), 'ogp_blog'=>$blog ]);
+    Flight::render('blog_header', [
+        'blog'=>$blog,
+        'user'=>Flight::user(),
+        'tab'=>'blog',
+        'subtab'=>'blog'
+    ]);
+    Flight::render('gallery', [
+        'posts'=>$posts,
+        'more_link'=>$moreLink,
+        'the_end'=>$theEnd,
     ]);
     Flight::render('buttons', [
         'blog'=>$blog,
