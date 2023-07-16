@@ -132,7 +132,7 @@ class timeline
 
         $this->moreSince = null;
 
-		if (count($posts)==31) {
+		if (count($posts)==($this->limit + 1)) {
             $lastPost = array_pop($posts);
 
             $moreParams = ['since'=>date('Y-m-d\TH:i:s', $lastPost['datetime'])];
@@ -183,7 +183,7 @@ class timeline
             $postsRemains = $postsTotal;
         }
 
-        return ['total'=>ceil($postsTotal/30), 'remains'=>floor($postsRemains/30)];
+        return ['total'=>ceil($postsTotal/$this->limit), 'remains'=>floor($postsRemains/$this->limit)];
     }
 
     public function moveToNextPage()
