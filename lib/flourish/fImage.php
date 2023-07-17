@@ -315,7 +315,7 @@ class fImage extends fFile
 	static protected function getInfo($image_path, $element=NULL)
 	{
 		$extension = strtolower(fFilesystem::getPathInfo($image_path, 'extension'));
-		if (!in_array($extension, array('jpg', 'jpeg', 'png', 'gif', 'tif', 'tiff'))) {
+		if (!in_array($extension, array('jpg', 'jpeg', 'png', 'gif', 'tif', 'tiff', 'webp'))) {
 			$type = self::getImageType($image_path);
 			if ($type === NULL) {
 				throw new fValidationException(
@@ -349,7 +349,9 @@ class fImage extends fFile
 					   IMAGETYPE_JPEG    => 'jpg',
 					   IMAGETYPE_PNG     => 'png',
 					   IMAGETYPE_TIFF_II => 'tif',
-					   IMAGETYPE_TIFF_MM => 'tif');
+					   IMAGETYPE_TIFF_MM => 'tif',
+                       IMAGETYPE_WEBP => 'webp'
+            );
 
 		$output           = array();
 		$output['width']  = $image_info[0];
@@ -372,7 +374,7 @@ class fImage extends fFile
 	 * Gets the image type from a file by looking at the file contents
 	 *
 	 * @param  string $image  The image path to get the type for
-	 * @return string|NULL  The type of the image - `'jpg'`, `'gif'`, `'png'` or `'tif'` - NULL if not one of those
+	 * @return string|NULL  The type of the image - `'jpg'`, `'gif'`, `'png'`, `'webp'` or `'tif'` - NULL if not one of those
 	 */
 	static private function getImageType($image)
 	{
@@ -562,7 +564,7 @@ class fImage extends fFile
 		parent::__construct($file_path, $skip_checks);
 
 		if (!self::isImageCompatible($file_path)) {
-			$valid_image_types = array('GIF', 'JPG', 'PNG');
+			$valid_image_types = array('GIF', 'JPG', 'PNG', 'WEBP');
 			if (self::$processor == 'imagemagick') {
 				$valid_image_types[] = 'TIF';
 			}
@@ -838,7 +840,7 @@ class fImage extends fFile
 	/**
 	 * Returns the type of the image
 	 *
-	 * @return string  The type of the image: `'jpg'`, `'gif'`, `'png'`, `'tif'`
+	 * @return string  The type of the image: `'jpg'`, `'gif'`, `'png'`, `'webp'`, `'tif'`
 	 */
 	public function getType()
 	{
@@ -890,7 +892,7 @@ class fImage extends fFile
 		$new_type  = $path_info['extension'];
 		$new_type  = ($type == 'jpeg') ? 'jpg' : $type;
 
-		if (!in_array($new_type, array('gif', 'jpg', 'png'))) {
+		if (!in_array($new_type, array('gif', 'jpg', 'png', 'webp'))) {
 			$new_type = $type;
 		}
 
@@ -925,6 +927,11 @@ class fImage extends fFile
 				$gd_res = imagecreatefrompng($this->file);
 				$save_alpha = TRUE;
 				break;
+            case 'webp':
+                // https://bugs.php.net/bug.php?id=79809
+                $gd_res = imagecreatefromwebp($this->file);
+                $save_alpha = TRUE;
+                break;
 		}
 
 
@@ -1106,6 +1113,9 @@ class fImage extends fFile
 			case 'png':
 				imagepng($gd_res, $output_file);
 				break;
+            case 'webp':
+                imagewebp($gd_res, $output_file, $jpeg_quality);
+                break;
 		}
 
 		imagedestroy($gd_res);
@@ -1137,7 +1147,7 @@ class fImage extends fFile
 		$new_type = $path_info['extension'];
 		$new_type = ($new_type == 'jpeg') ? 'jpg' : $new_type;
 
-		if (!in_array($new_type, array('gif', 'jpg', 'png'))) {
+		if (!in_array($new_type, array('gif', 'jpg', 'png', 'webp'))) {
 			$new_type = $type;
 		}
 
@@ -1347,7 +1357,7 @@ class fImage extends fFile
 	 * new file to be created, the old file will not be deleted until the
 	 * transaction is committed.
 	 *
-	 * @param  string  $new_image_type  The new file format for the image: 'NULL` (no change), `'jpg'`, `'gif'`, `'png'`
+	 * @param  string  $new_image_type  The new file format for the image: 'NULL` (no change), `'jpg'`, `'gif'`, `'png'`, `'webp'`
 	 * @param  integer $jpeg_quality    The quality setting to use for JPEG images - this may be ommitted
 	 * @param  boolean $overwrite       If an existing file with the same name and extension should be overwritten
 	 * @param  string  |$new_image_type
