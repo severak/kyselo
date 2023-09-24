@@ -177,9 +177,23 @@ Zepto(function(){
 
 	});
 
+	if (window.matchMedia && !window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+		// removing is-hoverable on phones as phones dont have real hover
+		$('.dropdown').removeClass('is-hoverable');
+	}
+
 	// dropdowns for phones
 	$('.dropdown-trigger').on('click', function(evt){
 		$(evt.target).parents('.dropdown').toggleClass("is-active");
+	});
+
+	// switches between absolute and relative date
+	$('.datum').on('click', function (evt){
+		var target = $(evt.target);
+		var title = target.attr('title');
+		var text = target.text();
+		target.attr('title', text);
+		target.text(title);
 	});
 });
 

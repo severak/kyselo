@@ -27,7 +27,7 @@ $groups = isset($_SESSION['user']['groups']) ? $_SESSION['user']['groups'] : [];
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="/st/css/bulma/bulma.css">
 	<link rel="stylesheet" href="/st/css/font-awesome/css/font-awesome.css">
-	<link rel="stylesheet" href="/st/css/kyselo/kyselo.css?v=2022-20-11">
+	<link rel="stylesheet" href="/st/css/kyselo/kyselo.css?v=2023-09-24">
 	<script src="/st/js/zepto.min.js"></script>
 	<script src="/st/js/medium-editor.min.js"></script>
 	<link rel="stylesheet" href="/st/css/medium-editor.min.css" type="text/css" media="screen" charset="utf-8">

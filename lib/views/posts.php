@@ -43,13 +43,13 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	<div>
 		<small><i class="fa fa-<?php echo $icons[$post['type']]; ?>"></i> <?php
             $datum = new fTimestamp($post['datetime']);
-            echo '<span title="' . $datum->getFuzzyDifference() . '">';
+            echo '<span title="' . $datum->getFuzzyDifference() . '" class="datum">';
             echo $datum->format('j.n.Y H:i:s');
             echo '</span>';
         ?>
         <?php
         if (!empty($post['reposted_from'])) {
-            echo '<i class="fa fa-refresh"></i> reposted from <img src="'.kyselo_small_image($post['reposted_from']['avatar_url'], 50, true).'" style="width:1em"> <a href="/'.$post['reposted_from']['name'].'/post/'.$post['repost_of'].'">' . $post['reposted_from']['name'] . '</a><br>';
+            echo '<span class="is-hidden-tablet"><br/></span><i class="fa fa-refresh"></i> reposted from <img src="'.kyselo_small_image($post['reposted_from']['avatar_url'], 50, true).'" style="width:1em"> <a href="/'.$post['reposted_from']['name'].'/post/'.$post['repost_of'].'">' . $post['reposted_from']['name'] . '</a><br>';
         }
         ?>
         </small>
@@ -243,7 +243,7 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
                                 <div class="control">
                                     <textarea placeholder="text of your comment..." rows="2" class="textarea" id="commentbox<?=$post['id'];?>"></textarea>
                                 </div>
-                                <div>
+                                <div class="post-button-container">
                                     <button class="button is-info is-fullwidth comment-post-button">Post comment</button>
                                 </div>
                             </div>

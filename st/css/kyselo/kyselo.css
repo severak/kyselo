@@ -53,6 +53,7 @@ html, body {
 		left: 5px;
 		bottom: 5px;
 		background-color: #f5f5f5;
+		box-shadow: 0 0 5px 5px #f5f5f5;
 	}
 
 	.kyselo-float #post_types {
@@ -312,7 +313,7 @@ blockquote {
 
 @media (max-width: 768px) {
 	.kyselo-gallery img {
-		width: 48vw;
+		width: 46vw;
 	}
 }
 
@@ -333,4 +334,9 @@ blockquote {
 /* to prevent leaks from toooo  long PREs */
 .content pre {
 	white-space: normal !important;
+}
+
+/* fixing some old copy pasted content in updates */
+.kyselo-post-body .kyselo-content {
+	width: auto;
 }
