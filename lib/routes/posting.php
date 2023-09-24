@@ -82,7 +82,7 @@ Flight::route('/act/post', function() {
 		if ($form->isValid) {
 			$postId = $rows->insert('posts', $newPost);
 			if (!empty($newPost['tags'])) {
-				foreach (explode(' ', $newPost['tags']) as $tag) {
+				foreach (array_unique(explode(' ', $newPost['tags'])) as $tag) {
 					$rows->insert('post_tags', ['blog_id'=>$newPost['blog_id'], 'post_id'=>$postId, 'tag'=>$tag]);
 				}
 			}
@@ -131,7 +131,7 @@ Flight::route('/act/post/edit/@id', function($id){
 			$rows->update('posts', $newPost, $id);
 			$rows->delete('post_tags', ['post_id'=>$id]);
 			if (!empty($newPost['tags'])) {
-				foreach (explode(' ', $newPost['tags']) as $tag) {
+				foreach (array_unique(explode(' ', $newPost['tags'])) as $tag) {
 					$rows->insert('post_tags', ['blog_id'=>$post['blog_id'], 'post_id'=>$id, 'tag'=>$tag]);
 				}
 			}
