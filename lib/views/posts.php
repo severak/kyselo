@@ -75,14 +75,25 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 	} else if ($post['type']==4) { // image
         $imgClass = 'kyselo-image';
 	    $size = @getimagesize(Flight::rootpath() . $post['url']);
-        if (!empty($size[0]) && (($size[0]*3) < $size[1])) {
+        if (!empty($size[0]) && (($size[0]*2.5) < $size[1])) {
             $imgClass = 'kyselo-image-long';
+        }
+        if (!empty($size[0]) && (($size[1]*2.5) < $size[0])) {
+            $imgClass = 'kyselo-image-panorama';
         }
         if (!empty($size[0]) && ($size[0]==$size[1])) {
             $imgClass = 'kyselo-image-square';
         }
 
+        if ($imgClass=='kyselo-image-panorama') {
+            echo '<div class="kyselo-panorama-holder">';
+        }
 		echo '<img class="image '.$imgClass.'" src="' . $post['url'] . '"/>';
+        if ($imgClass=='kyselo-image-panorama') {
+            echo '</div>';
+            echo '<p><i class="fa fa-arrows-h" aria-hidden="true"></i> panorama <i> - image is scrollable</i></p>';
+        }
+
 		if (!empty($post['body'])) {
 			echo '<p>' . $post['body'] . '</p>';
 		}

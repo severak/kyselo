@@ -195,6 +195,8 @@ Zepto(function(){
 		target.attr('title', text);
 		target.text(title);
 	});
+
+	// drag to scroll for desktop - https://phuoc.ng/collection/html-dom/drag-to-scroll/
 });
 
 

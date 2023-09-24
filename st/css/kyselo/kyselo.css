@@ -292,6 +292,28 @@ blockquote {
 	max-height: 80vh;
 }
 
+.kyselo-image-panorama {
+	height: 80vh;
+	max-width: none;
+}
+
+.kyselo-post-body {
+	width: auto;
+}
+
+.kyselo-panorama-holder {
+	display: inline-block;
+	max-height: 90vh;
+	width: 1200px;
+	overflow-y: scroll;
+}
+
+@media (max-width: 1100px) {
+	.kyselo-panorama-holder {
+		width: 70vw;
+	}
+}
+
 .kyselo-friend-box {
 	overflow: hidden;
 }

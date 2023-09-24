@@ -114,7 +114,7 @@ function kyselo_upload_image($form, $name)
 		),
 		'The file uploaded is not an image.'
 	);
-	$uploader->setMaxSize('2MB');
+	$uploader->setMaxSize('5MB');
 	$uploader->setOptional();
 
 	$uploaderError = $uploader->validate($name, true);
