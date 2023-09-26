@@ -178,7 +178,7 @@ Zepto(function(){
 	});
 
 	if (window.matchMedia && !window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-		// removing is-hoverable on phones as phones dont have real hover
+		// removing is-hoverable on phones as phones don't have real hover
 		$('.dropdown').removeClass('is-hoverable');
 	}
 
@@ -196,7 +196,23 @@ Zepto(function(){
 		target.text(title);
 	});
 
-	// drag to scroll for desktop - https://phuoc.ng/collection/html-dom/drag-to-scroll/
+	// fits panoramas into remaining space
+	var containerWidth = $('.kyselo-container').width();
+	$('.kyselo-panorama-holder').each(function (k, v){
+		var holder = $(v);
+		var currentParentWidth = holder.parent().width();
+		holder.attr('style', 'width: '  + Math.min(containerWidth - 88, currentParentWidth - 15) + 'px');
+	});
+
+	if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+		// panorama scroll handler
+		$('.kyselo-panorama-holder').on('wheel', function (e) {
+			e.preventDefault();
+			$(this).scrollLeft($(this).scrollLeft() + e.deltaY);
+		});
+
+		// TODO - drag to scroll later, it's hard to implement properly
+	}
 });
 
 
