@@ -128,7 +128,7 @@ Flight::route('/act/login', function() {
 	$request = Flight::request();
 
 	$form = new severak\forms\form(['method'=>'POST']);
-	$form->field('username', ['label'=>'User name', 'required'=>true]);
+	$form->field('username', ['label'=>'User name', 'required'=>true, 'style'=>'text-transform: lowercase']);
 	$form->field('password', ['label'=>'Password', 'type'=>'password', 'required'=>true]);
 	$form->field('login', ['label'=>'Login', 'type'=>'submit']);
 
@@ -137,6 +137,7 @@ Flight::route('/act/login', function() {
 	}
 
 	if ($request->method=='POST') {
+        if ($_POST['username']) $_POST['username'] = strtolower($_POST['username']); // for mobile phones
 		$form->fill($_POST);
 
 		if ($form->validate()) {
