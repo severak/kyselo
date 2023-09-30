@@ -171,6 +171,7 @@ function kyselo_download_image($form, $name)
 		mkdir($prefix . $dirname, 0777, true);
 	}
 	if (rename($tmpName, $prefix. $md5_path)) {
+        chmod($prefix . $md5_path, 0755);
 		return $md5_path;
 	}
 	$form->error($name, 'File download error!');
@@ -205,6 +206,7 @@ function kyselo_mirror_image($url)
         mkdir($prefix . $dirname, 0777, true);
     }
     if (rename($tmpName, $prefix. $md5_path)) {
+        chmod($prefix . $md5_path, 0755);
         return $md5_path;
     }
     return null;
