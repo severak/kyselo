@@ -17,7 +17,11 @@ if (empty($user)) {
         echo '<a href="/act/post?as='.$user['name'].'&type=1" class="button is-medium is-dark" title="post text"><i class="fa fa-book"></i><span class="kyselo-hidden"> new post</span></a>';
         echo '<a href="/act/post?as='.$user['name'].'&type=2" class="button is-medium is-dark" title="post link"><i class="fa fa-link"></i><span class="kyselo-hidden"> new post</span></a>';
         echo '<a href="/act/post?as='.$user['name'].'&type=3" class="button is-medium is-dark" title="post quote"><i class="fa fa-paragraph"></i><span class="kyselo-hidden"> new post</span></a>';
-        echo '<a href="/act/post?as='.$user['name'].'&type=4" class="button is-medium is-dark" title="post image"><i class="fa fa-camera"></i><span class="kyselo-hidden"> new post</span></a>';
+        if (Flight::config('resizer_url')) {
+            echo '<a href="'.Flight::config('resizer_url').'" class="button is-medium is-dark" title="post image"><i class="fa fa-camera"></i><span class="kyselo-hidden"> new post</span></a>';
+        } else {
+            echo '<a href="/act/post?as='.$user['name'].'&type=4" class="button is-medium is-dark" title="post image"><i class="fa fa-camera"></i><span class="kyselo-hidden"> new post</span></a>';
+        }
         echo '<a href="/act/post?as='.$user['name'].'&type=5" class="button is-medium is-dark" title="post video"><i class="fa fa-youtube-play"></i><span class="kyselo-hidden"> new post</span></a>';
         /*
         echo '<a href="/act/post?as='.$user['name'].'&type=6" class="button is-medium is-dark"><i class="fa fa-file"></i><span class="kyselo-hidden"> new post</span></a>';
