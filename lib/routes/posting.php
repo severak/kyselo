@@ -300,6 +300,12 @@ function finish_post($newPost, $form, $required=true)
             $newPost['source'] = $newPost['from'];
         }
         unset($newPost['from']);
+
+        if (Flight::config('resizer_url')) {
+            if (str_contains($newPost['source'], Flight::config('resizer_url'))) {
+                unset($newPost['source']); // we don't want save link to resizer at it disappears from there
+            }
+        }
 	}
 
 	if ($newPost['type']==5) {

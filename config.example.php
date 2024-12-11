@@ -11,5 +11,6 @@
     'tos_post'=>1,
     'footer_javascript'=>'<script>console.log("external stats  here")</script>',
     'souper_endpoint_key'=>'some_random_string',
+    'resizer_url' => 'https://resizer.example.org' // if not set resizer is not used
     // 'maintance_mode'=>true,
 );
