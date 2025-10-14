@@ -33,12 +33,6 @@ echo '--- ' . PHP_EOL;
 echo 'creating config file...' . PHP_EOL;
 file_put_contents(__DIR__ . '/config.php',  '<?php return ' . var_export($conf, true) . ';');
 
-
-$db = new medoo(array(
-	'database_type' => 'sqlite',
-	'database_file' => dirname(__FILE__) . '/' . $conf['database']
-));
-
 $pdo = new PDO('sqlite:' . __DIR__ . '/' .  $conf['database'], null, null, [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
 $rows = new severak\database\rows($pdo);
 
