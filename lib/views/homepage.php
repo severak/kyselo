@@ -17,7 +17,7 @@
         <a href="/act/random" class="button is-fullwidth"><i class="fa fa-random"></i>&nbsp;find random gems</a>
         <a href="/act/register" class="button is-fullwidth"><i class="fa fa-sign-in"></i>&nbsp;join us</a>
         <a href="/act/post?type=4" class="button  is-fullwidth is-primary"><i class="fa fa-photo"></i>&nbsp;post some cats</a>
-        <a href="https://bitbucket.org/severak/kyselo" class="button  is-fullwidth"><i class="fa fa-git"></i>&nbsp;see our code</a>
+        <a href="https://github.com/severak/kyselo" class="button  is-fullwidth"><i class="fa fa-git"></i>&nbsp;see our code</a>
         <a href="https://paypal.me/severakcz" class="button  is-fullwidth"><i class="fa fa-money"></i>&nbsp;donate some money</a>
         </div>
     </div>

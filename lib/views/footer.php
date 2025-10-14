@@ -1,5 +1,5 @@
     <footer class="footer kyselo-footer">
-    <p>Kyselo  - <a href="https://bitbucket.org/severak/kyselo">opensource software</a> by <a href="http://tilde.town/~severak/">Severák</a>.
+    <p>Kyselo  - <a href="https://github.com/severak/kyselo">opensource software</a> by <a href="http://tilde.town/~severak/">Severák</a>.
     <?php if (Flight::config('hosted_by')) { ?>
     Hosted by <?php
     if (Flight::config('hosted_by_url')) echo '<a href="' . Flight::config('hosted_by_url') . '">';
