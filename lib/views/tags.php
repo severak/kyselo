@@ -17,8 +17,8 @@ foreach ($tags as $tag=>$num) {
 
 echo '<hr>';
 
-$icons = ['', 'book', 'link', 'paragraph', 'camera', 'youtube-play', 'file', 'star', 'calendar'];
-$type2code = ['text'=>1, 'link'=>2, 'quote'=>3, 'image'=>4, 'video'=>5, 'file'=>6, 'review'=>7, 'event'=>8];
+$icons = ['', 'book', 'link', 'paragraph', 'camera', 'youtube-play', 'file', 'star', 'calendar', 'music'];
+$type2code = ['text'=>1, 'link'=>2, 'quote'=>3, 'image'=>4, 'video'=>5, 'file'=>6, 'review'=>7, 'event'=>8, 'audio'=>9];
 
 foreach ($type2code as $type=>$code) {
     if (isset($types[$code])) {

@@ -18,12 +18,14 @@ Flight::init();
 Flight::set('flight.handle_errors', false);
 Flight::set('flight.views.path', __DIR__ . '/lib/views');
 
-// init debugger
-require "lib/tracy/src/tracy.php";
-use \Tracy\Debugger;
-Debugger::enable(!empty($config['show_debug']) ? Debugger::DEVELOPMENT : Debugger::DETECT);
-Debugger::$showBar = false;
-Debugger::$errorTemplate = __DIR__ . '/lib/views/500.htm';
+if (version_compare(PHP_VERSION, '8.0.0', '<')) {
+    // init debugger
+    require "lib/tracy/src/tracy.php";
+    \Tracy\Debugger::enable(!empty($config['show_debug']) ? Debugger::DEVELOPMENT : Debugger::DETECT);
+    \Tracy\Debugger::$showBar = false;
+    \Tracy\Debugger::$errorTemplate = __DIR__ . '/lib/views/500.htm';
+}
+
 
 // init flourish
 flight\core\Loader::addDirectory("lib/flourish");
@@ -231,6 +233,39 @@ function kyselo_small_image($path, $size, $square=false)
     $smallImage->saveChanges();
     return $smallPath;
 }
+
+function kyselo_upload_other($form, $name, $ext, $mimes=[], $errorMsg=null)
+{
+    $uploader = new fUpload();
+    $uploader->setMIMETypes(
+        $mimes,
+        ($errorMsg? $errorMsg : 'This file type is not allowed.')
+    );
+    $uploader->setMaxSize('5MB');
+    $uploader->setOptional();
+
+    $uploaderError = $uploader->validate($name, true);
+    if ($uploaderError) {
+        $form->error($name, $uploaderError);
+    } elseif (!empty($_FILES[$name]['tmp_name'])) {
+        $md5 = md5_file($_FILES[$name]['tmp_name']);
+        $md5_path = '/pub/' . substr($md5, 0, 2) . '/' . substr($md5, 2, 2) . '/' . substr($md5, 4, 2) . '/' . $md5 . '.'. $ext;
+        $prefix = Flight::rootpath();
+        if (file_exists($prefix . $md5_path)) {
+            return $md5_path; // file exists already, no need to rewrite it
+        }
+        $dirname = pathinfo($md5_path, PATHINFO_DIRNAME);
+        if (!is_dir($prefix. $dirname)) {
+            mkdir($prefix . $dirname, 0777, true);
+        }
+        if (move_uploaded_file($_FILES[$name]['tmp_name'], $prefix . $md5_path)) {
+            return $md5_path;
+        }
+        $form->error($name, 'File upload error!');
+    }
+    return null;
+}
+
 
 function kyselo_csrf($form)
 {

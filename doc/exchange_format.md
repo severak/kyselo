@@ -52,6 +52,12 @@ Additional data are present according to types of post.
 - `description` - (optional) description of video as HTML
 - `preview_html` - (optional) HTML to embed video player
 
+### `audio`
+
+- `url` - relative URL of audio itself
+- `title` - (optional) title of audio
+- `description` - (optional) description as HTML
+
 ## TODO
 
 - how to backup where the post was reposted from?

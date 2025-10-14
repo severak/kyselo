@@ -147,7 +147,15 @@ $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 		echo '<p>from: ' . $post['start_date'] . '</p>';
 		echo '<p>to: ' . $post['end_date'] . '</p>';
 		echo '<p>where: ' . $post['location'] . '</p>';
-	}
+    } else if ($post['type']==9) { // audio
+        if (!empty($post['title'])) {
+            echo '<h2>' . $post['title'] . '</h2>';
+        }
+        echo '<audio src="' . $post['url'] . '" controls="controls"></audio>';
+        if (!empty($post['body'])) {
+            echo '<p>' . $post['body'] . '</p>';
+        }
+    }
 
 	echo '</div>';
 	echo '<div class="kyselo-tags">';

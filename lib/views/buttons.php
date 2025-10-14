@@ -28,6 +28,7 @@ if (empty($user)) {
         echo '<a href="/act/post?as='.$user['name'].'&type=7" class="button is-medium is-dark"><i class="fa fa-star"></i><span class="kyselo-hidden"> new post</span></a>';
         echo '<a href="/act/post?as='.$user['name'].'&type=8" class="button is-medium is-dark"><i class="fa fa-calendar"></i><span class="kyselo-hidden"> new post</span></a>';
         */
+        echo '<a href="/act/post?as='.$user['name'].'&type=9" class="button is-medium is-dark" title="post audio"><i class="fa fa-music"></i><span class="kyselo-hidden"> new post</span></a>';
         echo '</span>';
     }
     // group:

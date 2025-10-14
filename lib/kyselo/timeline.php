@@ -115,7 +115,7 @@ class timeline
             $Q = $Q->add(' AND p.datetime <= ?', [$this->since]);
         }
 
-        $type2code = ['text'=>1, 'link'=>2, 'quote'=>3, 'image'=>4, 'video'=>5, 'file'=>6, 'review'=>7, 'event'=>8];
+        $type2code = ['text'=>1, 'link'=>2, 'quote'=>3, 'image'=>4, 'video'=>5, 'file'=>6, 'review'=>7, 'event'=>8, 'audio'=>9];
         if ($this->type && isset($type2code[$this->type])) {
             $Q = $Q->add(' AND p.type = ?', [$type2code[$this->type]]);
         }

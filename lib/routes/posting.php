@@ -32,13 +32,14 @@ Flight::route('/act/post', function() {
 
 	$postTypes = [
 		1 => 'text',
-		'link',
-		'quote',
-		'image',
-		'video',
-		'file',
-		'rating',
-		'event'
+        2 => 'link',
+		3 => 'quote',
+		4 => 'image',
+		5 => 'video',
+		6 => 'file', // backward compatibility
+		7 => 'rating', // backward compatibilty
+		8 => 'event', // backward compatibility
+        9 => 'audio'
 	];
 
 	$canPostAs = [];
@@ -260,9 +261,13 @@ function get_post_form($postType, $canPostAs=null)
 		$form->field('body', ['type'=>'textarea', 'class'=>'kyselo-editor', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Description']);
 		$form->field('from', ['label'=>'From', 'placeholder'=>'http://example.org/funny-cat-picture']);
 	} elseif ($postType==5) {
-		$form->field('source', ['label'=>'Video URL', 'placeholder'=>'https://www.youtube.com/watch?v=YT0k99hCY5I', 'required'=>true]);
-        $form->field('body', ['type'=>'textarea', 'class'=>'kyselo-editor', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Description']);
-	} else {
+        $form->field('source', ['label' => 'Video URL', 'placeholder' => 'https://www.youtube.com/watch?v=YT0k99hCY5I', 'required' => true]);
+        $form->field('body', ['type' => 'textarea', 'class' => 'kyselo-editor', 'rows' => 5, 'cols' => 30, 'placeholder' => 'text...', 'label' => 'Description']);
+    } elseif ($postType==9) {
+        $form->field('upload', ['type'=>'file', 'label'=>'Upload', 'accept'=>'audio/mp3;audio/mpeg;*.mp3']);
+        $form->field('title', ['placeholder'=>'title']);
+        $form->field('body', ['type'=>'textarea', 'class'=>'kyselo-editor', 'rows'=>5, 'cols'=>30, 'placeholder'=>'text...', 'label'=>'Text']);
+    } else {
 		throw new Exception('Not yet!');
 	}
 
@@ -319,11 +324,22 @@ function finish_post($newPost, $form, $required=true)
 		}
 	}
 
-	if ($newPost['type']>6) {
+	if (in_array($newPost['type'], [6, 7, 8]) || $newPost['type']>9) {
 		$form->error('type', 'Post type not yet implemented.');
 	}
 
-	return $newPost;
+    if ($newPost['type']==9) {
+        // audio uploading
+        $newAudio = kyselo_upload_other($form, 'upload', 'mp3', ['audio/mpeg', 'audio/mp3'], 'Only mp3s are allowed.');
+        if ($newAudio) {
+            $newPost['url'] = $newAudio;
+        }
+        if (empty($newPost['title'])) {
+            $newPost['title'] = $_FILES['upload']['name'];
+        }
+    }
+
+    return $newPost;
 }
 
 

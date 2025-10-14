@@ -36,6 +36,11 @@ class format
             $out['body'] = $post['body'];
             $out['source'] = $post['source'];
             $out['preview_html'] = $post['preview_html'];
+        } else if ($post['type']==9) {
+            $out['type'] = 'audio';
+            $out['url'] = $post['url'];
+            $out['title'] = $post['title'];
+            $out['description'] = $post['body'];
         }
 
         return json_encode($out) . PHP_EOL;
