@@ -39,23 +39,26 @@ $db = new medoo(array(
 	'database_file' => dirname(__FILE__) . '/' . $conf['database']
 ));
 
+$pdo = new PDO('sqlite:' . __DIR__ . '/' .  $conf['database'], null, null, [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
+$rows = new severak\database\rows($pdo);
+
 echo 'creating database...' . PHP_EOL;
 $schema = file_get_contents(__DIR__  . '/doc/schema.sql');
 $tables = explode(';', $schema);
 foreach ($tables as $create) {
-	$db->query($create);
+    $rows->execute($rows->fragment($create));
 }
 
 echo 'creating admin account...' . PHP_EOL;
 
-$userId = $db->insert('users', [
+$userId = $rows->insert('users', [
 	'blog_id' => 0,
 	'email' => $adminEmail,
 	'password' => password_hash($adminPw, PASSWORD_DEFAULT),
 	'is_active' => 1
 ]);
 
-$blogId = $db->insert('blogs', [
+$blogId = $rows->insert('blogs', [
 	'name' => 'admin',
 	'title' => 'admin\'s soup',
 	'about' => '(owner of this site)',
@@ -64,11 +67,11 @@ $blogId = $db->insert('blogs', [
 	'since' => date('Y-m-d H:i:s')
 ]);
 
-$db->update('users', ['blog_id'=>$blogId], ['id'=> $userId]);
+$rows->update('users', ['blog_id'=>$blogId], ['id'=> $userId]);
 
 echo 'making first blogpost...' . PHP_EOL;
 
-$db->insert('posts', [
+$rows->insert('posts', [
 	'blog_id' => $blogId,
 	'author_id' => $blogId,
 	'datetime' => strtotime('now'),
@@ -78,8 +81,6 @@ $db->insert('posts', [
 ]);
 
 echo 'OK. Complete.' . PHP_EOL;
-
-// TODO: here starting php server + browser opening??? we want it???
 
 function _readline($prompt)
 {
