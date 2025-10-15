@@ -21,7 +21,7 @@ Flight::set('flight.views.path', __DIR__ . '/lib/views');
 if (version_compare(PHP_VERSION, '8.0.0', '<')) {
     // init debugger
     require "lib/tracy/src/tracy.php";
-    \Tracy\Debugger::enable(!empty($config['show_debug']) ? Debugger::DEVELOPMENT : Debugger::DETECT);
+    \Tracy\Debugger::enable(!empty($config['show_debug']) ? \Tracy\Debugger::DEVELOPMENT : \Tracy\Debugger::DETECT);
     \Tracy\Debugger::$showBar = false;
     \Tracy\Debugger::$errorTemplate = __DIR__ . '/lib/views/500.htm';
 }
