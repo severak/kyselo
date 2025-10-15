@@ -25,7 +25,7 @@ class generator
             $item->guid['isPermaLink'] = 'true';
 
             $desc = '';
-            if ($post['type']==1 || $post['type']==3) {
+            if ($post['type']==1 || $post['type']==3 || $post['type']==9) {
                 $desc = $post['body'];
             } elseif (in_array($post['type'], [2, 5, 6])) {
                 // link, video, file
@@ -36,7 +36,7 @@ class generator
 
             $item->description = $desc;
 
-            if ($post['type']==4 && file_exists($this->pathPrefix . $post['url'])) {
+            if (in_array($post['type'], [4,9]) && file_exists($this->pathPrefix . $post['url'])) {
                 $item->enclosure['url'] = $this->urlPrefix . $post['url'];
                 $item->enclosure['length'] = filesize($this->pathPrefix . $post['url']);
                 $item->enclosure['type'] = \fFile::determineMimeType($this->pathPrefix . $post['url']);
