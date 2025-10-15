@@ -19,7 +19,7 @@
     </footer>
 </div>
 
-<script src="/st/js/kyselo.js?v=2023-09-27"></script>
+<script src="/st/js/kyselo.js?v=2025-10-15"></script>
 <?php if (Flight::config('footer_javascript')) {
     echo Flight::config('footer_javascript');
 
