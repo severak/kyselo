@@ -25,7 +25,7 @@ $showComments = empty($hideComments);
 foreach ($posts as $post) {
 $nsfwClass = $post['is_nsfw'] ? 'is-nsfw' : '';
 ?>
-<div class="media kyselo-post">
+<div class="media kyselo-post post-id-<?=$post['id']; ?> kyselo-hint-<?=$post['id']%7; ?>">
 	<div class="media-left">
 		<a href="/<?=$post['name']; ?>">
 			<img src=<?php echo kyselo_small_image($post['avatar_url'], 64, true); ?> class="image is-64x64">
