@@ -8,7 +8,7 @@
 // - $the_end
 // - friends
 
-$icons = ['', 'book', 'link', 'paragraph', 'camera', 'youtube-play', 'file', 'star', 'calendar'];
+$icons = ['', 'book', 'link', 'paragraph', 'camera', 'youtube-play', 'file', 'star', 'calendar', 'music'];
 
 if (!empty($friends)) {
     echo '<div class="kyselo-friendlist">';
